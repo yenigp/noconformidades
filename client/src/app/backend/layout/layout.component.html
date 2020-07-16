@@ -1,0 +1,108 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport="true" [attr.role]="isHandset ? 'dialog' : 'navigation'"
+    [mode]="isHandset ? 'over' : 'side'" [opened]="!isHandset">
+
+    <div fxFlex fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="gappx">
+      <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="gappx">
+        <mat-toolbar id="MainToolbarHeader" style="height: auto;" class="w-100 mat-elevation-z8" color="primary">
+
+          <mat-toolbar-row id="headerToolbar" class="p-3" style="height: auto !important;" fxLayout="row" fxLayoutAlign="center center">
+            <div class="profile-img" fxLayoutAlign="center center">
+              <img style="height:80px; width: auto; object-fit: cover;object-position: center; border-radius: 4px;"
+                src="../../../assets/images/logos/angular-icon-1.svg">
+            </div>
+
+          </mat-toolbar-row>
+
+          <!-- <mat-toolbar-row class="p-2" style="height: auto !important;" fxLayoutAlign="center center">
+            <span class="mat-title mb-0">Admin Dashboard</span>
+          </mat-toolbar-row> -->
+
+          <!-- <div fxLayout="row" class="w-100" fxLayoutAlign="start center" fxLayoutGap="gappx">
+
+            <div fxFlex="30" fxLayoutAlign="start center">
+              <img *ngIf="true" height="54px" src="{{'../../../../../assets/images/background/loadingBackground.jpg"
+                onerror="this.onerror=null;this.src='../../../assets/images/logo/havanatur_transparent_logo.png';" />
+            </div>
+            <div fxLayout="column"  fxFlex="70" fxLayoutAlign="start center" fxLayoutGap="gappx">
+                <span class="mat-title mb-0">{{'Agency Name'}}</span>
+            </div>
+
+          </div> -->
+
+        </mat-toolbar>
+
+        <mat-nav-list class="navList">
+          <app-menu-list-item *ngFor=" let item of navigationData" [item]="item"></app-menu-list-item>
+        </mat-nav-list>
+      </div>
+      <div fxFlex fxLayout="column" fxLayoutAlign="end end" fxLayoutGap="gappx">
+        <footer id="NavBarFooter" class="w-100">
+          <mat-toolbar style="height: 100% !important;" class="w-100" color="primary">
+            <span class="mat-caption mx-auto">{{'Copyright'}} &copy;{{year}}</span>
+          </mat-toolbar>
+        </footer>
+      </div>
+    </div>
+
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar id="toolbarBody" color="primary" class="main-toolbar">
+      <mat-toolbar-row>
+        <div fxLayout="row" fxLayoutAlign="space-between center" fxFlex="100" fxFlex.gt-md="78">
+          <div fxLayoutAlign="start center" fxFlex="25">
+            <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
+              *ngIf="isHandset || !this.sidenav.opened">
+              <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+            </button>
+            <app-breadcrumd [separator]="separator"></app-breadcrumd>
+          </div>
+
+          <div fxLayout="row" fxFlex="75" fxLayoutAlign="end center">
+
+
+
+            <button class="mx-1" mat-icon-button matTooltip="{{'User options'}}">
+              <mat-icon class="cursor-pointer" aria-label="Side nav toggle icon" [matMenuTriggerFor]="menu">more_vert
+              </mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" class="mymegamenu">
+              <button mat-menu-item (click)="onEditProfile()">
+                <mat-icon>account_box</mat-icon>
+                {{"Editar Perfil"}}
+              </button>
+              <button mat-menu-item (click)="onLogout()">
+                <mat-icon>exit_to_app</mat-icon>
+                {{"Cerrar la sesión"}}
+              </button>
+            </mat-menu>
+
+            <div fxLayout="row" class="py-1" fxLayoutAlign="start center">
+              <img class="ImageAvatar" *ngIf="!this.loggedInUser || !this.loggedInUser.avatar"
+                src="../../../assets/images/users/profile2.png" alt="user">
+              <img class="ImageAvatar" *ngIf="this.loggedInUser && this.loggedInUser.avatar" src="{{userUrl+loggedInUser.avatar}}"
+                alt="user" onerror="this.onerror=null;this.src='../../../assets/images/users/profile2.png';">
+            </div>
+
+
+            <div *ngIf="loggedInUser" fxLayout="column" fxHide.xs style="margin-right: 0px !important;" fxLayoutAlign="center start">
+              <span class="mat-body-1" style="font-size: 13px !important;">{{loggedInUser.name}}</span>
+              <span class="mat-caption">{{loggedInUser.email}}</span>
+            </div>
+            <div *ngIf="!loggedInUser" fxLayout="column" fxHide.xs style="margin-right: 0px !important;" fxLayoutAlign="center start">
+              <span class="mat-body-1" style="font-size: 13px !important;">{{'Example name'}}</span>
+              <span class="mat-caption">{{'example.email.@gmail.com' }}</span>
+            </div>
+
+          </div>
+        </div>
+      </mat-toolbar-row>
+
+    </mat-toolbar>
+    <!--{%Reemplazor"<block_name>"Here%}-->
+    <!--views-->
+    <div class="MainLayoutRoutes" fxFlexFill fxLayout="column" fxLayoutAlign="start stretch">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

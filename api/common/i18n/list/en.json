@@ -1,0 +1,16 @@
+{
+  "fields"  : {
+    "Authorization": "Authorization",
+    "user"         : "User",
+    "username"     : "username",
+    "password"     : "password",
+    "name"         : "name"
+  },
+  "messages": {
+    "User not found"               : "User not found",
+    "Wrong password"               : "Wrong password",
+    "Not valid authentication type": "Not valid authentication type",
+    "Authorization has expired"    : "Your session has expired, please log in again",
+    "Invalid bearer authorization" : "Invalid bearer authorization"
+  }
+}

@@ -1,0 +1,21 @@
+.container-image {
+  padding: 24px;
+  min-height: 100vh;
+  position: relative;
+
+
+  font-family: 'Poppins',
+  sans-serif !important;
+
+  .title {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 50px;
+  }
+
+  .subtitle {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 25px;
+  }
+}

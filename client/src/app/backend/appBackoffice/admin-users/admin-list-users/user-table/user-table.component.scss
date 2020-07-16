@@ -1,0 +1,116 @@
+@import "../../../../../../assets/scss/theme/variables";
+@import "src/assets/scss/mixins/breakpoints";
+
+app-user-table {
+  padding: 8px;
+
+  @include media-breakpoint("xs") {
+    padding: 2px !important;
+  }
+
+  mat-toolbar-row {
+    background-color: transparent !important;
+  }
+
+  mat-toolbar {
+    background-color: transparent !important;
+  }
+
+  .example-full-width {
+    width: 100%;
+  }
+
+  .search-input {
+    font-family: Roboto;
+    font-size: 20px;
+    outline: none; // removes blue outline on focus
+    border: 0; // removes border
+    box-shadow: none;
+    background-color: transparent;
+
+  }
+
+  .mat-table {
+    display: table;
+    width: 100%;
+    // border-left: 1px solid rgba(0, 0, 0, 0.12);
+    // border-right: 1px solid rgba(0, 0, 0, 0.12);
+
+    >.mat-header-row,
+    >.mat-row {
+      display: table-row !important;
+      padding: 0 !important;
+      border: none !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+      >.mat-header-cell,
+      >.mat-cell {
+        display: table-cell;
+        height: 80px !important;
+        vertical-align: middle;
+
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
+      }
+    }
+  }
+
+  // #actionsHover {
+  //   color: #616161 !important;
+
+  // }
+
+  .rowData {
+    min-height: 70px !important;
+    height: 70px !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.12) !important;
+
+
+    // &:hover {
+    //   background-color: #eee;
+    // }
+  }
+
+  .responsive_table {
+    max-height: 70vh;
+    overflow: auto;
+    padding: 1px;
+
+    @include media-breakpoint("lt-md") {
+      table {
+        min-width: 800px !important;
+
+        th {
+          min-width: 80px !important;
+        }
+
+        #select {
+          min-width: 60px !important;
+        }
+
+        #action {
+          min-width: 60px !important;
+        }
+      }
+
+      .mat-paginator {
+        display: block;
+        min-width: 800px !important;
+      }
+
+    }
+  }
+}
+
+// #add-button {
+//   position: fixed;
+//   bottom: 16px;
+//   right: 16px;
+//   padding: 0;
+//   z-index: 99;
+
+//   @include media-breakpoint('xs') {
+//     position: sticky;
+//     top: calc(100vh - 72px);
+//     bottom: auto;
+//   }
+// }

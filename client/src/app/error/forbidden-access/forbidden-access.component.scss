@@ -1,0 +1,83 @@
+@import "../../../assets/scss/theme/variables";
+
+
+#forbidenPage {
+  background: #233142;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  place-content: center;
+  align-items: center;
+}
+
+.whistle {
+  width: 250px;
+  margin: 100px auto;
+  fill: #f95959;
+  text-align: left;
+  transform: translate(-50%, -50%);
+  transform: rotate(0);
+  transform-origin: 80% 30%;
+  animation: wiggle .7s infinite;
+
+  @media screen and (max-width: 992px) {
+    width: 200px !important;
+    margin: 40px auto;
+  }
+
+}
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(3deg);
+  }
+
+  50% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(3deg);
+  }
+}
+
+
+.title_403 {
+  margin-top: -40px;
+  margin-bottom: 20px;
+  color: #facf5a;
+  text-align: center;
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 90px;
+  font-weight: 800;
+
+}
+
+#backHome {
+  background-color: #facf5a;
+  color: #233142;
+  width: 180px;
+  padding: 8px 16px;
+  margin-top: 32px;
+}
+
+h2 {
+  color: #455d7a;
+  text-align: center;
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 30px;
+  text-transform: uppercase;
+}
+
+.title {
+  color: #facf5a !important;
+  text-align: center !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 60px;
+
+  @media screen and (max-width: 992px) {
+    font-size: 34px !important;
+  }
+}

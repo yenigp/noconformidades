@@ -1,0 +1,16 @@
+{
+  "fields"  : {
+    "Authorization": "Autorización",
+    "user"         : "Usuario",
+    "username"     : "nombre de usuario",
+    "password"     : "contraseña",
+    "name"         : "nombre"
+  },
+  "messages": {
+    "User not found"               : "Usuario no encontrado",
+    "Wrong password"               : "Contraseña incorrecta",
+    "Not valid authentication type": "No es un tipo de autenticación válido",
+    "Authorization has expired"    : "Su sesión ha caducado, por favor, logueese de nuevo.",
+    "Invalid bearer authorization" : "La autorización del portador no es válida"
+  }
+}

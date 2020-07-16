@@ -1,0 +1,65 @@
+<div class="container">
+    <div mat-dialog-content class="my-dialog-content">
+
+        <div style="float: left; width: 65%;">
+            <div *ngFor="let form of formData.controls">
+                <form [formGroup]="form">
+                    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                        <span class="mat-body-2 ">{{'Usuario para acceder a este deploy'}}</span>
+                    </div>
+                    <div fxLayout="row" class="mt-2" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                        <mat-form-field fxFlex="33" fxFlex.lt-md="80" fxFlex.xs="100" appearance="outline">
+                            <mat-label>{{'username'}}</mat-label>
+                            <input type="text" matInput [formControl]="form.controls['username']" placeholder="{{'username'}}">
+                            <mat-icon class="greyIcon" matSuffix>link</mat-icon>
+                            <mat-error *ngIf="form.controls['username'].hasError('required')">
+                                {{'El username'}} <strong>{{'es requerido'}}</strong>
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field fxFlex="33" fxFlex.lt-md="80" fxFlex.xs="100" appearance="outline">
+                            <mat-label>{{'cipheredPass'}}</mat-label>
+                            <input type="text" matInput [formControl]="form.controls['cipheredPass']" placeholder="{{'cipheredPass'}}">
+                            <mat-icon class="greyIcon" matSuffix>link</mat-icon>
+                            <mat-error *ngIf="form.controls['cipheredPass'].hasError('required')">
+                                {{'El cipheredPass'}} <strong>{{'es requerido'}}</strong>
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field fxFlex="33" fxFlex.lt-md="80" fxFlex.xs="100" appearance="outline">
+                            <mat-label>{{'Rol'}}</mat-label>
+                            <input type="text" matInput [formControl]="form.controls['rol']" placeholder="{{'rol'}}">
+                            <mat-icon class="greyIcon" matSuffix>link</mat-icon>
+                            <mat-error *ngIf="form.controls['rol'].hasError('required')">
+                                {{'El rol'}} <strong>{{'es requerido'}}</strong>
+                            </mat-error>
+                        </mat-form-field>
+
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                        <!-- <span class="mat-body-2 ">{{'Para quien?'}}</span> -->
+                    </div>
+                    <div fxLayout="row" class="mt-2" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                        <mat-form-field fxFlex="100" fxFlex.lt-md="80" fxFlex.xs="100" appearance="outline">
+                            <mat-label>{{'Descripcion'}}</mat-label>
+                            <input type="text" matInput [formControl]="form.controls['description']" placeholder="{{'description'}}">
+                            <mat-icon class="greyIcon" matSuffix>link</mat-icon>
+                            <mat-error *ngIf="form.controls['description'].hasError('required')">
+                                {{'El description'}} <strong>{{'es requerido'}}</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        <!-- <div style="position: absolute; right: 200px;">
+            <app-resumen-deploy [deploy]="this.deploy" [webClients]="this.webClients"></app-resumen-deploy>
+        </div> -->
+        <div style="width: 35%; float: left; position: absolute; right: 0;">
+
+            <app-resumen-deploy [deploy]="this.deploy" [webClients]="this.webClients"></app-resumen-deploy>
+
+        </div>
+    </div>
+</div>

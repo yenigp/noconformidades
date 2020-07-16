@@ -1,0 +1,446 @@
+// ---------------Material Themin -----------------///
+@import "~@angular/material/theming";
+@include mat-core();
+$custom-typography: mat-typography-config($font-family: "Poppins"
+);
+// Override the typography in the core CSS.
+@include mat-core($custom-typography);
+
+$primary: mat-palette($mat-indigo, 900);
+$accent: mat-palette($mat-amber, 500, 400, 600);
+$warn: mat-palette($mat-red);
+
+$theme-accent : mat-color($accent);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$default-theme: mat-light-theme($primary, $accent, $warn);
+
+// -----Creating Global Variables------
+
+$main-primary: mat-color($primary, 500);
+$main-primary-400: mat-color($primary, 400);
+$main-primary-300: mat-color($primary, 300);
+$main-primary-200: mat-color($primary, 200);
+$main-primary-100: mat-color($primary, 100);
+
+$grey-700: mat-color(mat-palette($mat-grey), 700);
+$grey-600: mat-color(mat-palette($mat-grey), 600);
+$grey-500: mat-color(mat-palette($mat-grey), 500);
+$grey-400: mat-color(mat-palette($mat-grey), 400);
+$grey-800: mat-color(mat-palette($mat-grey), 800);
+$grey-900: mat-color(mat-palette($mat-grey), 900);
+
+$red-600: mat-color(mat-palette($mat-red), 600);
+@include angular-material-theme($default-theme);
+
+//colors
+$theme-main: mat-color($mat-indigo, 900);
+$theme-main-400: mat-color($mat-indigo, 400);
+$theme-main-300: mat-color($mat-indigo, 300);
+$theme-main-100: mat-color($mat-indigo, 100);
+$theme-main-dark: #323232;
+$theme-main-dark-2: #303030;
+$theme-main-dark-3: #282828;
+$theme-main-red: #f33927;
+
+$white: #ffffff;
+$white-dark: #e2e2e2;
+$black: #000000;
+$dark-font: #222222;
+$grey-dark: #2d2a25;
+$font-color: #333333;
+$grey-light: #dddddd;
+$grey: #777777;
+$grey2: #eeeeee;
+$grey3: #c3c3c3;
+$grey4: #444;
+$grey5: #848484;
+$grey6: #e5e5e5;
+$grey7: #787878;
+$grey8: #d9d9d9;
+$grey9: #f3f3f3;
+$grey10: #9c9c9c;
+$baners-background: #f5f5f5;
+$background: #fafafa;
+$gray-lighter: #f6f6f6;
+$footer-background: #f7f7f7;
+
+
+//////////////////////////////////////
+
+/*Material Colors*/
+$grey-50: #FAFAFA;
+$grey-100: #F5F5F5;
+$grey-200: #EEEEEE;
+$grey-300: #E0E0E0;
+$grey-400: #BDBDBD;
+$grey-500: #9E9E9E;
+$grey-600: #757575;
+$grey-700: #616161;
+$grey-800: #424242;
+$grey-900: #212121;
+
+$red-100: #FFEBEE;
+$red-200: #FFCDD2;
+$red-300: #E57373;
+$red-400: #EF5350;
+$red-500: #F44336;
+$red-600: #E53935;
+$red-700: #D32F2F;
+$red-800: #C62828;
+$red-900: #B71C1C;
+
+$amber-100: #FFECB3;
+$amber-200: #FFE082;
+$amber-300: #FFD54F;
+$amber-400: #FFCA28;
+$amber-500: #FFC107;
+$amber-600: #FFB300;
+$amber-700: #FFA000;
+$amber-800: #FF8F00;
+$amber-900: #FF6F00;
+
+$teal-50: #e0f2f2;
+$teal-100: #B2DFDB;
+$teal-200: #80CBC4;
+$teal-300: #4DB6AC;
+$teal-400: #26A69A;
+$teal-500: #009688;
+$teal-600: #00897B;
+$teal-700: #00796B;
+$teal-800: #00695C;
+$teal-900: #004D40;
+
+$blue-50: #e3f2fd;
+$blue-100: #bbdefb;
+$blue-200: #90caf9;
+$blue-300: #64b5f6;
+$blue-400: #42a5f5;
+$blue-500: #2196f3;
+$blue-600: #1e88e5;
+$blue-700: #1976d2;
+$blue-800: #1565c0;
+$blue-900: #0d47a1;
+
+// $green-50: mat-color(mat-palette($mat-green, 50));
+// $green-100: mat-color(mat-palette($mat-green, 100));
+// $green-200: mat-color(mat-palette($mat-green, 200));
+// $green-300: mat-color(mat-palette($mat-green, 300));
+// $green-400: mat-color(mat-palette($mat-green, 400));
+// $green-500: mat-color(mat-palette($mat-green, 500));
+// $green-600: mat-color(mat-palette($mat-green, 600));
+// $green-700: mat-color(mat-palette($mat-green, 700));
+// $green-800: mat-color(mat-palette($mat-green, 800));
+// $green-900: mat-color(mat-palette($mat-green, 900));
+
+//////////BACKGROUND COLORS////////////
+.background-color-white {
+  background-color: white;
+}
+
+.background-color-grey-50 {
+  background-color: $grey-50 !important;
+}
+
+.background-color-grey-100 {
+  background-color: $grey-100;
+}
+
+.background-color-grey-200 {
+  background-color: $grey-200;
+}
+
+.background-color-grey-300 {
+  background-color: $grey-300;
+}
+
+.background-color-grey-400 {
+  background-color: $grey-400;
+}
+
+.background-color-grey-500 {
+  background-color: $grey-500;
+}
+
+.background-color-grey-600 {
+  background-color: $grey-600;
+}
+
+.background-color-grey-700 {
+  background-color: $grey-700;
+}
+
+.color-grey-700 {
+  color: $grey-700 !important;
+}
+
+.background-color-grey-800 {
+  background-color: $grey-800;
+}
+
+.background-color-grey-900 {
+  background-color: $grey-900;
+}
+
+/*red*/
+.background-color-red-100 {
+  background-color: $red-100;
+}
+
+.background-color-red-200 {
+  background-color: $red-200;
+}
+
+.background-color-red-300 {
+  background-color: $red-300;
+}
+
+.background-color-red-400 {
+  background-color: $red-400;
+}
+
+.background-color-red-500 {
+  background-color: $red-500;
+}
+
+.background-color-red-600 {
+  background-color: $red-600;
+}
+
+.background-color-red-700 {
+  background-color: $red-700;
+}
+
+.background-color-red-800 {
+  background-color: $red-800;
+}
+
+.background-color-red-900 {
+  background-color: $red-900;
+}
+
+/*teal*/
+.background-color-teal-100 {
+  background-color: $teal-100;
+}
+
+.background-color-teal-200 {
+  background-color: $teal-200;
+}
+
+.background-color-teal-300 {
+  background-color: $teal-300;
+}
+
+.background-color-teal-400 {
+  background-color: $teal-400;
+}
+
+.background-color-teal-500 {
+  background-color: $teal-500;
+}
+
+.background-color-teal-600 {
+  background-color: $teal-600;
+}
+
+.background-color-teal-700 {
+  background-color: $teal-700;
+}
+
+.background-color-teal-800 {
+  background-color: $teal-800;
+}
+
+.background-color-teal-900 {
+  background-color: $teal-900;
+}
+
+/*amber*/
+.background-color-amber-100 {
+  background-color: $amber-100;
+}
+
+.background-color-amber-200 {
+  background-color: $amber-200;
+}
+
+.background-color-amber-300 {
+  background-color: $amber-300;
+}
+
+.background-color-amber-400 {
+  background-color: $amber-400;
+}
+
+.background-color-amber-500 {
+  background-color: $amber-500;
+}
+
+.background-color-amber-600 {
+  background-color: $amber-600;
+}
+
+.background-color-amber-700 {
+  background-color: $amber-700;
+}
+
+.background-color-amber-800 {
+  background-color: $amber-800;
+}
+
+.background-color-amber-900 {
+  background-color: $amber-900;
+}
+
+//////COLORS////////////
+.color-grey-100 {
+  color: $grey-100;
+}
+
+.color-grey-200 {
+  color: $grey-200;
+}
+
+.color-grey-300 {
+  color: $grey-300;
+}
+
+.color-grey-400 {
+  color: $grey-400;
+}
+
+.color-grey-500 {
+  color: $grey-500;
+}
+
+.color-grey-600 {
+  color: $grey-600;
+}
+
+.color-grey-700 {
+  color: $grey-700;
+}
+
+.color-grey-800 {
+  color: $grey-800;
+}
+
+.color-grey-900 {
+  color: $grey-900;
+}
+
+/*red*/
+.color-red-100 {
+  color: $red-100;
+}
+
+.color-red-200 {
+  color: $red-200;
+}
+
+.color-red-300 {
+  color: $red-300;
+}
+
+.color-red-400 {
+  color: $red-400;
+}
+
+.color-red-500 {
+  color: $red-500;
+}
+
+.color-red-600 {
+  color: $red-600;
+}
+
+.color-red-700 {
+  color: $red-700;
+}
+
+.color-red-800 {
+  color: $red-800;
+}
+
+.color-red-900 {
+  color: $red-900;
+}
+
+/*teal*/
+.color-teal-100 {
+  color: $teal-100;
+}
+
+.color-teal-200 {
+  color: $teal-200;
+}
+
+.color-teal-300 {
+  color: $teal-300;
+}
+
+.color-teal-400 {
+  color: $teal-400;
+}
+
+.color-teal-500 {
+  color: $teal-500;
+}
+
+.color-teal-600 {
+  color: $teal-600;
+}
+
+.color-teal-700 {
+  color: $teal-700;
+}
+
+.color-teal-800 {
+  color: $teal-800;
+}
+
+.color-teal-900 {
+  color: $teal-900;
+}
+
+/*amber*/
+.color-amber-100 {
+  color: $amber-100;
+}
+
+.color-amber-200 {
+  color: $amber-200;
+}
+
+.color-amber-300 {
+  color: $amber-300;
+}
+
+.color-amber-400 {
+  color: $amber-400;
+}
+
+.color-amber-500 {
+  color: $amber-500;
+}
+
+.color-amber-600 {
+  color: $amber-600;
+}
+
+.color-amber-700 {
+  color: $amber-700;
+}
+
+.color-amber-800 {
+  color: $amber-800;
+}
+
+.color-amber-900 {
+  color: $amber-900;
+}
+
+.color-white {
+  color: white;
+}

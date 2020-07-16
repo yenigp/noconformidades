@@ -1,0 +1,62 @@
+@import '../../../../assets/scss/theme/variables';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  outline: none;
+  width: 100%;
+
+  .mat-list-item.active {
+    background-color: #fff;
+    color: $theme-main;
+    border-radius: 24px;
+    transition: border-radius .2s ease;
+
+    span {
+      font-weight: 500 !important;
+      color: $theme-main !important;
+    }
+
+    mat-icon {
+      color: $theme-main !important;
+    }
+  }
+
+  span {
+    color: #fff;
+  }
+
+  #dividerNav {
+    border-top-color: #424242 !important;
+  }
+
+  &:hover,
+  &:focus {
+    >.mat-list-item:not(.expanded) {
+      border-radius: 16px;
+      transition: border-radius .2s ease;
+    }
+  }
+
+}
+
+.mat-list-item {
+  padding: 2px 0;
+  display: flex;
+  width: auto;
+  color: #fff;
+
+  .routeIcon {
+    margin-right: 30px;
+  }
+}
+
+.menu-icons {
+  font-size: 18px !important;
+
+  mat-icon {
+    color: #fff;
+    margin: 0px !important;
+  }
+
+}

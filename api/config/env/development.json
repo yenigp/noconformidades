@@ -1,0 +1,86 @@
+{
+  "api": {
+    "useHttps": false,
+    "prefix": "/v1",
+    "port": 8601,
+    "host": "0.0.0.0",
+    "fileLimit": "420000kb"
+  },
+  "logging"            : {
+    "transports": {
+      "console": {
+        "enabled"  : true,
+        "colorize" : true,
+        "timestamp": false
+      },
+      "mongodb": {
+        "enabled"   : false,
+        "db"        : "mongodb://localhost/projects",
+        "collection": "SystemLogs",
+        "username"  : "nimdall",
+        "password"  : "nimda321",
+        "decolorize": true,
+        "includeIds": true
+      },
+      "mongo-code": "db.createUser({user:'nimda',pwd:\"nimda321\",roles:[{role:\"dbAdmin\",db:\"repo\"}]})"
+    }
+  },
+  "database": {
+    "activeDialect": "oracle",
+    "dialects": {
+      "oracle": {
+        "storage": "db.production.oracle"
+      },
+      "oracle": {
+        "host": "127.0.0.1",
+        "port": "1521",
+        "database": "XE",
+        "username": "SYSTEM",
+        "password": "oracle",
+        "define": {
+          "charset": "utf8",
+          "dialectOptions": {
+            "collate": "utf8_unicode_ci"
+          }
+        }
+      }
+    },
+    "defaultOptions": {
+      "logging": false,
+      "sync": {
+        "force": false
+      }
+    }
+  },
+  "mailer": {
+    "enabled": true,
+    "sendMail": false,
+    "activeService": "gmail",
+    "from": "akmedSystem@gmail.com<akmedSystem@gmail.com>",
+    "services": {
+      "gmail": {
+        "service": "gmail",
+        "auth": {
+          "user": "akmedSystem@gmail.com",
+          "pass": "akmedSystem321"
+        }
+      }
+    }
+  },
+  "utils": {
+    "logger": {
+      "enabled": true,
+      "colorize": true,
+      "timestamp": false
+    }
+  },
+  "developers": {
+    "sendNotifications": true,
+    "mails": [
+      "jackbrown9375@gmail.com"
+    ]
+  },
+  "jwt": {
+    "secret": "281462ba-b4fe-41ae-b9dc-6ac40eac196c"
+  }
+}

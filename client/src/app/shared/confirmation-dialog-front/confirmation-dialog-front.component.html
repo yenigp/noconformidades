@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>{{data.title}}</h2>
+
+<mat-dialog-content>
+  <span>{{data.question}}</span>
+
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayout fxLayoutAlign="space-between center">
+  <button fxFlex mat-button mat-dialog-close>
+    CANCELAR
+  </button>
+
+  <button fxFlex color="primary" mat-raised-button (click)="onSave()">
+    <span>ACEPTAR</span>
+  </button>
+</mat-dialog-actions>

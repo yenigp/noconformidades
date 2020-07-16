@@ -1,0 +1,172 @@
+<mat-card class="p-1 mat-elevation-z0" style="border-radius: 8px !important;">
+  <mat-toolbar>
+    <mat-toolbar-row *ngIf="!selection.selected.length && !showFilterProject">
+      <div fxLayout="row" fxLayoutAlign="space-between center" fxFlex="100">
+        <span class="mat-title cf-margin-0">Lista de proyectos</span>
+        <div fxHide.xs>
+          <button mat-button (click)="showSearchForm()">
+            <mat-icon>search</mat-icon>
+            Filtrar
+          </button>
+          <button mat-button (click)="refreshData()">
+            <mat-icon>refresh</mat-icon>
+            Refrescar
+          </button>
+          <button *ngIf="role !=='Collaborator'" mat-button (click)="onCreateProject()">
+            <mat-icon>add</mat-icon>
+            Adicionar
+          </button>
+        </div>
+
+        <div fxHide fxShow.xs>
+          <button mat-icon-button (click)="showSearchForm()">
+            <mat-icon>search</mat-icon>
+          </button>
+          <button mat-icon-button (click)="refreshData()">
+            <mat-icon>refresh</mat-icon>
+          </button>
+          <button *ngIf="role !=='Collaborator'" mat-icon-button (click)="onCreateProject()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-toolbar-row>
+
+    <mat-toolbar-row *ngIf="showFilterProject && !selection.selected.length">
+      <form class="example-full-width" [formGroup]="searchForm">
+        <div fxLayout="row" fxLayoutAlign="space-between center" fxFlex="100">
+          <button mat-icon-button>
+            <mat-icon matPrefix>search</mat-icon>
+          </button>
+          <input [formControl]="searchForm.controls['textCtrl']" placeholder="{{'Entre su texto de búsqueda'}}"
+            class="example-full-width search-input" type="text" autofocus>
+          <div>
+            <button mat-icon-button (click)="hideSearchForm()">
+              <mat-icon aria-label="Cerrar">close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-toolbar-row>
+
+    <mat-toolbar-row *ngIf="selection.selected.length">
+      <div fxLayout="row" fxLayoutAlign="space-between center" fxFlex="100">
+        <span fxHide.xs class="mat-title">{{selection.selected.length + ' elemento seleccionado'}}</span>
+        <div>
+          <button *ngIf="selection.selected.length==1" mat-button (click)="onEditProject(selection.selected[0])">
+            <mat-icon aria-label="Example icon-button with a heart icon">edit</mat-icon>
+            <span *ngIf="role !=='Collaborator'" class="mat-button">EDITAR</span>
+          </button>
+          <button mat-button (click)="onRemoveProject(selection.selected)">
+            <mat-icon aria-label="Remove">remove</mat-icon>
+            <span class="mat-button">BORRAR</span>
+          </button>
+        </div>
+      </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div class="responsive_table">
+    <table mat-table multiTemplateDataRows [dataSource]="dataSource" matSort matSortActive="createdAt" matSortDisableClear
+      matSortDirection="desc" class="mat-elevation-z8  cf-padding-left-10 cf-padding-right-10  cf-padding-bottom-10">
+
+
+      <ng-container matColumnDef="select">
+        <th style="width: 8%;" mat-header-cell *matHeaderCellDef mat-sort-header>
+          <div fxLayout="column" fxLayoutAlign="start start">
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+            </mat-checkbox>
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <div fxLayout="column" fxLayoutAlign="start start">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+              [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+            </mat-checkbox>
+          </div>
+
+        </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="name">
+        <th style="width:15%;" mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span class="mat-body-2">{{'Nombre'}}</span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="git">
+        <th style="width:15%;" mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span class="mat-body-2">{{'git'}}</span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.git}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <th style="width:15%;" mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span class="mat-body-2">{{'Tipo'}}</span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="description">
+        <th style="width:15%;" mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span class="mat-body-2">{{'Descripcion'}}</span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="actions">
+        <th style="width:3%;overflow:hidden;" mat-header-cell *matHeaderCellDef mat-sort-header>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <div id="actionsHover" fxLayout="row" fxLayoutAlign="end center">
+            <button (click)="onEditProject(element)" mat-icon-button>
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button (click)="onRemoveProject([element])" mat-icon-button>
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+
+
+      <!-- <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+          <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+
+            <div fxLayout="row" fxLayoutAlign="start start" class="p-4" style="width: 100%;background-color: black; color: #00D684;">
+
+              <div fxFlex="50">
+                <span class="mat-title">Body</span>
+                <pre> {{getBody(element) | json}} </pre>
+              </div>
+              <div fxFlex="50">
+                <span class="mat-title">Query</span>
+                <pre> {{getQuery(element) | json}} </pre>
+              </div>
+
+            </div>
+
+          </div>
+        </td>
+      </ng-container> -->
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row"
+        [class.example-expanded-row]="expandedElement === element" (click)="expandedElement = expandedElement === element ? null : element">
+      </tr>
+      <!-- <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr> -->
+    </table>
+  </div>
+  <mat-paginator [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+
+</mat-card>

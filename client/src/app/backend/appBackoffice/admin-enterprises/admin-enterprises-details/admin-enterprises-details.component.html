@@ -1,0 +1,82 @@
+<div class="loading-shade-full" style="background:rgba(0, 0, 0, 0.02) !important;" *ngIf="isLoading">
+    <mat-spinner *ngIf="isLoading">
+    </mat-spinner>
+</div>
+
+<div class="container">
+
+    <div style="margin-top: 10px;">
+        <div>Informacion sobre la empresa</div>
+        <div>Nombre: {{Enterprise.name}}</div>
+        <div>Descripcion: {{Enterprise.description}}</div>
+    </div>
+    <div fxLayout="row" ngClass.gt-sm="mt-4" fxLayoutAlign="space-between center" class="filter-row mat-elevation-z1">
+        <span fxHide.xs class="mat-title mb-0">{{'Lista de Deploys'}}</span>
+        <span fxHide fxShow.xs class="mat-title mb-0">{{'Deploys'}}</span>
+    </div>
+
+
+    <div *ngIf="Enterprise.Deploys&&Enterprise.Deploys.length" fxLayout="row wrap" class="w-100 py-2" fxLayoutAlign="start start"
+        fxLayoutAlign.lt-md="center start" fxLayoutGap="gappx">
+
+
+
+        <mat-card *ngFor="let deploy of Enterprise.Deploys" class="product-card">
+            <mat-card-header>
+                <mat-card-title>{{deploy.domain}}</mat-card-title>
+            </mat-card-header>
+            <div class="w-100" fxLayout="row" fxLayoutAlign="center center">
+            </div>
+
+            <mat-card-content style="margin-top: 10px;">
+                <hr />
+                <div class="">
+                    <div style="text-align: center;"><b>Proyecto</b></div>
+                    <div>nombre: {{deploy.Project.name}}</div>
+                    <div>tipo: {{deploy.Project.type}}</div>
+                    <div>git: {{deploy.Project.git}}</div>
+                </div>
+                <hr />
+                <div class="">
+                    <div style="text-align: center;"><b>Deploy</b></div>
+                    <div>rama: {{deploy.branch}}</div>
+                    <div>environment: {{deploy.environment}}</div>
+                    <div>ip del servidor: {{deploy.serverIp}}</div>
+                    <div *ngIf="deploy.userIp">usuario del servidor: {{deploy.userIp}}</div>
+                </div>
+                <hr />
+                <div class="" style="padding: 10px;">
+                    <div style="text-align: center;"><b>Usuarios ({{deploy.WebClients.length}})</b></div>
+                    <div *ngFor="let user of deploy.WebClients">
+                        <div>usuario: {{user.username}}</div>
+                        <div>password: {{user.cipheredPass}}</div>
+                        <div>rol: {{user.rol}}</div>
+                        <hr />
+                    </div>
+                </div>
+            </mat-card-content>
+            <mat-card-actions class="mb-0" fxLayoutAlign="end center">
+                <button matTooltip="{{'Editar deploy'}}" (click)="this.onEditDeploy(deploy)" mat-icon-button>
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </mat-card-actions>
+        </mat-card>
+
+    </div>
+
+    <div *ngIf="!(Enterprise.Deploys&&Enterprise.Deploys.length)" style="padding:32px 0px" fxLayout="column" fxLayoutAlign="center center">
+
+        <img src="../../../../../assets/images/empty.svg" alt="Empty" style="height: 160px; width: 160px;">
+        <h1 class="text-muted mt-3">
+            Esta empresas no presenta ningun proyecto desplegado
+        </h1>
+
+    </div>
+
+</div>
+
+<button (click)="onAddDeploy()" id="AddBtn" mat-fab color="primary">
+    <mat-icon>
+        add
+    </mat-icon>
+</button>
