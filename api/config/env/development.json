@@ -26,17 +26,17 @@
     }
   },
   "database": {
-    "activeDialect": "oracle",
+    "activeDialect": "postgres",
     "dialects": {
-      "oracle": {
-        "storage": "db.production.oracle"
+      "postgres": {
+        "storage": "db.production.sqlite"
       },
-      "oracle": {
+      "postgres": {
         "host": "127.0.0.1",
-        "port": "1521",
-        "database": "XE",
-        "username": "SYSTEM",
-        "password": "oracle",
+        "schema": "noconformidades",
+        "database": "postgres",
+        "username": "yeni",
+        "password": "postgres",
         "define": {
           "charset": "utf8",
           "dialectOptions": {

@@ -20,7 +20,7 @@ module.exports = function (sequelize) {
 
     lodash.forEach(possibleImageAttributesMap, function (item) {
       if (object[item]) {
-        console.log("AGREGANDO OARA GUARDAR::", item)
+        console.log("AGREGANDO PARA GUARDAR::", item)
 
         promiseArray.push(processFile.createFileFromAttributeDataUri(object, item));
       }

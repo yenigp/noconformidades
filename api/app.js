@@ -118,7 +118,7 @@ app.use(function (req, res, next) {
   //   || req.method.toLowerCase() === 'patch'
   //   || req.method.toLowerCase() === 'put')
   //   // && !req.is('application/json')
-    
+
   //   ) {
   //   return res.sendStatus(415); // Unsupported Media Type.
   // }
@@ -330,7 +330,7 @@ async.series([
     require('./common/utils/hooks-handler').start();
     global.app.utils = require('./common/utils/index');
     global.app.security = require('./common/middleware').auth;
-  
+
     cb();
   }
 

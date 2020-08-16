@@ -3,12 +3,10 @@
 var path                 = require('path');
 var spawn                = require('child_process').spawn;
 var lodash               = require('lodash');
-var oracledb             = require('oracledb');
-var Sequelize            = require('sequelize-oracle');
-//var Sequelize            = require('sequelize');
+var Sequelize            = require('sequelize');
 var noUpdateAttributes   = require('./db-modules/sequelize-noupdate-attributes');
 var addProcessFilesHooks = require('./processFilesHooks');
-//var mongoose = require('mongoose');
+var mongoose = require('mongoose');
 var bluebird = require('bluebird');
 // To allow automatically setting the transaction to all queries.
 var cls              = require('continuation-local-storage');
