@@ -35,10 +35,12 @@
           },
           "configurations": {
             "production": {
-              "fileReplacements": [{
-                "replace": "src/environments/environment.ts",
-                "with": "src/environments/environment.prod.ts"
-              }],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -47,7 +49,8 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "budgets": [{
+              "budgets": [
+                {
                   "type": "initial",
                   "maximumWarning": "5mb",
                   "maximumError": "10mb"
@@ -124,5 +127,8 @@
       }
     }
   },
-  "defaultProject": "BACKEND-EMPRESAS"
+  "defaultProject": "BACKEND-EMPRESAS",
+  "cli": {
+    "analytics": "28b82357-2ee6-493a-9e37-583b73f8618d"
+  }
 }

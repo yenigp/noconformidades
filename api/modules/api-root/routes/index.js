@@ -41,6 +41,8 @@ module.exports = function(req, res) {
       "TagsHelp": absoluteNewLinkPath + "/tags-help",
       "ToDo": absoluteNewLinkPath + "/to-do",
       "ToDoHelp": absoluteNewLinkPath + "/to-do-help",
+      "Turista": absoluteNewLinkPath + "/turista",
+      "TuristaHelp": absoluteNewLinkPath + "/turista-help",
 
     }
   };

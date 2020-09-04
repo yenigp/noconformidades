@@ -1,0 +1,68 @@
+'use strict';
+var lodash = require('lodash');
+const bcrypt = require('bcryptjs');
+exports.loadModel = function loadModel() {
+    const Tareas = global.app.orm.sequelize.define('Tareas',
+        lodash.extend({}, global.app.orm.mixins.attributes, {
+          "id": {
+            "type": global.app.orm.Sequelize.INTEGER,
+            "allowNull": false,
+            "autoIncrement": true,
+            "primaryKey": true
+          },
+          "nombre": {
+              "type": global.app.orm.Sequelize.STRING,
+              "allowNull": false
+
+          },
+          "descripcion": {
+            "type": global.app.orm.Sequelize.STRING,
+            "allowNull": false
+
+          },
+          "fechainicio": {
+              "type": global.app.orm.Sequelize.DATEONLY,
+              "allowNull": false
+
+          },
+          "fechafin": {
+              "type": global.app.orm.Sequelize.DATEONLY,
+              "allowNull": false
+
+          },
+          "estado": {
+              "type": global.app.orm.Sequelize.STRING,
+              "allowNull": false
+
+          },
+          "responsable": {
+              "type": global.app.orm.Sequelize.STRING,
+              "allowNull": false
+
+          },
+          "noconformidad_id": {
+              "type": global.app.orm.Sequelize.INTEGER,
+              "references": {
+                  "model": "NoConformidad",
+                  "key": "id"
+              },
+              "onUpdate": "cascade",
+              "onDelete": "cascade",
+              "allowNull": false
+          },
+
+        }), {
+            comment: 'A example model.',
+            freezeTableName: true,
+            tableName: 'tareas',
+            schema: 'noconformidades',
+            hooks: {
+
+            }
+        });
+        Tareas.associate = function() {
+            var models = global.app.orm.sequelize.models;
+            models.Tareas.belongsTo(models.NoConformidad);
+        }
+
+};
