@@ -43,7 +43,7 @@ exports.loadModel = function loadModel() {
         QuejasReclamaciones.associate = function() {
             var models = global.app.orm.sequelize.models;
             models.QuejasReclamaciones.belongsTo(models.NoConformidad, {
-                as: 'id'
+                as: 'NoConformidad'
             });
         }
 };

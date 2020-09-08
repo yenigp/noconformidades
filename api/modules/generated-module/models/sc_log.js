@@ -16,10 +16,15 @@ exports.loadModel = function loadModel() {
 
             },
             "usuario": {
-                "type": global.app.orm.Sequelize.STRING,
-                "allowNull": false
-
-            },
+              "type": global.app.orm.Sequelize.INTEGER,
+              "references": {
+                  "model": "NCUsuario",
+                  "key": "id"
+              },
+              "onUpdate": "cascade",
+              "onDelete": "cascade",
+              "allowNull": true
+          },
             "accion": {
                 "type": global.app.orm.Sequelize.STRING,
                 "allowNull": false
@@ -27,13 +32,17 @@ exports.loadModel = function loadModel() {
             },
             "url": {
                 "type": global.app.orm.Sequelize.STRING,
-                "allowNull": false
-
+                "allowNull": false,
+                "validate":{
+                  "isUrl": true,
+                }
             },
             "ip": {
                 "type": global.app.orm.Sequelize.TEXT,
-                "allowNull": false
-
+                "allowNull": false,
+                "validate":{
+                  "isIP": true,
+                }
             },
             "fecha": {
                 "type": global.app.orm.Sequelize.DATE,
@@ -50,6 +59,4 @@ exports.loadModel = function loadModel() {
 
             }
         });
-
-
 };

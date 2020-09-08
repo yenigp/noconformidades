@@ -43,6 +43,17 @@ exports.loadModel = function loadModel() {
             "codigo_nc": {
                 "type": global.app.orm.Sequelize.STRING,
                 "allowNull": false
+                "validate":{
+                  "is": {
+                    "args": /^([A-Z]{4}[0-9]{6}+[\s]*)+$/i,
+                    "msg": "Sólo se aceptan 4 letras seguidas de 6 números"
+                  },
+                  "max":{
+                    "args": [10],
+                    "msg": "Máximo 10 carácteres"
+                  },
+                }
+            },
 
             },
             "fechainicio": {
@@ -64,7 +75,14 @@ exports.loadModel = function loadModel() {
             },
             "descripcion": {
                 "type": global.app.orm.Sequelize.STRING,
-                "allowNull": false
+                "allowNull": false,
+                "validate":{
+                  "len":{
+                    "args": [10,255],
+                    "msg": "Mínimo 10 y máximo 255 carácteres"
+                  },
+                }
+            },
 
             },
             "evidencia": {
@@ -123,9 +141,9 @@ exports.loadModel = function loadModel() {
         });
         NoConformidad.associate = function() {
             var models = global.app.orm.sequelize.models;
-            //models.NoConformidad.hasOne(models.Auditoria);
-            //models.NoConformidad.hasOne(models.Incidencia);
-            //models.NoConformidad.hasOne(models.QuejasReclamacione);
+            models.NoConformidad.hasOne(models.Auditoria);
+            models.NoConformidad.hasOne(models.Incidencia);
+            models.NoConformidad.hasOne(models.QuejasReclamacione);
             models.NoConformidad.belongsTo(models.Proceso);
             models.NoConformidad.belongsTo(models.ModalidadTuristica);
             models.NoConformidad.belongsTo(models.Norma);
