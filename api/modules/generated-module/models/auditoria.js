@@ -33,7 +33,7 @@ exports.loadModel = function loadModel() {
         Auditoria.associate = function() {
             var models = global.app.orm.sequelize.models;
             models.Auditoria.belongsTo(models.NoConformidad, {
-                as: 'id'
+                as: 'NoConformidad'
             });
         }
 };

@@ -2,7 +2,7 @@
 var lodash = require('lodash');
 const bcrypt = require('bcryptjs');
 exports.loadModel = function loadModel() {
-    const AcccionCorrectiva = global.app.orm.sequelize.define('AcccionCorrectiva',
+    const AccionCorrectiva = global.app.orm.sequelize.define('AccionCorrectiva',
         lodash.extend({}, global.app.orm.mixins.attributes, {
           "id": {
               "type": global.app.orm.Sequelize.INTEGER,
@@ -35,10 +35,10 @@ exports.loadModel = function loadModel() {
 
             }
         });
-        AcccionCorrectiva.associate = function() {
+        AccionCorrectiva.associate = function() {
             var models = global.app.orm.sequelize.models;
-            models.AcccionCorrectiva.belongsTo(models.Acciones, {
-                as: 'id'
+            models.AccionCorrectiva.belongsTo(models.Acciones, {
+                as: 'Acciones'
             });
         }
 };

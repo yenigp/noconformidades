@@ -102,4 +102,5 @@ exports.loadModel = function loadModel() {
         ProdServicio.associate = function() {
             var models = global.app.orm.sequelize.models;
             models.ProdServicio.belongsTo(models.Producto);
+          }
 };

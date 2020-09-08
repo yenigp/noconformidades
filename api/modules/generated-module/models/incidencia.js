@@ -33,7 +33,7 @@ exports.loadModel = function loadModel() {
         Incidencia.associate = function() {
             var models = global.app.orm.sequelize.models;
             models.Incidencia.belongsTo(models.NoConformidad, {
-                as: 'id'
+                as: 'NoConformidad'
             });
         }
 };

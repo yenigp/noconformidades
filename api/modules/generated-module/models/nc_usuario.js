@@ -59,20 +59,22 @@ exports.loadModel = function loadModel() {
                 "allowNull": false,
                 "unique": true,
                 "validate":{
-                  max: 10,
-                  notNull: {
-                    msg: 'Por favor, registre el nombre de usuario'
-                }
+                  "max": 10,
+                  "notNull": {
+                    "msg": "Por favor, registre el nombre de usuario"
+                },
+              }
 
             },
             "correo": {
                 "type": global.app.orm.Sequelize.STRING,
                 "allowNull": false,
                 "validate":{
-                  isEmail: true,
-                  notNull: {
-                    msg: 'Por favor, registre el correo electrónico'
+                  "isEmail": true,
+                  "notNull": {
+                    "msg": "Por favor, registre el correo electrónico"
                 }
+              },
 
             },
             "is_active": {
@@ -88,8 +90,7 @@ exports.loadModel = function loadModel() {
             "fecha_baja": {
                 "type": global.app.orm.Sequelize.DATE,
                 "allowNull": true,
-                "defaultValue": "NULL",
-                "min": $.get(this.fecha_creado)
+                "defaultValue": "NULL"
 
             },
             "password": {
@@ -100,8 +101,9 @@ exports.loadModel = function loadModel() {
                   var rounds = 8;
                   var hashedpassword = bcrypt.hashSync(password, rounds);
                   this.setDataValue('password', hashedpassword);
-
             },
+
+          },
             "check_password": {
                 "type": global.app.orm.Sequelize.STRING,
                 "allowNull": true,
@@ -125,15 +127,13 @@ exports.loadModel = function loadModel() {
             },
             "fecha_modificacion": {
                 "type": global.app.orm.Sequelize.DATE,
-                "allowNull": false,
-                "min": $.get(this.fecha_creado)
-
+                "allowNull": false
             },
             "observacion": {
-                "type": global.app.orm.Sequelize.TEXT('long')
+                "type": global.app.orm.Sequelize.TEXT('long'),
                 "allowNull": true,
                 "validate":{
-                  max: 255,
+                  "max": 255,
                 }
 
             },
@@ -163,10 +163,11 @@ exports.loadModel = function loadModel() {
         });
         NCUsuario.associate = function() {
             var models = global.app.orm.sequelize.models;
-            models.NCUsuario.belongsTo(models.Cargo);
-            models.NCUsuario.belongsTo(models.Rol);
+            models.NCUsuario.belongsTo(models.SCCargo);
+            models.NCUsuario.belongsTo(models.SCRol);
         }
         NCUsuario.prototype.isValidPassword = function(password) {
             var hashedPassword = this.get('password');
             return bcrypt.compareSync(password, hashedPassword);
+          }
 };

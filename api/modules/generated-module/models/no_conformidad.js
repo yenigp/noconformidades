@@ -42,10 +42,10 @@ exports.loadModel = function loadModel() {
           },
             "codigo_nc": {
                 "type": global.app.orm.Sequelize.STRING,
-                "allowNull": false
+                "allowNull": false,
                 "validate":{
                   "is": {
-                    "args": /^([A-Z]{4}[0-9]{6}+[\s]*)+$/i,
+                    "args": /^[A-Z]{4}[0-9]{6}$/i,
                     "msg": "Sólo se aceptan 4 letras seguidas de 6 números"
                   },
                   "max":{
@@ -53,8 +53,6 @@ exports.loadModel = function loadModel() {
                     "msg": "Máximo 10 carácteres"
                   },
                 }
-            },
-
             },
             "fechainicio": {
                 "type": global.app.orm.Sequelize.DATE,
@@ -82,8 +80,6 @@ exports.loadModel = function loadModel() {
                     "msg": "Mínimo 10 y máximo 255 carácteres"
                   },
                 }
-            },
-
             },
             "evidencia": {
                 "type": global.app.orm.Sequelize.STRING,
@@ -143,7 +139,7 @@ exports.loadModel = function loadModel() {
             var models = global.app.orm.sequelize.models;
             models.NoConformidad.hasOne(models.Auditoria);
             models.NoConformidad.hasOne(models.Incidencia);
-            models.NoConformidad.hasOne(models.QuejasReclamacione);
+            models.NoConformidad.hasOne(models.QuejasReclamaciones);
             models.NoConformidad.belongsTo(models.Proceso);
             models.NoConformidad.belongsTo(models.ModalidadTuristica);
             models.NoConformidad.belongsTo(models.Norma);

@@ -34,8 +34,6 @@ exports.loadModel = function loadModel() {
                   },
                 }
             },
-
-            },
             "proposito": {
                 "type": global.app.orm.Sequelize.STRING,
                 "allowNull": false

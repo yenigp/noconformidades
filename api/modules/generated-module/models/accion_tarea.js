@@ -2,7 +2,7 @@
 var lodash = require('lodash');
 const bcrypt = require('bcryptjs');
 exports.loadModel = function loadModel() {
-    const AcccionTarea = global.app.orm.sequelize.define('AcccionTarea',
+    const AccionTarea = global.app.orm.sequelize.define('AccionTarea',
         lodash.extend({}, global.app.orm.mixins.attributes, {
           "tarea_id": {
               "type": global.app.orm.Sequelize.INTEGER,
