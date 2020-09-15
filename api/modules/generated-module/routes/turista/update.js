@@ -15,7 +15,7 @@ module.exports = function (req, res) {
     .then(function (data) {
       return models
         .Turista
-        .findByPk(data.idturista, {include:[{all:true}]});
+        .findByPk(data.id, {include:[{all:true}]});
     })
     .then(function (data) {
       jsonAPIBody.data = data.toJSON();

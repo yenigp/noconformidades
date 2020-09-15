@@ -7,21 +7,21 @@ exports.registry = function registry() {
   var turistaHelpRoute = apiRoute + '/turista-help';
   global.app.express
     .route(turistaHelpRoute)
-    .get(global.security.ensureAuthenticated(), require('./help'));
+    .get(require('./help'));
 
   var turistaCollectionRoute = apiRoute + '/turista';
 
   global.app.express
     .route(turistaCollectionRoute)
-    .post(global.security.ensureAuthenticated(), require('./create'))
-    .get(global.security.ensureAuthenticated(), require('./index'));
+    .post(require('./create'))
+    .get(require('./index'));
 
   global
     .app.express
-    .param('idturista', function (req, res, next, idturista) {
+    .param('id', function (req, res, next, idturista) {
       return models
         .Turista
-        .findByPk(idturista, {
+        .findByPk(id, {
           include: [{ all: true }]
         }).then(function (data) {
           if (!data) {
@@ -34,7 +34,7 @@ exports.registry = function registry() {
         })
         .catch(global.app.orm.Sequelize.ValidationError, function (error) {
           global.app.logger.error(error, {
-            module: 'Turista/:idturista',
+            module: 'Turista/:id',
             submodule: 'index',
             stack: error.stack
           });
@@ -43,7 +43,7 @@ exports.registry = function registry() {
         })
         .catch(function (error) {
           global.app.logger.error(error, {
-            module: 'Turista/:idturista',
+            module: 'Turista/:id',
             submodule: 'index',
             stack: error.stack
           });
@@ -53,20 +53,20 @@ exports.registry = function registry() {
     }
     );
 
-  var turistaSingleRoute = turistaCollectionRoute + '/:idturista';
+  var turistaSingleRoute = turistaCollectionRoute + '/:id';
 
   global.app.express
     .route(turistaSingleRoute)
-    .patch(global.security.ensureAuthenticated(), require('./update'))
-    .get(global.security.ensureAuthenticated(), require('./show'))
-    .delete(global.security.ensureAuthenticated(), require('./delete'));
+    .patch(require('./update'))
+    .get(require('./show'))
+    .delete(require('./delete'));
 
   var turistaProfileRoute = '/v1/profile';
 
   global.app.express
     .route(turistaProfileRoute)
-    .patch(global.security.ensureAuthenticated(),function(req,res,next){
-      req.turista=req.loggedUser;
+    .patch(function(req,res,next){
+      //req.turista=req.loggedUser;
       return next();
     }, require('./update'))
 };
