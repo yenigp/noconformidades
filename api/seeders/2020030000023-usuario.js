@@ -1,6 +1,6 @@
 'use strict';
 
-var tableName = "Person";
+var tableName = "Usuario";
 const bcrypt = require('bcryptjs');
 var rounds = 8;
 
@@ -10,22 +10,21 @@ var hashedpassword = bcrypt.hashSync(password, rounds);
 var centros = [
   {
     id: 1,
-    gitUser: 'admin',
+    nombre: 'Administrador',
+    apellidos: 'del Sistema',
+    correo: "admin@admin.admin",
+    usuario: 'admin',
+    password: hashedpassword,
     status: "enabled",
     rol: "admin",
-    email: "admin@admin.admin",
-    password: hashedpassword,
     createdAt: "2020-04-05 22:23:17",
     lastLogout: "2020-04-05 22:23:17",
     updatedAt: "2020-04-05 22:23:17"
   }
 ];
-
-
-
 module.exports = {
   up: function (queryInterface) {
-    return queryInterface.bulkInsert(tableName, centros)
+    return queryInterface.bulkInsert({tableName: "Usuario", schema: "sgnc"}, centros)
   },
   down: function (queryInterface) {
     return queryInterface.bulkDelete(tableName);
