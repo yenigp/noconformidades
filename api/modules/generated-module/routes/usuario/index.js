@@ -15,7 +15,7 @@ module.exports = function (req, res) {
 
   var query = jsonAPI.buildQueryFromReq({
     req  : req,
-    model: models.NCUsuario
+    model: models.Usuario
   });
 
   query=jsonAPI.prepareQuery(query);

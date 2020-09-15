@@ -16,8 +16,8 @@ module.exports = function (req, res) {
       patch=1
       delete=1
       show=1
-
-
+      
+      
   `;
   var getHelp = `
     //------------------------------------------------------------------------------------------
@@ -47,22 +47,20 @@ module.exports = function (req, res) {
           data:[
             {
               id: 1 u
-              cargo_id: 1
-              uuid: 1
+              
               nombre: "Yeni"
-              segundo_apellido: "Pedro"
-              usuario: "yenigp"
-              correo: "hav_yeni@hotmail.com"
-              is_active: true
-              is_baja: false
-              fecha_baja: ""
+              apellidos: "Gayle Pedro"
+              correo: "yeni@havanatur.cu"
+              usuario: ""
               password: "" **
-              check_password: "" **
-              RolesID: 1
-              fecha_creado: 2018-09-05 20:28:13
-              fecha_modificacion: 2018-09-05 20:28:13
-              observacion: ""
-              primer_apellido: "Gayle"
+              status: "enabled|blocked"
+              lastLogout: date
+              description: txt
+              rol: "programador|admin"
+              CreatorId: Person
+              AreaId: Area
+              createdAt: 2018-09-05 20:28:13
+              updatedAt: 2018-09-05 20:28:13
             }
           ]
         }
@@ -76,21 +74,18 @@ module.exports = function (req, res) {
         Authorization: Bearer tokenxyz
     body params:
       {
-
-        cargo_id: 1
-        uuid: 1
+        
         nombre: "Yeni"
-        segundo_apellido: "Pedro"
-        usuario: "yenigp"
-        correo: "hav_yeni@hotmail.com"
-        is_active: true
-        is_baja: false
-        fecha_baja: ""
+        apellidos: "Gayle Pedro"
+        correo: "yeni@havanatur.cu"
+        usuario: ""
         password: "" **
-        check_password: "" **
-        RolesID: 1
-        observacion: ""
-        primer_apellido: "Gayle"
+        status: "enabled|blocked"
+        lastLogout: date
+        description: txt
+        rol: "programador|admin"
+        CreatorId: Person
+        AreaId: Area
       }
     return:
       status 201:
@@ -98,22 +93,20 @@ module.exports = function (req, res) {
           data:[
             {
               id: 2 u
-              cargo_id: 1
-              uuid: 1
+              
               nombre: "Yeni"
-              segundo_apellido: "Pedro"
-              usuario: "yenigp"
-              correo: "hav_yeni@hotmail.com"
-              is_active: true
-              is_baja: false
-              fecha_baja: ""
+              apellidos: "Gayle Pedro"
+              correo: "yeni@havanatur.cu"
+              usuario: ""
               password: "" **
-              check_password: "" **
-              RolesID: 1
-              fecha_creado: 2018-09-05 20:28:13
-              fecha_modificacion: 2018-09-05 20:28:13
-              observacion: ""
-              primer_apellido: "Gayle"
+              status: "enabled|blocked"
+              lastLogout: date
+              description: txt
+              rol: "programador|admin"
+              CreatorId: Person
+              AreaId: Area
+              createdAt: 2018-09-05 20:28:13
+              updatedAt: 2018-09-05 20:28:13
             }
           ]
         }
@@ -128,20 +121,17 @@ module.exports = function (req, res) {
     body params:
       {
 
-        cargo_id: 1
-        uuid: 1
         nombre: "Yeni"
-        segundo_apellido: "Pedro"
-        usuario: "yenigp"
-        correo: "hav_yeni@hotmail.com"
-        is_active: true
-        is_baja: false
-        fecha_baja: ""
+        apellidos: "Gayle Pedro"
+        correo: "yeni@havanatur.cu"
+        usuario: ""
         password: "" **
-        check_password: "" **
-        RolesID: 1
-        observacion: ""
-        primer_apellido: "Gayle"
+        status: "enabled|blocked"
+        lastLogout: date
+        description: txt
+        rol: "programador|admin"
+        CreatorId: Person
+        AreaId: Area
       }
     return:
       status 200:
@@ -149,22 +139,20 @@ module.exports = function (req, res) {
           data:[
             {
               id: 2 u
-              cargo_id: 1
-              uuid: 1
+              
               nombre: "Yeni"
-              segundo_apellido: "Pedro"
-              usuario: "yenigp"
-              correo: "hav_yeni@hotmail.com"
-              is_active: true
-              is_baja: false
-              fecha_baja: ""
+              apellidos: "Gayle Pedro"
+              correo: "yeni@havanatur.cu"
+              usuario: ""
               password: "" **
-              check_password: "" **
-              RolesID: 1
-              fecha_creado: 2018-09-05 20:28:13
-              fecha_modificacion: 2018-09-05 20:28:13
-              observacion: ""
-              primer_apellido: "Gayle"
+              status: "enabled|blocked"
+              lastLogout: date
+              description: txt
+              rol: "programador|admin"
+              CreatorId: Person
+              AreaId: Area
+              createdAt: 2018-09-05 20:28:13
+              updatedAt: 2018-09-05 20:28:13
             }
           ]
         }
@@ -177,7 +165,7 @@ module.exports = function (req, res) {
           Authorization: Bearer tokenxyz
 
     return:
-      status 204
+      status 204 
       // no content
   `;
 
@@ -192,22 +180,20 @@ module.exports = function (req, res) {
           data:[
             {
               id: 2 u
-              cargo_id: 1
-              uuid: 1
+              
               nombre: "Yeni"
-              segundo_apellido: "Pedro"
-              usuario: "yenigp"
-              correo: "hav_yeni@hotmail.com"
-              is_active: true
-              is_baja: false
-              fecha_baja: ""
+              apellidos: "Gayle Pedro"
+              correo: "yeni@havanatur.cu"
+              usuario: ""
               password: "" **
-              check_password: "" **
-              RolesID: 1
-              fecha_creado: 2018-09-05 20:28:13
-              fecha_modificacion: 2018-09-05 20:28:13
-              observacion: ""
-              primer_apellido: "Gayle"
+              status: "enabled|blocked"
+              lastLogout: date
+              description: txt
+              rol: "programador|admin"
+              CreatorId: Person
+              AreaId: Area
+              createdAt: 2018-09-05 20:28:13
+              updatedAt: 2018-09-05 20:28:13
             }
           ]
         }

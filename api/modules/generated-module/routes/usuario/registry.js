@@ -4,37 +4,37 @@ exports.registry = function registry() {
   var apiRoute = global.app.config.get('api:prefix');
   var jsonAPI = global.app.utils.jsonAPI;
 
-  var personHelpRoute = apiRoute + '/person-help';
+  var usuarioHelpRoute = apiRoute + '/usuario-help';
   global.app.express
-    .route(personHelpRoute)
-    .get(global.security.ensureAuthenticated(), require('./help'));
+    .route(usuarioHelpRoute)
+    .get(require('./help'));
 
-  var personCollectionRoute = apiRoute + '/person';
+  var usuarioCollectionRoute = apiRoute + '/usuario';
 
   global.app.express
-    .route(personCollectionRoute)
-    .post(global.security.ensureAuthenticated(), require('./create'))
-    .get(global.security.ensureAuthenticated(), require('./index'));
+    .route(usuarioCollectionRoute)
+    .post(require('./create'))
+    .get(require('./index'));
 
   global
     .app.express
-    .param('personId', function (req, res, next, personId) {
+    .param('usuarioId', function (req, res, next, usuarioId) {
       return models
-        .Person
-        .findByPk(personId, {
+        .Usuario
+        .findByPk(usuarioId, {
           include: [{ all: true }]
         }).then(function (data) {
           if (!data) {
             return res.sendStatus(404); // Not Found.
           }
 
-          req.person = data;
+          req.usuario = data;
           return next();
 
         })
         .catch(global.app.orm.Sequelize.ValidationError, function (error) {
           global.app.logger.error(error, {
-            module: 'Person/:personId',
+            module: 'Usuario/:usuarioId',
             submodule: 'index',
             stack: error.stack
           });
@@ -43,7 +43,7 @@ exports.registry = function registry() {
         })
         .catch(function (error) {
           global.app.logger.error(error, {
-            module: 'Person/:personId',
+            module: 'Usuario/:usuarioId',
             submodule: 'index',
             stack: error.stack
           });
@@ -53,20 +53,20 @@ exports.registry = function registry() {
     }
     );
 
-  var personSingleRoute = personCollectionRoute + '/:personId';
+  var usuarioSingleRoute = usuarioCollectionRoute + '/:usuarioId';
 
   global.app.express
-    .route(personSingleRoute)
-    .patch(global.security.ensureAuthenticated(), require('./update'))
-    .get(global.security.ensureAuthenticated(), require('./show'))
-    .delete(global.security.ensureAuthenticated(), require('./delete'));
+    .route(usuarioSingleRoute)
+    .patch(require('./update'))
+    .get(require('./show'))
+    .delete(require('./delete'));
 
-  var personProfileRoute = '/v1/profile';
+  var usuarioProfileRoute = '/v1/profile';
 
   global.app.express
-    .route(personProfileRoute)
+    .route(usuarioProfileRoute)
     .patch(global.security.ensureAuthenticated(),function(req,res,next){
-      req.person=req.loggedUser;
+      //req.usuario=req.loggedUser;
       return next();
     }, require('./update'))
 };
