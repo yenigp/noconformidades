@@ -18,6 +18,17 @@ module.exports = function (req, res) {
     model: models.Reserva
   });
 
+  query.include=[
+    {
+      model: models.ReservaPadre,
+      attributes:["id","localizador", "anombrede"]
+    },
+    {
+      model: models.Producto,
+      attributes:["id","nombproducto"]
+    },
+  ]
+
   query=jsonAPI.prepareQuery(query);
   return models
     .Reserva.findAll(query)
