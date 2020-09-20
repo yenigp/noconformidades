@@ -15,24 +15,17 @@ module.exports = function (req, res) {
 
   var query = jsonAPI.buildQueryFromReq({
     req  : req,
-    model: models.ProdServicio
+    model: models.Pais
   });
-
-  query.include=[
-    {
-      model: models.Producto,
-      attributes:["id","nombproducto"]
-    },
-  ]
 
   query=jsonAPI.prepareQuery(query);
   return models
-    .ProdServicio.findAll(query)
+    .Pais.findAll(query)
     .then(function (data) {
       jsonAPIBody.data                  = data;
       jsonAPIBody.meta.pagination.count = data.length;
       global.app.utils.jsonAPI.cleanQuery(query);
-      return models.ProdServicio.count(query);
+      return models.Pais.count(query);
     })
     .then(function (total) {
       jsonAPIBody.meta.pagination.total = total;
@@ -40,7 +33,7 @@ module.exports = function (req, res) {
     })
     .catch(global.app.orm.Sequelize.ValidationError, function (error) {
       global.app.utils.logger.error(error, {
-        module   : 'prodservicio/index',
+        module   : 'pais/index',
         submodule: 'routes',
         stack    : error.stack
       });
@@ -49,7 +42,7 @@ module.exports = function (req, res) {
     })
     .catch(function (error) {
       global.app.utils.logger.error(error, {
-        module   : 'prodservicio/index',
+        module   : 'pais/index',
         submodule: 'routes',
         stack    : error.stack
       });

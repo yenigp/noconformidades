@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 exports.loadModel = function loadModel() {
     const Pais = global.app.orm.sequelize.define('Pais',
         lodash.extend({}, global.app.orm.mixins.attributes, {
-          "idpais": {
+          "id": {
             "type": global.app.orm.Sequelize.INTEGER,
             "allowNull": false,
             "primaryKey": true
@@ -17,7 +17,7 @@ exports.loadModel = function loadModel() {
                 "type": global.app.orm.Sequelize.STRING
 
             },
-            "ididio": {
+            "id_idio": {
                 "type": global.app.orm.Sequelize.INTEGER
 
             },
@@ -26,8 +26,7 @@ exports.loadModel = function loadModel() {
 
             },
             "activo": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": "1"
+                "type": global.app.orm.Sequelize.INTEGER
 
             },
             "codigo2": {
@@ -37,12 +36,29 @@ exports.loadModel = function loadModel() {
 
         }), {
             comment: 'A example model.',
+            timestamps: false,
+            paranoid: true,
             freezeTableName: true,
-            tableName: 'e_pais',
-            schema: 'noconformidades',
+            tableName: 'Pais',
             hooks: {
 
             }
         });
+
+        Pais.associate = function() {
+            var models = global.app.orm.sequelize.models;
+            models.Pais.hasMany(models.ReservaPadre, {
+                foreignKey: 'id_pais',
+                constraints: false
+            });
+            models.Pais.hasMany(models.ReservaPadre, {
+                foreignKey: 'id_pais',
+                constraints: false
+            });
+            models.Pais.hasMany(models.Turista, {
+                foreignKey: 'id_pais',
+                constraints: false
+            });
+        }
 
 };

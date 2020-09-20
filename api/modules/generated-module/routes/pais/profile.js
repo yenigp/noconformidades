@@ -1,46 +1,29 @@
 'use strict';
 
-var lodash  = require('lodash');
-
 module.exports = function (req, res) {
+
+	var jsonAPI    = global.app.utils.jsonAPI;
   var models = global.app.orm.sequelize.models;
-  var jsonAPI = global.app.utils.jsonAPI;
 
   var jsonAPIBody = {
-    meta: {
-      pagination: {}
-    },
-    data: []
+    data: {}
   };
 
-  var query = jsonAPI.buildQueryFromReq({
-    req  : req,
-    model: models.ProdServicio
-  });
-
-  query.include=[
-    {
-      model: models.Producto,
-      attributes:["id","nombproducto"]
-    },
-  ]
-
-  query=jsonAPI.prepareQuery(query);
-  return models
-    .ProdServicio.findAll(query)
+  return req
+    .pais
+    .update(req.body)
     .then(function (data) {
-      jsonAPIBody.data                  = data;
-      jsonAPIBody.meta.pagination.count = data.length;
-      global.app.utils.jsonAPI.cleanQuery(query);
-      return models.ProdServicio.count(query);
+      return models
+        .Pais
+        .findByPk(data.id, {include:[{all:true}]});
     })
-    .then(function (total) {
-      jsonAPIBody.meta.pagination.total = total;
+    .then(function (data) {
+      jsonAPIBody.data = data.toJSON();
       return res.status(200).json(jsonAPIBody); // OK.
     })
     .catch(global.app.orm.Sequelize.ValidationError, function (error) {
       global.app.utils.logger.error(error, {
-        module   : 'prodservicio/index',
+        module   : 'pais/update',
         submodule: 'routes',
         stack    : error.stack
       });
@@ -49,7 +32,7 @@ module.exports = function (req, res) {
     })
     .catch(function (error) {
       global.app.utils.logger.error(error, {
-        module   : 'prodservicio/index',
+        module   : 'pais/update',
         submodule: 'routes',
         stack    : error.stack
       });
