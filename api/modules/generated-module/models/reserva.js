@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 exports.loadModel = function loadModel() {
     const Reserva = global.app.orm.sequelize.define('Reserva',
         lodash.extend({}, global.app.orm.mixins.attributes, {
-          "idreserva": {
+          "id": {
             "type": global.app.orm.Sequelize.INTEGER,
             "allowNull": false,
             "primaryKey": true
@@ -22,29 +22,22 @@ exports.loadModel = function loadModel() {
 
             },
             "tercero": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "allowNull": false,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
 
             },
             "fcreacion": {
-                "type": global.app.orm.Sequelize.DATE,
-                "allowNull": false,
+                "type": global.app.orm.Sequelize.DATE
 
             },
             "cantidadpax": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
 
             },
             "pagada": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "allowNull": false,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
             },
             "idestadoreserva": {
-                "type": global.app.orm.Sequelize.STRING,
-                "allowNull": false
+                "type": global.app.orm.Sequelize.STRING
             },
             "idticket": {
                 "type": global.app.orm.Sequelize.INTEGER
@@ -53,18 +46,12 @@ exports.loadModel = function loadModel() {
                 "type": global.app.orm.Sequelize.INTEGER
             },
             "idtipoproducto": {
-                "type": global.app.orm.Sequelize.STRING,
-                "allowNull": false
+                "type": global.app.orm.Sequelize.STRING
             },
-            "ProductoID": {
+            "idproducto": {
                 "type": global.app.orm.Sequelize.INTEGER,
-                "references": {
-                    "model": "Producto",
-                    "key": "idproducto"
-                },
-                "onUpdate": "cascade",
-                "onDelete": "cascade",
-                "allowNull": false
+                "comment": "The foreing object that will have the Producto"
+      
             },
             "idproductoterc": {
                 "type": global.app.orm.Sequelize.INTEGER
@@ -73,9 +60,7 @@ exports.loadModel = function loadModel() {
                 "type": global.app.orm.Sequelize.STRING
             },
             "free": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "allowNull": false,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
             },
             "nombservicio": {
                 "type": global.app.orm.Sequelize.STRING
@@ -93,23 +78,19 @@ exports.loadModel = function loadModel() {
                 "type": global.app.orm.Sequelize.INTEGER
             },
             "siovernight": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
             },
             "idtiporegreserva": {
                 "type": global.app.orm.Sequelize.STRING
             },
             "esprefacturada": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
             },
             "locindice": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "allowNull": false
+                "type": global.app.orm.Sequelize.INTEGER
             },
             "esautorizadaoperar": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
             },
             "fechaautorizo": {
                 "type": global.app.orm.Sequelize.DATE
@@ -117,15 +98,10 @@ exports.loadModel = function loadModel() {
             "observacionesautorizo": {
                 "type": global.app.orm.Sequelize.STRING
             },
-            "ReservaPadreID": {
+            "idreservapadre": {
                 "type": global.app.orm.Sequelize.INTEGER,
-                "references": {
-                    "model": "ReservaPadre",
-                    "key": "idreservapadre"
-                },
-                "onUpdate": "cascade",
-                "onDelete": "cascade",
-                "allowNull": false
+                "comment": "The foreing object that will have the ReservaPadre"
+      
             },
             "habrecogida": {
                 "type": global.app.orm.Sequelize.STRING
@@ -140,12 +116,10 @@ exports.loadModel = function loadModel() {
                 "type": global.app.orm.Sequelize.INTEGER
             },
             "siincluyeentrada": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 1
+                "type": global.app.orm.Sequelize.INTEGER
             },
             "siincluyesalida": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 1
+                "type": global.app.orm.Sequelize.INTEGER
             },
             "notas": {
                 "type": global.app.orm.Sequelize.STRING
@@ -154,35 +128,31 @@ exports.loadModel = function loadModel() {
                 "type": global.app.orm.Sequelize.INTEGER
             },
             "esventaexterior": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
             },
             "numconfsolicitud": {
                 "type": global.app.orm.Sequelize.STRING
             },
             "secotiza": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 1
+                "type": global.app.orm.Sequelize.INTEGER
             },
             "desglosegenerado": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
             },
             "cantmay": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
             },
             "cantmen": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
+                
             },
             "cantinf": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
+                
             },
             "essol": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
+                
             },
             "indicadorsolicitud": {
                 "type": global.app.orm.Sequelize.STRING
@@ -203,17 +173,14 @@ exports.loadModel = function loadModel() {
                 "type": global.app.orm.Sequelize.INTEGER
             },
             "idestadocupo": {
-                "type": global.app.orm.Sequelize.STRING,
-                "allowNull": false,
-                "defaultValue": "QOR"
+                "type": global.app.orm.Sequelize.STRING
             },
             "cantadm": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
             },
             "esfacturada": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
+                
             },
             "idcondpago": {
                 "type": global.app.orm.Sequelize.INTEGER
@@ -231,28 +198,27 @@ exports.loadModel = function loadModel() {
                 "type": global.app.orm.Sequelize.FLOAT
             },
             "escontabilizada": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
+                
             },
             "esmismoserviniciofin": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
+                
             },
             "enableservinicial": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
             },
             "enableservfinal": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
+                
             },
             "enablevueloentrada": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
+                
             },
             "enablevuelosalida": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
+                
             },
             "freecomentario": {
                 "type": global.app.orm.Sequelize.STRING
@@ -261,20 +227,20 @@ exports.loadModel = function loadModel() {
                 "type": global.app.orm.Sequelize.INTEGER
             },
             "isingresoticketasentado": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
+                
             },
             "iddepartamento": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": -1
+                "type": global.app.orm.Sequelize.INTEGER
+                
             },
             "iscostoasentado": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
+                
             },
             "idmotivocancel": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
+                
             },
             "fechacancel": {
                 "type": global.app.orm.Sequelize.DATE
@@ -283,8 +249,8 @@ exports.loadModel = function loadModel() {
                 "type": global.app.orm.Sequelize.STRING
             },
             "tratar_idaret": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 1
+                "type": global.app.orm.Sequelize.INTEGER
+                
             },
             "id_usua_mod": {
                 "type": global.app.orm.Sequelize.INTEGER
@@ -293,8 +259,7 @@ exports.loadModel = function loadModel() {
                 "type": global.app.orm.Sequelize.INTEGER
             },
             "fultmodif": {
-                "type": global.app.orm.Sequelize.DATE,
-                "defaultValue": global.app.orm.Sequelize.NOW
+                "type": global.app.orm.Sequelize.DATE
             },
             "idestadoold": {
                 "type": global.app.orm.Sequelize.INTEGER
@@ -304,17 +269,26 @@ exports.loadModel = function loadModel() {
             },
         }), {
             comment: 'A example model.',
+            timestamps: false,
+            paranoid: true,
             freezeTableName: true,
-            tableName: 'e_reserva',
-            schema: 'noconformidades',
+            tableName: 'Reserva',
             hooks: {
 
             }
         });
         Reserva.associate = function() {
             var models = global.app.orm.sequelize.models;
-            models.Reserva.belongsTo(models.ReservaPadre);
-            models.Reserva.belongsTo(models.Producto);
+            models.Reserva.belongsTo(models.ReservaPadre,
+                {
+                    foreignKey: 'idreservapadre',
+                    constraints: false
+                });
+            models.Reserva.belongsTo(models.Producto, 
+                {
+                    foreignKey: 'idproducto',
+                    constraints: false
+                });
         }
 
 };
