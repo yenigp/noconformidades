@@ -4,13 +4,7 @@ const bcrypt = require('bcryptjs');
 exports.loadModel = function loadModel() {
     const Expediente = global.app.orm.sequelize.define('Expediente',
         lodash.extend({}, global.app.orm.mixins.attributes, {
-          "id": {
-            "type": global.app.orm.Sequelize.INTEGER,
-            "allowNull": false,
-            "autoIncrement": true,
-            "primaryKey": true
-          },
-          "noconformidad_codigo_nc": {
+          "NoConformidadId": {
               "type": global.app.orm.Sequelize.INTEGER,
               "references": {
                   "model": "NoConformidad",
@@ -25,29 +19,39 @@ exports.loadModel = function loadModel() {
                 "allowNull": false
 
             },
-            "fechacreacion": {
-                "type": global.app.orm.Sequelize.DATEONLY,
-                "allowNull": false
+            "estado": {
+                "type": global.app.orm.Sequelize.ENUM,
+                "values": ["abierto", "cerrado"],
+                "defaultValue": "abierto"
 
             },
-            "fechacierre": {
-                "type": global.app.orm.Sequelize.DATEONLY,
-                "allowNull": false
-
+            "CreatorId": {
+                "type": global.app.orm.Sequelize.INTEGER,
+                "references": {
+                    "model": "Usuario",
+                    "key": "id"
+                },
+                "onUpdate": "cascade",
+                "onDelete": "cascade"
+      
             },
 
         }), {
             comment: 'A example model.',
             freezeTableName: true,
-            tableName: 'expediente',
-            schema: 'noconformidades',
+            tableName: 'Expediente',
             hooks: {
 
             }
         });
         Expediente.associate = function() {
             var models = global.app.orm.sequelize.models;
-            models.Expediente.belongsTo(models.NoConformidad);
+            models.Expediente.belongsTo(models.Usuario, {
+                as: 'Creator'
+            });  
+            models.Expediente.belongsTo(models.NoConformidad, {
+                as: 'NoConformidad'
+            });
         }
 
 };
