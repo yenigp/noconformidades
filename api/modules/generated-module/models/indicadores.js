@@ -4,13 +4,7 @@ const bcrypt = require('bcryptjs');
 exports.loadModel = function loadModel() {
     const Indicadores = global.app.orm.sequelize.define('Indicadores',
         lodash.extend({}, global.app.orm.mixins.attributes, {
-          "id": {
-            "type": global.app.orm.Sequelize.INTEGER,
-            "allowNull": false,
-            "autoIncrement": true,
-            "primaryKey": true
-          },
-          "proceso_id": {
+          "ProcesoId": {
               "type": global.app.orm.Sequelize.INTEGER,
               "references": {
                   "model": "Proceso",
@@ -24,9 +18,8 @@ exports.loadModel = function loadModel() {
                 "type": global.app.orm.Sequelize.STRING,
                 "allowNull": false,
                 "validate":{
-                  "is": {
-                    "args": /^([A-Z]{1}[a-zñáéíóú]+[\s]*)+$/i,
-                    "msg": "Sólo se aceptan letras"
+                  "isAlpha": {
+                    "msg": "El nombre de un indicador solo puede contener letras"
                   },
                   "len":{
                     "args": [3,50],
@@ -55,8 +48,8 @@ exports.loadModel = function loadModel() {
                 "defaultValue": "enabled"
 
             },
-            "cumplimientoindicador": {
-                "type": global.app.orm.Sequelize.DOUBLE,
+            "cumplimiento": {
+                "type": global.app.orm.Sequelize.FLOAT,
                 "allowNull": false
 
             },
@@ -65,35 +58,47 @@ exports.loadModel = function loadModel() {
                 "allowNull": false
 
             },
-            "responsableseguimiento": {
-                "type": global.app.orm.Sequelize.STRING,
-                "allowNull": false
-
-            },
             "frecuenciaanalisis": {
                 "type": global.app.orm.Sequelize.INTEGER,
                 "allowNull": false
 
             },
-            "tipo": {
+            "tipoanalisis": {
               "type": global.app.orm.Sequelize.ENUM,
               "values": ["Actividad", "Calidad", "Desempeño", "Gestión", "Objetivo", "Proceso", "Riesgo"],
-              "defaultValue": "enabled"
+              "defaultValue": "Calidad"
 
+            },
+            "CreatorId": {
+                "type": global.app.orm.Sequelize.INTEGER,
+                "references": {
+                    "model": "Usuario",
+                    "key": "id"
+                },
+                "onUpdate": "cascade",
+                "onDelete": "cascade"
+      
             },
 
         }), {
             comment: 'A example model.',
             freezeTableName: true,
-            tableName: 'indicadores',
-            schema: 'noconformidades',
+            tableName: 'Indicadores',
             hooks: {
 
             }
         });
         Indicadores.associate = function() {
             var models = global.app.orm.sequelize.models;
-            models.Indicadores.belongsTo(models.Proceso);
+            models.Indicadores.belongsTo(models.Usuario, {
+                as: 'Creator'
+            });  
+            models.Indicadores.belongsTo(models.Proceso, {
+                as: 'Proceso'
+            });
+            models.Indicadores.belongsToMany(models.ObjetivosCalidad, {
+                through: models.IndicadoresObjetivos
+            })
         }
 
 };
