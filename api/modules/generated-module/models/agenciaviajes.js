@@ -4,16 +4,6 @@ const bcrypt = require('bcryptjs');
 exports.loadModel = function loadModel() {
     const AgenciaViajes = global.app.orm.sequelize.define('AgenciaViajes',
         lodash.extend({}, global.app.orm.mixins.attributes, {
-          "AgenciaViajesID": {
-              "type": global.app.orm.Sequelize.INTEGER,
-              "references": {
-                  "model": "Sucursal",
-                  "key": "idagenciaviajes_tmp"
-              },
-              "onUpdate": "cascade",
-              "onDelete": "cascade",
-              "allowNull": false
-          },
             "email": {
                 "type": global.app.orm.Sequelize.STRING
 
@@ -30,82 +20,94 @@ exports.loadModel = function loadModel() {
                 "type": global.app.orm.Sequelize.STRING
             },
             "sicasamatriz": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 1
-            },
+                "type": global.app.orm.Sequelize.INTEGER
 
+            },
             "descripcion": {
                 "type": global.app.orm.Sequelize.STRING
             },
             "nombagenciaviajes": {
                 "type": global.app.orm.Sequelize.STRING
+
             },
             "idagrupacion": {
                 "type": global.app.orm.Sequelize.INTEGER
+                
             },
             "direccion": {
                 "type": global.app.orm.Sequelize.STRING
+
             },
             "idagenciaviajesmatriz": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "unique": "compositeIndex"
+                "type": global.app.orm.Sequelize.INTEGER
+
             },
             "escliente": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
+
             },
             "id_acre_deud": {
                 "type": global.app.orm.Sequelize.INTEGER
+
             },
             "id_cons_enti": {
                 "type": global.app.orm.Sequelize.INTEGER
+
             },
             "idpolo": {
                 "type": global.app.orm.Sequelize.INTEGER
+
             },
             "simontar": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
+
             },
             "sicoorporativo": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
+
             },
-            "PaisID": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "references": {
-                    "model": "Pais",
-                    "key": "idpais"
-                },
-                "onUpdate": "cascade",
-                "onDelete": "cascade",
-                "allowNull": false
+            "id_pais": {
+                "type": global.app.orm.Sequelize.INTEGER
+
             },
             "idclasiftipoproducto": {
                 "type": global.app.orm.Sequelize.INTEGER
+
             },
             "idestado": {
                 "type": global.app.orm.Sequelize.STRING
+
             },
             "id_propietario": {
                 "type": global.app.orm.Sequelize.INTEGER
-            },
 
-
+            }
         }), {
             comment: 'A example model.',
+            timestamps: false,
+            paranoid: true,
             freezeTableName: true,
-            tableName: 'e_agenciaviajes',
-            schema: 'noconformidades',
+            tableName: 'AgenciaViajes',
             hooks: {
 
             }
         });
         AgenciaViajes.associate = function() {
             var models = global.app.orm.sequelize.models;
-            models.AgenciaViajes.belongsTo(models.Sucursal, {
-                as: 'AgenciaViajes'
+            models.AgenciaViajes.belongsTo(models.Pais, {
+                foreignKey: 'id_pais',
+                constraints: false
             });
-            models.AgenciaViajes.belongsTo(models.Pais);
+            models.AgenciaViajes.belongsTo(models.Sucursal, {
+                foreignKey: 'id_propietario',
+                constraints: false
+            });
+            models.AgenciaViajes.belongsTo(models.AgenciaViajes, {
+                foreignKey: 'idagenciaviajesmatriz',
+                constraints: false
+            });
+            models.AgenciaViajes.belongsToMany(models.Mercado, {
+                through: models.AgenciaMercado
+            });
         }
 };
