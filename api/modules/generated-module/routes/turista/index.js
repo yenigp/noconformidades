@@ -18,6 +18,17 @@ module.exports = function (req, res) {
     model: models.Turista
   });
 
+  query.include=[
+    {
+      model: models.ReservaPadre,
+      attributes:["id","localizador", "anombrede"]
+    },
+    {
+      model: models.Pais,
+      attributes:["id", "codigo", "descripcion"]
+    },
+  ]
+
   query=jsonAPI.prepareQuery(query);
   return models
     .Turista.findAll(query)
