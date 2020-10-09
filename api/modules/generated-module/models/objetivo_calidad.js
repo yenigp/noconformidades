@@ -2,21 +2,14 @@
 var lodash = require('lodash');
 const bcrypt = require('bcryptjs');
 exports.loadModel = function loadModel() {
-    const ObjetivoCalidad = global.app.orm.sequelize.define('ObjetivoCalidad',
+    const ObjetivosCalidad = global.app.orm.sequelize.define('ObjetivosCalidad',
         lodash.extend({}, global.app.orm.mixins.attributes, {
-          "id": {
-            "type": global.app.orm.Sequelize.INTEGER,
-            "allowNull": false,
-            "autoIncrement": true,
-            "primaryKey": true
-          },
             "nombre": {
                 "type": global.app.orm.Sequelize.STRING,
                 "allowNull": false,
                 "validate":{
-                  "is": {
-                    "args": /^([A-Z]{1}[a-zñáéíóú]+[\s]*)+$/i,
-                    "msg": "Sólo se aceptan letras"
+                  "isAlpha": {
+                    "msg": "El nombre de un objetivo solo puede contener letras"
                   },
                   "len":{
                     "args": [3,50],
@@ -26,16 +19,19 @@ exports.loadModel = function loadModel() {
             },
             "fechacomienzo": {
                 "type": global.app.orm.Sequelize.DATEONLY,
-                "allowNull": false
 
+            },
+            "fechafin": {
+              "type": global.app.orm.Sequelize.DATE
+      
             },
             "valoralcanzar": {
                 "type": global.app.orm.Sequelize.INTEGER,
                 "allowNull": false
 
             },
-            "cumplimientoobjetivo": {
-                "type": global.app.orm.Sequelize.DOUBLE,
+            "cumplimiento": {
+                "type": global.app.orm.Sequelize.FLOAT,
                 "allowNull": false
 
             },
@@ -49,19 +45,32 @@ exports.loadModel = function loadModel() {
                 "allowNull": true
 
             },
-            "responsableseguimiento": {
-                "type": global.app.orm.Sequelize.STRING,
-                "allowNull": false
-
-            },
+            "CreatorId": {
+              "type": global.app.orm.Sequelize.INTEGER,
+              "references": {
+                  "model": "Usuario",
+                  "key": "id"
+              },
+              "onUpdate": "cascade",
+              "onDelete": "cascade"
+    
+          },
 
         }), {
             comment: 'A example model.',
             freezeTableName: true,
-            tableName: 'objetivo_calidad',
-            schema: 'noconformidades',
+            tableName: 'ObjetivosCalidad',
             hooks: {
 
             }
         });
+        ObjetivosCalidad.associate = function() {
+          var models = global.app.orm.sequelize.models;
+          models.ObjetivosCalidad.belongsTo(models.Usuario, {
+              as: 'Creator'
+          });    
+          models.ObjetivosCalidad.belongsToMany(models.Indicadores, {
+              through: models.IndicadoresObjetivos
+          })
+        }  
 };
