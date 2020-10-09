@@ -12,7 +12,7 @@ var centros = [
     id: 1,
     nombre: 'Administrador',
     apellidos: 'del Sistema',
-    correo: "admin@admin.admin",
+    email: "admin@admin.admin",
     usuario: 'admin',
     password: hashedpassword,
     status: "enabled",
@@ -24,7 +24,7 @@ var centros = [
 ];
 module.exports = {
   up: function (queryInterface) {
-    return queryInterface.bulkInsert({tableName: "Usuario", schema: "sgnc"}, centros)
+    return queryInterface.bulkInsert({tableName: "Usuario", schema: "noconformidades"}, centros)
   },
   down: function (queryInterface) {
     return queryInterface.bulkDelete(tableName);
