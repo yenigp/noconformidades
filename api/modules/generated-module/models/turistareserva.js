@@ -5,31 +5,33 @@ exports.loadModel = function loadModel() {
     const TuristaReserva = global.app.orm.sequelize.define('TuristaReserva',
         lodash.extend({}, global.app.orm.mixins.attributes, {
           "TuristaID": {
-              "type": global.app.orm.Sequelize.INTEGER,
-              "references": {
-                  "model": "Turista",
-                  "key": "idturista"
-              },
-              "onUpdate": "cascade",
-              "onDelete": "cascade",
-              "allowNull": false
+              "type": global.app.orm.Sequelize.INTEGER
           },
           "ReservaID": {
-              "type": global.app.orm.Sequelize.INTEGER,
-              "references": {
-                  "model": "Reserva",
-                  "key": "idreserva"
-              },
-              "onUpdate": "cascade",
-              "onDelete": "cascade",
-              "allowNull": false
+              "type": global.app.orm.Sequelize.INTEGER
           },
+          "idclasifedad": {
+            "type": global.app.orm.Sequelize.INTEGER
+          },
+          "pagada": {
+            "type": global.app.orm.Sequelize.INTEGER
+          },
+         "idcondpago": {
+            "type": global.app.orm.Sequelize.INTEGER
+          },
+          "free": {
+            "type": global.app.orm.Sequelize.INTEGER
+          },
+          "secotiza": {
+            "type": global.app.orm.Sequelize.INTEGER
+          }
 
         }), {
             comment: 'A example model.',
+            timestamps: false,
+            paranoid: true,
             freezeTableName: true,
-            tableName: 'e_turistareserva',
-            schema: 'noconformidades',
+            tableName: 'TuristaReserva',
             hooks: {
 
             }
