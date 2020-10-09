@@ -4,11 +4,6 @@ const bcrypt = require('bcryptjs');
 exports.loadModel = function loadModel() {
     const ProdServicio = global.app.orm.sequelize.define('ProdServicio',
         lodash.extend({}, global.app.orm.mixins.attributes, {
-          "idservicio": {
-            "type": global.app.orm.Sequelize.INTEGER,
-            "allowNull": false,
-            "primaryKey": true
-          },
             "nombservicio": {
                 "type": global.app.orm.Sequelize.STRING
 
@@ -28,15 +23,8 @@ exports.loadModel = function loadModel() {
                 "defaultValue": 0
 
             },
-            "ProductoID": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "references": {
-                    "model": "Producto",
-                    "key": "idproducto"
-                },
-                "onUpdate": "cascade",
-                "onDelete": "cascade",
-                "allowNull": false
+            "idproducto": {
+                "type": global.app.orm.Sequelize.INTEGER
             },
             "idtiposervicio": {
                 "type": global.app.orm.Sequelize.STRING
@@ -46,13 +34,16 @@ exports.loadModel = function loadModel() {
                 "type": global.app.orm.Sequelize.INTEGER
 
             },
+            "horaserv": {
+                "type": global.app.orm.Sequelize.STRING
+
+            },
             "cantidad": {
                 "type": global.app.orm.Sequelize.INTEGER
 
             },
             "siflexible": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
 
             },
             "idtipobono": {
@@ -60,47 +51,45 @@ exports.loadModel = function loadModel() {
 
             },
             "sitercero": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
 
             },
             "rp_idnodo": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 3
+                "type": global.app.orm.Sequelize.INTEGER
 
             },
             "siretorno": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
 
             },
             "siidaretorno": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
 
             },
             "siincluirvariante": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
 
             },
             "inclcantreserva": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
 
             },
 
         }), {
             comment: 'A example model.',
+            timestamps: false,
+            paranoid: true,
             freezeTableName: true,
-            tableName: 'e_prodservicio',
-            schema: 'noconformidades',
+            tableName: 'ProdServicio',
             hooks: {
 
             }
         });
         ProdServicio.associate = function() {
             var models = global.app.orm.sequelize.models;
-            models.ProdServicio.belongsTo(models.Producto);
+            models.ProdServicio.belongsTo(models.Producto, {
+                foreignKey: 'idproducto',
+                constraints: false
+            });
           }
 };
