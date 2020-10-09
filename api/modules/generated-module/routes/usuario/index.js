@@ -18,6 +18,13 @@ module.exports = function (req, res) {
     model: models.Usuario
   });
 
+  query.include=[
+    {
+      model: models.Area,
+      attributes:["nombre"]
+    },
+  ]
+
   query=jsonAPI.prepareQuery(query);
   return models
     .NCUsuario.findAll(query)
