@@ -2,17 +2,21 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface
-      .addIndex({
-        tableName: 'Usuario',
-        schema: 'sgnc'
+    return queryInterface.addColumn({
+      tableName: 'Usuario',
+      schema: 'noconformidades'
+    },
+    'AreaId',
+    {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'Area',
+        key: 'id'
       },
-        ['nombre', 'apellidos'],
-          {
-            indexName: 'SuperDuperIndex',
-            indicesType: 'UNIQUE'
-          }
-      )
+      onUpdate: 'cascade',
+      onDelete: 'cascade'
+    }
+  )
     /*
       Add altering commands here.
       Return a promise to correctly handle asynchronicity.

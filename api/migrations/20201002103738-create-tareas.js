@@ -13,6 +13,11 @@ module.exports = {
         "allowNull": false
 
       },
+      "descripcion": {
+        "type": Sequelize.STRING,
+        "allowNull": false
+
+      },
       "fechacomienzo": {
         "type": Sequelize.DATE
 
@@ -21,27 +26,11 @@ module.exports = {
         "type": Sequelize.DATE
 
       },
-      "valoralcanzar": {
-        "type": Sequelize.INTEGER,
+      "estado": {
+        "type": Sequelize.ENUM,
+        "values": ["registrada", "revisada", "cerrada"],
         "allowNull": false
 
-      },
-      "cumplimiento":
-      {
-        "type": Sequelize.FLOAT,
-        "allowNull": false
-
-      },
-      "periodicidadseguimiento":
-      {
-        "type": Sequelize.INTEGER,
-        "allowNull": false
-
-      },
-      "comentario":
-      {
-        "type": Sequelize.STRING
-    
       },
       "CreatorId": {
           "type": Sequelize.INTEGER,
@@ -64,7 +53,7 @@ module.exports = {
       }
   };
   return queryInterface
-      .createTable({name: "ObjetivosCalidad", tableName: "ObjetivosCalidad", schema: "sgnc"}, tableDefinition);
+      .createTable({name: "Tareas", tableName: "Tareas", schema: "noconformidades"}, tableDefinition);
   },
 
   down: (queryInterface, Sequelize) => {

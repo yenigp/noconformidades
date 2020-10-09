@@ -8,20 +8,14 @@ module.exports = {
           "primaryKey": true,
           "autoIncrement": true
       },
+      "codigo": {
+          "type": Sequelize.STRING(2),
+          "allowNull": false
+
+      },
       "nombre": {
-        "type": Sequelize.STRING,
-        "allowNull": false
-
-      },
-      "tipo": {
-        "type": Sequelize.ENUM,
-        "values": ["realización", "estratégico", "de apoyo"],
-        "allowNull": false
-
-      },
-      "jefeproceso": {
-        "type": Sequelize.STRING,
-        "allowNull": false
+          "type": Sequelize.STRING(150),
+          "allowNull": false
 
       },
       "CreatorId": {
@@ -45,7 +39,7 @@ module.exports = {
       }
   };
   return queryInterface
-      .createTable({name: "Proceso", tableName: "Proceso", schema: "sgnc"}, tableDefinition);
+      .createTable({name: "TipoNC", tableName: "TipoNC", schema: "noconformidades"}, tableDefinition);
   },
 
   down: (queryInterface, Sequelize) => {

@@ -13,6 +13,17 @@ module.exports = {
         "allowNull": false
 
       },
+      "tipo": {
+        "type": Sequelize.ENUM,
+        "values": ["realización", "estratégico", "de apoyo"],
+        "allowNull": false
+
+      },
+      "jefeproceso": {
+        "type": Sequelize.STRING,
+        "allowNull": false
+
+      },
       "CreatorId": {
           "type": Sequelize.INTEGER,
           "references": {
@@ -34,7 +45,7 @@ module.exports = {
       }
   };
   return queryInterface
-      .createTable({name: "ModalidadTuristica", tableName: "ModalidadTuristica", schema: "sgnc"}, tableDefinition);
+      .createTable({name: "Proceso", tableName: "Proceso", schema: "noconformidades"}, tableDefinition);
   },
 
   down: (queryInterface, Sequelize) => {

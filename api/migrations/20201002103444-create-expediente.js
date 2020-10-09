@@ -1,7 +1,5 @@
 'use strict';
 
-const { flatMap } = require("lodash");
-
 module.exports = {
   up: (queryInterface, Sequelize) => {
     var tableDefinition = {
@@ -10,61 +8,25 @@ module.exports = {
         "primaryKey": true,
         "autoIncrement": true
     },
-      "ProcesoId": {
+      "NoConformidadId": {
         "type": Sequelize.INTEGER,
         "references": {
-            "model": "Proceso",
+            "model": "NoConformidad",
             "key": "id"
         },
         "onUpdate": "cascade",
         "onDelete": "cascade"
       },
-      "nombre": {
-        "type": Sequelize.STRING(100),
-        "allowNull": false
-
-      },
-      "propósito": {
+      "evidencia": {
         "type": Sequelize.STRING,
         "allowNull": false
 
       },
-      "plazodesde": {
-        "type": Sequelize.DATE
-
-      },
-      "plazohasta": {
-        "type": Sequelize.DATE
-
-      },
-      "tipomedicion": {
+      "estado": {
         "type": Sequelize.ENUM,
-        "values": ["Numérico", "Porcentaje", "Probabilidad", "Medida-Impacto"],
-        "defaultValue": "Numérico"
-
-      },
-      "cumplimiento": {
-        "type": Sequelize.FLOAT,
-        "allowNull": false
-
-      },
-      "frecuenciaseguimiento":
-      {
-        "type": Sequelize.INTEGER,
-        "allowNull": false
-
-      },
-      "frecuencianalisis":
-      {
-        "type": Sequelize.INTEGER,
-        "allowNull": false
-
-      },
-      "tipoanalisis":
-      {
-        "type": Sequelize.ENUM,
-        "values": ["Actividad", "Calidad", "Desempeño", "Gestión", "Objetivo", "Proceso", "Riesgo"],
-        "defaultValue": "Calidad"
+        "values": ["abierto", "cerrado"],
+        "defaultValue": "abierto"
+        
       },
       "CreatorId": {
           "type": Sequelize.INTEGER,
@@ -87,7 +49,7 @@ module.exports = {
       }
   };
   return queryInterface
-      .createTable({name: "Indicadores", tableName: "Indicadores", schema: "sgnc"}, tableDefinition);
+      .createTable({name: "Expediente", tableName: "Expediente", schema: "noconformidades"}, tableDefinition);
   },
 
   down: (queryInterface, Sequelize) => {

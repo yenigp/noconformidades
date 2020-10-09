@@ -3,36 +3,29 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     var tableDefinition = {
-      "NoConformidadId": {
+      "id": {
+        "type": Sequelize.INTEGER,
+        "primaryKey": true,
+        "autoIncrement": true
+
+      },
+      "IndicadoresId": {
         "type": Sequelize.INTEGER,
         "references": {
-            "model": "NoConformidad",
+            "model": "Indicadores",
             "key": "id"
         },
         "onUpdate": "cascade",
         "onDelete": "cascade"
       },
-      "ModalidadTuristicaId": {
+      "ObjetivosId": {
         "type": Sequelize.INTEGER,
         "references": {
-          "model": "ModalidadTuristica",
-          "key": "id"
-      },
-      "onUpdate": "cascade",
-      "onDelete": "cascade"
-
-      },
-      "clasificacion": {
-        "type": Sequelize.ENUM,
-        "values": ["interna", "externa"],
-        "allowNull": false
-
-      },
-      "costonocalidad": {
-        "type": Sequelize.FLOAT.UNSIGNED
-      },
-      "observacion": {
-        "type": Sequelize.STRING
+            "model": "ObjetivosCalidad",
+            "key": "id"
+        },
+        "onUpdate": "cascade",
+        "onDelete": "cascade"
       },
       "CreatorId": {
           "type": Sequelize.INTEGER,
@@ -55,7 +48,7 @@ module.exports = {
       }
   };
   return queryInterface
-      .createTable({name: "QuejasReclamaciones", tableName: "QuejasReclamaciones", schema: "sgnc"}, tableDefinition);
+      .createTable({name: "IndicadoresObjetivos", tableName: "IndicadoresObjetivos", schema: "noconformidades"}, tableDefinition);
   },
 
   down: (queryInterface, Sequelize) => {

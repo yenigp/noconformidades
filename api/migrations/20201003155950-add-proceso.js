@@ -3,18 +3,12 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.addColumn({
-      tableName: 'Usuario',
-      schema: 'sgnc'
+      tableName: 'Proceso',
+      schema: 'noconformidades'
     },
-    'AreaId',
+    'codigo',
     {
-      type: Sequelize.INTEGER,
-      references: {
-        model: 'Area',
-        key: 'id'
-      },
-      onUpdate: 'cascade',
-      onDelete: 'cascade'
+      type: Sequelize.STRING(2)
     }
   )
     /*

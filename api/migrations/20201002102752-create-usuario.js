@@ -6,10 +6,11 @@ module.exports = {
   up: function(queryInterface, Sequelize) {
     var tableDefinition = {
         "id": {
-            "type": Sequelize.INTEGER,
+            "allowNull": false,
+            "autoIncrement": true,
             "primaryKey": true,
-            "autoIncrement": true
-        },
+            "type": Sequelize.INTEGER
+          },
         "nombre": {
           "type": Sequelize.STRING
 
@@ -58,16 +59,6 @@ module.exports = {
             "onDelete": "cascade"
 
         },
-        /*"AreaId": {
-          "type": Sequelize.INTEGER,
-          "references": {
-              "model": "Area",
-              "key": "id"
-          },
-          "onUpdate": "cascade",
-          "onDelete": "cascade"
-
-        },*/
         "createdAt": {
             "type": Sequelize.DATE
         },
@@ -79,7 +70,7 @@ module.exports = {
         }
     };
     return queryInterface
-        .createTable({name: "tableName", tableName: "tableName", schema: "sgnc"}, tableDefinition);
+        .createTable({name: "Usuario", tableName: "Usuario", schema: "noconformidades"}, tableDefinition);
 },
 down: function(queryInterface) {
     return queryInterface.dropTable(tableName);

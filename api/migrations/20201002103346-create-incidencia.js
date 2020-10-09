@@ -7,7 +7,8 @@ module.exports = {
         "type": Sequelize.INTEGER,
         "primaryKey": true,
         "autoIncrement": true
-    },
+
+      },
       "NoConformidadId": {
         "type": Sequelize.INTEGER,
         "references": {
@@ -17,16 +18,15 @@ module.exports = {
         "onUpdate": "cascade",
         "onDelete": "cascade"
       },
-      "evidencia": {
-        "type": Sequelize.STRING,
+      "tipo": {
+        "type": Sequelize.ENUM,
+        "values": ["traslado", "alojamiento", "renta de autos", "vuelo", "restauración"],
+        "allowNull": false
+      },
+      "causainvestigacion": {
+        "type": Sequelize.BOOLEAN,
         "allowNull": false
 
-      },
-      "estado": {
-        "type": Sequelize.ENUM,
-        "values": ["abierto", "cerrado"],
-        "defaultValue": "abierto"
-        
       },
       "CreatorId": {
           "type": Sequelize.INTEGER,
@@ -49,7 +49,7 @@ module.exports = {
       }
   };
   return queryInterface
-      .createTable({name: "Expediente", tableName: "Expediente", schema: "sgnc"}, tableDefinition);
+      .createTable({name: "Incidencia", tableName: "Incidencia", schema: "noconformidades"}, tableDefinition);
   },
 
   down: (queryInterface, Sequelize) => {

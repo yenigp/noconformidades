@@ -3,19 +3,38 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     var tableDefinition = {
-      "NoConformidadId": {
+      "id": {
+        "type": Sequelize.INTEGER,
+        "primaryKey": true,
+        "autoIncrement": true
+
+    },
+      "QuejasReclamacionesId": {
         "type": Sequelize.INTEGER,
         "references": {
-            "model": "NoConformidad",
+            "model": "QuejasReclamaciones",
             "key": "id"
         },
         "onUpdate": "cascade",
         "onDelete": "cascade"
       },
-      "observacion": {
-        "type": Sequelize.STRING,
+      "codigo": {
+        "type": Sequelize.STRING(10),
         "allowNull": false
 
+      },
+      "estado": {
+        "type": Sequelize.ENUM,
+        "values": ["aprobado", "denegado"],
+        "allowNull": false
+
+      },
+      "fechaaprobacion": {
+        "type": Sequelize.DATE
+
+      },
+      "conclusiones": {
+        "type": Sequelize.STRING
       },
       "CreatorId": {
           "type": Sequelize.INTEGER,
@@ -38,7 +57,7 @@ module.exports = {
       }
   };
   return queryInterface
-      .createTable({name: "Auditoria", tableName: "Auditoria", schema: "sgnc"}, tableDefinition);
+      .createTable({name: "Dictamen", tableName: "Dictamen", schema: "noconformidades"}, tableDefinition);
   },
 
   down: (queryInterface, Sequelize) => {

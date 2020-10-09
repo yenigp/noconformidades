@@ -4,14 +4,28 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     var tableDefinition = {
       "id": {
-          "type": Sequelize.INTEGER,
-          "primaryKey": true,
-          "autoIncrement": true
-      },
-      "nombre": {
-        "type": Sequelize.STRING,
-        "allowNull": false
+        "type": Sequelize.INTEGER,
+        "primaryKey": true,
+        "autoIncrement": true
 
+      },
+      "NoConformidadId": {
+        "type": Sequelize.INTEGER,
+        "references": {
+            "model": "NoConformidad",
+            "key": "id"
+        },
+        "onUpdate": "cascade",
+        "onDelete": "cascade"
+      },
+      "AccionesId": {
+        "type": Sequelize.INTEGER,
+        "references": {
+            "model": "Acciones",
+            "key": "id"
+        },
+        "onUpdate": "cascade",
+        "onDelete": "cascade"
       },
       "CreatorId": {
           "type": Sequelize.INTEGER,
@@ -34,7 +48,7 @@ module.exports = {
       }
   };
   return queryInterface
-      .createTable({name: "Norma", tableName: "Norma", schema: "sgnc"}, tableDefinition);
+      .createTable({name: "NCAcciones", tableName: "NCAcciones", schema: "noconformidades"}, tableDefinition);
   },
 
   down: (queryInterface, Sequelize) => {

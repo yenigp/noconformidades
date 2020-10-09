@@ -14,6 +14,12 @@ module.exports = {
           "type": Sequelize.STRING
 
         },
+        "sucursalId": {
+            "type": Sequelize.INTEGER,
+            "comment": "The foreing object that will have the Sucursal.",
+            "allowNull": false,
+  
+        },
         "CreatorId": {
             "type": Sequelize.INTEGER,
             "references": {
@@ -35,7 +41,7 @@ module.exports = {
         }
     };
     return queryInterface
-        .createTable({name: "Area", tableName: "Area", schema: "sgnc"}, tableDefinition);
+        .createTable({name: "Area", tableName: "Area", schema: "noconformidades"}, tableDefinition);
 },
 down: function(queryInterface) {
     return queryInterface.dropTable(tableName);

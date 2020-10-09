@@ -3,19 +3,25 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     var tableDefinition = {
-      "IndicadoresId": {
+      "id": {
+        "type": Sequelize.INTEGER,
+        "primaryKey": true,
+        "autoIncrement": true
+
+      },
+      "AccionesId": {
         "type": Sequelize.INTEGER,
         "references": {
-            "model": "Indicadores",
+            "model": "Acciones",
             "key": "id"
         },
         "onUpdate": "cascade",
         "onDelete": "cascade"
       },
-      "ObjetivosId": {
+      "TareasId": {
         "type": Sequelize.INTEGER,
         "references": {
-            "model": "ObjetivosCalidad",
+            "model": "Tareas",
             "key": "id"
         },
         "onUpdate": "cascade",
@@ -42,7 +48,7 @@ module.exports = {
       }
   };
   return queryInterface
-      .createTable({name: "IndicadoresObjetivos", tableName: "IndicadoresObjetivos", schema: "sgnc"}, tableDefinition);
+      .createTable({name: "AccionTarea", tableName: "AccionTarea", schema: "noconformidades"}, tableDefinition);
   },
 
   down: (queryInterface, Sequelize) => {

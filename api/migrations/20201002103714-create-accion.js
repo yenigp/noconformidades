@@ -54,7 +54,7 @@ module.exports = {
       }
   };
   return queryInterface
-      .createTable({name: "Acciones", tableName: "Acciones", schema: "sgnc"}, tableDefinition);
+      .createTable({name: "Acciones", tableName: "Acciones", schema: "noconformidades"}, tableDefinition);
   },
 
   down: (queryInterface, Sequelize) => {
