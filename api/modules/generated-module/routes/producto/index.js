@@ -18,13 +18,6 @@ module.exports = function (req, res) {
     model: models.Producto
   });
 
-  query.include=[
-    {
-      model: models.Sucursal,
-      attributes:["id","nombagenciaviajes"]
-    },
-  ]
-
   query=jsonAPI.prepareQuery(query);
   return models
     .Producto.findAll(query)
