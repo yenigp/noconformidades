@@ -28,15 +28,16 @@
   "database": {
     "activeDialect": "postgres",
     "dialects": {
-      "postgres": {
+      "sqlite": {
         "storage": "db.production.sqlite"
       },
       "postgres": {
         "host": "127.0.0.1",
-        "schema": "noconformidades",
         "database": "postgres",
         "username": "yeni",
         "password": "postgres",
+        "schema": "noconformidades",
+        "migrationStorageTableSchema": "noconformidades",
         "define": {
           "charset": "utf8",
           "dialectOptions": {
@@ -77,7 +78,7 @@
   "developers": {
     "sendNotifications": true,
     "mails": [
-      "jackbrown9375@gmail.com"
+      "hav_yeni@hotmil.com"
     ]
   },
   "jwt": {
