@@ -4,24 +4,13 @@ const bcrypt = require('bcryptjs');
 exports.loadModel = function loadModel() {
     const Turista = global.app.orm.sequelize.define('Turista',
         lodash.extend({}, global.app.orm.mixins.attributes, {
-          "idturista": {
-            "type": global.app.orm.Sequelize.INTEGER,
-            "allowNull": false,
-            "primaryKey": true
-          },
             "nombre": {
                 "type": global.app.orm.Sequelize.STRING
 
             },
-            "ReservaPadreID": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "references": {
-                    "model": "ReservaPadre",
-                    "key": "idreservapadre"
-                },
-                "onUpdate": "cascade",
-                "onDelete": "cascade",
-                "allowNull": false
+            "idreservapadre": {
+                "type": global.app.orm.Sequelize.INTEGER
+
             },
             "idsuperclasifedad": {
                 "type": global.app.orm.Sequelize.STRING
@@ -50,8 +39,8 @@ exports.loadModel = function loadModel() {
                 "type": global.app.orm.Sequelize.INTEGER
             },
             "idtipopax": {
-                "type": global.app.orm.Sequelize.STRING,
-                "defaultValue": "TUR"
+                "type": global.app.orm.Sequelize.STRING
+
             },
             "sexo": {
                 "type": global.app.orm.Sequelize.STRING
@@ -62,33 +51,119 @@ exports.loadModel = function loadModel() {
             "idhistoreservapadre": {
                 "type": global.app.orm.Sequelize.INTEGER
             },
-            "PaisID": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "references": {
-                    "model": "Pais",
-                    "key": "idpais"
-                },
-                "onUpdate": "cascade",
-                "onDelete": "cascade",
-                "allowNull": false
+            "id_pais": {
+                "type": global.app.orm.Sequelize.INTEGER
+
             },
-            "ididio": {
+            "id_idio": {
                 "type": global.app.orm.Sequelize.STRING
             },
-
+            "edad": {
+                "type": global.app.orm.Sequelize.INTEGER
+            },
+            "numero": {
+                "type": global.app.orm.Sequelize.INTEGER
+            },
+            "tipo_doc_prm": {
+                "type": global.app.orm.Sequelize.INTEGER
+            },
+            "tipo_doc_sec": {
+                "type": global.app.orm.Sequelize.INTEGER
+            },
+            "nombre_seg": {
+                "type": global.app.orm.Sequelize.STRING
+            },
+            "emisor_doc_prm": {
+                "type": global.app.orm.Sequelize.INTEGER
+            },
+            "emisor_doc_sec": {
+                "type": global.app.orm.Sequelize.INTEGER
+            },
+            "documento_sec": {
+                "type": global.app.orm.Sequelize.STRING
+            },
+            "fecha_venc_prm": {
+                "type": global.app.orm.Sequelize.DATE
+            },
+            "fecha_venc_sec": {
+                "type": global.app.orm.Sequelize.DATE
+            },
+            "fecha_nac": {
+                "type": global.app.orm.Sequelize.DATE
+            },
+            "direccion": {
+                "type": global.app.orm.Sequelize.STRING
+            },
+            "direccion2": {
+                "type": global.app.orm.Sequelize.STRING
+            },
+            "codigopostal": {
+                "type": global.app.orm.Sequelize.STRING
+            },
+            "vuelo_ret": {
+                "type": global.app.orm.Sequelize.STRING
+            },
+            "id_paisresid": {
+                "type": global.app.orm.Sequelize.INTEGER
+            },
+            "codigopostal2": {
+                "type": global.app.orm.Sequelize.STRING
+            },
+            "estadodir": {
+                "type": global.app.orm.Sequelize.STRING
+            },
+            "estadodir2": {
+                "type": global.app.orm.Sequelize.STRING
+            },
+            "ciudad": {
+                "type": global.app.orm.Sequelize.STRING
+            },
+            "ciudad2": {
+                "type": global.app.orm.Sequelize.STRING
+            },
+            "apellidos": {
+                "type": global.app.orm.Sequelize.STRING
+            },
+            "apellidos2": {
+                "type": global.app.orm.Sequelize.STRING
+            },
+            "idclaseaerea": {
+                "type": global.app.orm.Sequelize.INTEGER
+            },
+            "codigo": {
+                "type": global.app.orm.Sequelize.STRING
+            },
+            "telefono2": {
+                "type": global.app.orm.Sequelize.STRING
+            }
+            
         }), {
             comment: 'A example model.',
+            timestamps: false,
+            paranoid: true,
             freezeTableName: true,
-            tableName: 'e_turista',
-            schema: 'noconformidades',
+            tableName: 'Turista',
             hooks: {
 
             }
         });
         Turista.associate = function() {
             var models = global.app.orm.sequelize.models;
-            models.Turista.belongsTo(models.ReservaPadre);
-            models.Turista.belongsTo(models.Pais);
+            models.Turista.hasMany(models.QuejasReclamaciones, {
+                foreignKey: 'TuristaId',
+                constraints: false
+            });
+            models.Turista.belongsTo(models.ReservaPadre, {
+                foreignKey: 'idreservapadre',
+                constraints: false
+            });
+            models.Turista.belongsTo(models.Pais, {
+                foreignKey: 'id_pais',
+                constraints: false
+            });
+            models.Turista.belongsToMany(models.Reserva, {
+                through: models.TuristaReserva
+            });
         }
 
 };
