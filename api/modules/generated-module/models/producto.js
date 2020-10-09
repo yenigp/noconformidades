@@ -4,11 +4,6 @@ const bcrypt = require('bcryptjs');
 exports.loadModel = function loadModel() {
     const Producto = global.app.orm.sequelize.define('Producto',
         lodash.extend({}, global.app.orm.mixins.attributes, {
-          "id": {
-            "type": global.app.orm.Sequelize.INTEGER,
-            "allowNull": false,
-            "primaryKey": true
-          },
             "nombproducto": {
                 "type": global.app.orm.Sequelize.STRING
 
@@ -108,7 +103,11 @@ exports.loadModel = function loadModel() {
                 foreignKey: 'idproducto',
                 constraints: false
             });
-            models.Producto.belongsTo(models.Sucursal,{
+            models.Producto.hasMany(models.ProdServicio, {
+                foreignKey: 'idproducto',
+                constraints: false
+            });
+            models.Producto.belongsTo(models.Sucursal, {
                 foreignKey: 'idagenciaviajes_tmp',
                 constraints: false
             });
