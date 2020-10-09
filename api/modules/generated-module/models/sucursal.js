@@ -6,15 +6,10 @@ exports.loadModel = function loadModel() {
         lodash.extend({}, global.app.orm.mixins.attributes, {
           "idagenciaviajes_tmp": {
             "type": global.app.orm.Sequelize.INTEGER,
-            "allowNull": false,
-            "primaryKey": true
+
           },
             "global_name": {
                 "type": global.app.orm.Sequelize.STRING
-
-            },
-            "idnodo": {
-                "type": global.app.orm.Sequelize.INTEGER
 
             },
             "nombagenciaviajes": {
@@ -80,12 +75,24 @@ exports.loadModel = function loadModel() {
 
         }), {
             comment: 'A example model.',
+            timestamps: false,
+            paranoid: true,
             freezeTableName: true,
-            tableName: 'e_sucursal',
-            schema: 'noconformidades',
+            tableName: 'Sucursal',
             hooks: {
 
             }
         });
+
+        Sucursal.associate = function() {
+            var models = global.app.orm.sequelize.models;
+            models.Sucursal.hasMany(models.AgenciaViajes, {
+                foreignKey: 'id_propietario',
+                constraints: false
+            });
+            models.Sucursal.hasMany(models.Producto, {
+                foreignKey: 'idagenciaviajes_tmp'
+            })
+        }
 
 };
