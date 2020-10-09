@@ -6,6 +6,6 @@ module.exports = function (req, res) {
     data: {}
   };
 
-  jsonAPIBody.data = req.person;
+  jsonAPIBody.data = req.agenciaviajes;
   return res.status(200).json(jsonAPIBody); // OK.
 };

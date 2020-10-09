@@ -1,42 +1,39 @@
 'use strict';
 
 module.exports = function (req, res) {
-
-	var jsonAPI    = global.app.utils.jsonAPI;
   var models = global.app.orm.sequelize.models;
+  var Sequelize = global.app.orm.Sequelize;
 
+	var jsonAPI = global.app.utils.jsonAPI;
   var jsonAPIBody = {
     data: {}
   };
-
-  return req
-    .nc_usuario
-    .update(req.body)
-    .then(function (data) {
+  return global
+    .app.orm.sequelize.transaction(function (t) {
       return models
-        .NCUsuario
-        .findByPk(data.id, {include:[{all:true}]});
+        .AgenciaViajes
+        .create(req.body,{transaction:t});
     })
     .then(function (data) {
       jsonAPIBody.data = data.toJSON();
-      return res.status(200).json(jsonAPIBody); // OK.
+      return res.status(201).json(jsonAPIBody); // OK.
     })
     .catch(global.app.orm.Sequelize.ValidationError, function (error) {
       global.app.utils.logger.error(error, {
-        module   : 'nc_usuario/update',
+        module   : 'agenciaviajes/create',
         submodule: 'routes',
         stack    : error.stack
       });
       return res.status(400)
-         .json(jsonAPI.processErrors(error, req, {file:__filename}));
+                .json(jsonAPI.processErrors(error, req, {file:__filename}));
     })
     .catch(function (error) {
       global.app.utils.logger.error(error, {
-        module   : 'nc_usuario/update',
+        module   : 'agenciaviajes/create',
         submodule: 'routes',
         stack    : error.stack
       });
       return res.status(500)
-         .json(jsonAPI.processErrors(error, req, {file:__filename}));
+                .json(jsonAPI.processErrors(error, req, {file:__filename}));
     });
 };

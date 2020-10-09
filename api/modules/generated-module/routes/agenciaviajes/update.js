@@ -10,11 +10,11 @@ module.exports = function (req, res) {
   };
 
   return req
-    .person
+    .agenciaviajes
     .update(req.body)
     .then(function (data) {
       return models
-        .Person
+        .AgenciaViajes
         .findByPk(data.id, {include:[{all:true}]});
     })
     .then(function (data) {
@@ -23,7 +23,7 @@ module.exports = function (req, res) {
     })
     .catch(global.app.orm.Sequelize.ValidationError, function (error) {
       global.app.utils.logger.error(error, {
-        module   : 'person/update',
+        module   : 'agenciaviajes/update',
         submodule: 'routes',
         stack    : error.stack
       });
@@ -32,7 +32,7 @@ module.exports = function (req, res) {
     })
     .catch(function (error) {
       global.app.utils.logger.error(error, {
-        module   : 'person/update',
+        module   : 'agenciaviajes/update',
         submodule: 'routes',
         stack    : error.stack
       });
@@ -40,4 +40,3 @@ module.exports = function (req, res) {
          .json(jsonAPI.processErrors(error, req, {file:__filename}));
     });
 };
-
