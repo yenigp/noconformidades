@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 exports.loadModel = function loadModel() {
     const IndicadoresObjetivos = global.app.orm.sequelize.define('IndicadoresObjetivos',
         lodash.extend({}, global.app.orm.mixins.attributes, {
-          "indicadores_id": {
+          "IndicadoresId": {
               "type": global.app.orm.Sequelize.INTEGER,
               "references": {
                   "model": "Indicadores",
@@ -14,10 +14,10 @@ exports.loadModel = function loadModel() {
               "onDelete": "cascade",
               "allowNull": false
           },
-          "objetivo_calidad_id": {
+          "ObjetivosId": {
               "type": global.app.orm.Sequelize.INTEGER,
               "references": {
-                  "model": "ObjetivoCalidad",
+                  "model": "ObjetivosCalidad",
                   "key": "id"
               },
               "onUpdate": "cascade",
@@ -28,8 +28,7 @@ exports.loadModel = function loadModel() {
         }), {
             comment: 'A example model.',
             freezeTableName: true,
-            tableName: 'indicadores_objetivos',
-            schema: 'noconformidades',
+            tableName: 'IndicadoresObjetivos',
             hooks: {
 
             }
