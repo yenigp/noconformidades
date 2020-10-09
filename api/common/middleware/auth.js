@@ -42,22 +42,22 @@ function ensureAuthenticated() {
             });
         } else {
 
-          return models.Person.findByPk(
+          return models.Usuario.findByPk(
             decoded.data.id
           ).then(function(user) {
             if (!user) {
               return res.status(401).json({
                 errors: [{
-                  field: "user",
-                  title: "user not found"
+                  field: "usuario",
+                  title: "el usuario no existe"
                 }]
               })
             }
             if (user.dataValues.status != undefined && user.dataValues.status !== 'enabled') {
               return res.status(401).json({
                 errors: [{
-                  field: "user",
-                  title: "user is disabled"
+                  field: "usuario",
+                  title: "el usuario está desabilitado"
                 }]
               })
             }
@@ -106,9 +106,9 @@ function ensureHasPermission(permissionId) {
   return function(req, res, next) {
     var method = req.method.toLowerCase();
 
-    return models.RolePerson.findAll({
+    return models.RoleUsuario.findAll({
       where: {
-        PersonId: req.loggedUser.id
+        UsuarioId: req.loggedUser.id
       },
       raw: true,
       logging: console.log,
@@ -151,23 +151,23 @@ function basicStrategyVerifyCallback(username,
     return;
   }
   return models
-    .Person
+    .Usuario
     .findOne({
       where: {
-        gitUser: username,
+        usuario: username,
         status: enabled
       }
     })
-    .then(function(person) {
-      if (!person) {
+    .then(function(usuario) {
+      if (!usuario) {
         done(null, false);
         return null;
       }
-      if (!person.isValidPassword(password)) {
+      if (!usuario.isValidPassword(password)) {
         done(null, false);
         return null;
       }
-      done(null, person);
+      done(null, usuario);
     })
 }
 
@@ -190,7 +190,7 @@ function basicCheckUser(bearer, done) {
         }, null);
       } else {
 
-        return global.app.orm.sequelize.models.Person.findByPk(
+        return global.app.orm.sequelize.models.Usuario.findByPk(
           decoded.data.id
         ).then(function(user) {
 
@@ -202,7 +202,7 @@ function basicCheckUser(bearer, done) {
               message: 'user not found'
             }, null);
           }
-          if (user.dataValues.gitUser != decoded.data.username) {
+          if (user.dataValues.usuario != decoded.data.username) {
             console.log('Usuario de otra api');
             return done({
               status: 401,
@@ -220,7 +220,7 @@ function basicCheckUser(bearer, done) {
             }, null);
 
           }
-          var personlastLogout = moment(user.dataValues.lastLogout);
+          var usuariolastLogout = moment(user.dataValues.lastLogout);
           if (decoded.data.lastLogout == undefined) {
             return done({
               status: 401,
@@ -229,8 +229,8 @@ function basicCheckUser(bearer, done) {
             }, null);
           }
 
-          console.log('cant ', personlastLogout.diff(tokenlastLogout, 'seconds'));
-          if (personlastLogout.diff(tokenlastLogout, 'seconds') > 0) {
+          console.log('cant ', usuariolastLogout.diff(tokenlastLogout, 'seconds'));
+          if (usuariolastLogout.diff(tokenlastLogout, 'seconds') > 0) {
             return done({
               status: 401,
               key: 'authorization',
@@ -238,7 +238,7 @@ function basicCheckUser(bearer, done) {
             }, null);
           } else {
             /**
-             * si la ultima vez que se logueo la persona
+             * si la ultima vez que se logueo el usuario
              * */
             return done(
               null, user);
@@ -272,7 +272,7 @@ function getPermissionsByUserId(UserId) {
   var Sequelize = global.app.orm.Sequelize;
   return models.RolePerson.findAll({
     where: {
-      PersonId: UserId
+      UsuarioId: UserId
     },
     attributes: ["RoleId"],
     raw: true
