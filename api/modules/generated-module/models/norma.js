@@ -4,33 +4,38 @@ const bcrypt = require('bcryptjs');
 exports.loadModel = function loadModel() {
     const Norma = global.app.orm.sequelize.define('Norma',
         lodash.extend({}, global.app.orm.mixins.attributes, {
-          "id": {
-            "type": global.app.orm.Sequelize.INTEGER,
-            "allowNull": false,
-            "autoIncrement": true,
-            "primaryKey": true
-          },
             "nombre": {
                 "type": global.app.orm.Sequelize.STRING,
                 "allowNull": false,
                 "validate":{
-                  "is": {
-                    "args": /^([A-Z]{1}[a-zñáéíóú]+[\s]*)+$/i,
-                    "msg": "Sólo se aceptan letras"
-                  },
                   "len":{
                     "args": [3,50],
-                    "msg": "Mínimo 3 y máximo 50 carácteres"
+                    "msg": "El nombre de la norma debe tener como mínimo 3 carácteres"
                   },
                 }
             },
+            "CreatorId": {
+              "type": global.app.orm.Sequelize.INTEGER,
+              "references": {
+                  "model": "Usuario",
+                  "key": "id"
+              },
+              "onUpdate": "cascade",
+              "onDelete": "cascade"
+          },
+
         }), {
             comment: 'A example model.',
             freezeTableName: true,
-            tableName: 'norma',
-            schema: 'noconformidades',
+            tableName: 'Norma',
             hooks: {
 
             }
         });
+        Norma.associate = function() {
+          var models = global.app.orm.sequelize.models;
+          models.Norma.belongsTo(models.Usuario, {
+              as: 'Creator'
+          });    
+        }      
 };
