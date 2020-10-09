@@ -4,19 +4,12 @@ const bcrypt = require('bcryptjs');
 exports.loadModel = function loadModel() {
     const Tareas = global.app.orm.sequelize.define('Tareas',
         lodash.extend({}, global.app.orm.mixins.attributes, {
-          "id": {
-            "type": global.app.orm.Sequelize.INTEGER,
-            "allowNull": false,
-            "autoIncrement": true,
-            "primaryKey": true
-          },
           "nombre": {
               "type": global.app.orm.Sequelize.STRING,
               "allowNull": false,
               "validate":{
-                "is": {
-                  "args": /^([A-Z]{1}[a-zñáéíóú]+[\s]*)+$/i,
-                  "msg": "Sólo se aceptan letras"
+                "isAlpha": {
+                  "msg": "EL nombre de una tarea solo puede contener letras"
                 },
                 "len":{
                   "args": [3,50],
@@ -29,7 +22,7 @@ exports.loadModel = function loadModel() {
             "allowNull": false
 
           },
-          "fechainicio": {
+          "fechacomienzo": {
               "type": global.app.orm.Sequelize.DATEONLY,
               "allowNull": false
 
@@ -40,38 +33,38 @@ exports.loadModel = function loadModel() {
 
           },
           "estado": {
-              "type": global.app.orm.Sequelize.STRING,
-              "allowNull": false
+              "type": global.app.orm.Sequelize.ENUM,
+              "values": ["registrada", "revisada", "cerrada"],
+              "defaultValue": "registrada",
 
           },
-          "responsable": {
-              "type": global.app.orm.Sequelize.STRING,
-              "allowNull": false
-
-          },
-          "noconformidad_id": {
-              "type": global.app.orm.Sequelize.INTEGER,
-              "references": {
-                  "model": "NoConformidad",
-                  "key": "id"
-              },
-              "onUpdate": "cascade",
-              "onDelete": "cascade",
-              "allowNull": false
-          },
+          "CreatorId": {
+            "type": global.app.orm.Sequelize.INTEGER,
+            "references": {
+                "model": "Usuario",
+                "key": "id"
+            },
+            "onUpdate": "cascade",
+            "onDelete": "cascade"
+  
+        }
 
         }), {
             comment: 'A example model.',
             freezeTableName: true,
-            tableName: 'tareas',
-            schema: 'noconformidades',
+            tableName: 'Tareas',
             hooks: {
 
             }
         });
         Tareas.associate = function() {
             var models = global.app.orm.sequelize.models;
-            models.Tareas.belongsTo(models.NoConformidad);
+            models.Tareas.belongsTo(models.Usuario, {
+              as: 'Creator'
+            });
+            models.Tareas.belongsToMany(models.Acciones, {
+              through: models.AccionTarea
+            });
         }
 
 };
