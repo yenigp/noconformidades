@@ -4,42 +4,27 @@ const bcrypt = require('bcryptjs');
 exports.loadModel = function loadModel() {
     const AgenciaMercado = global.app.orm.sequelize.define('AgenciaMercado',
         lodash.extend({}, global.app.orm.mixins.attributes, {
-          "AgenciaViajesID": {
-              "type": global.app.orm.Sequelize.INTEGER,
-              "references": {
-                  "model": "AgenciaViajes",
-                  "key": "idagenciaviajes"
-              },
-              "onUpdate": "cascade",
-              "onDelete": "cascade",
-              "allowNull": false
+          "AgenciaViajeId": {
+              "type": global.app.orm.Sequelize.INTEGER
           },
-          "MercadoID": {
-              "type": global.app.orm.Sequelize.INTEGER,
-              "references": {
-                  "model": "Mercado",
-                  "key": "idmercado"
-              },
-              "onUpdate": "cascade",
-              "onDelete": "cascade",
-              "allowNull": false
+          "MercadoId": {
+              "type": global.app.orm.Sequelize.INTEGER
           },
             "activo": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 1
+                "type": global.app.orm.Sequelize.INTEGER
 
             },
             "pordefecto": {
-                "type": global.app.orm.Sequelize.INTEGER,
-                "defaultValue": 0
+                "type": global.app.orm.Sequelize.INTEGER
 
             },
 
         }), {
             comment: 'A example model.',
+            timestamps: false,
+            paranoid: true,
             freezeTableName: true,
-            tableName: 'e_agenciamercado',
-            schema: 'noconformidades',
+            tableName: 'AgenciaMercado',
             hooks: {
 
             }
