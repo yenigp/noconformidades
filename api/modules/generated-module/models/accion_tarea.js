@@ -4,20 +4,20 @@ const bcrypt = require('bcryptjs');
 exports.loadModel = function loadModel() {
     const AccionTarea = global.app.orm.sequelize.define('AccionTarea',
         lodash.extend({}, global.app.orm.mixins.attributes, {
-          "tarea_id": {
+          "AccionesId": {
               "type": global.app.orm.Sequelize.INTEGER,
               "references": {
-                  "model": "Tareas",
+                  "model": "Acciones",
                   "key": "id"
               },
               "onUpdate": "cascade",
               "onDelete": "cascade",
               "allowNull": false
           },
-          "acciones_id": {
+          "TareasId": {
               "type": global.app.orm.Sequelize.INTEGER,
               "references": {
-                  "model": "Acciones",
+                  "model": "Tareas",
                   "key": "id"
               },
               "onUpdate": "cascade",
@@ -28,8 +28,7 @@ exports.loadModel = function loadModel() {
         }), {
             comment: 'A example model.',
             freezeTableName: true,
-            tableName: 'accion_tarea',
-            schema: 'noconformidades',
+            tableName: 'AccionTarea',
             hooks: {
 
             }
