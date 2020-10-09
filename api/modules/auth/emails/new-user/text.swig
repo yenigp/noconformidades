@@ -1,2 +1,2 @@
-Hola {{user.username}}
+Hola {{user.usuario}}
 Usa este code: {{code}}

@@ -25,21 +25,21 @@ module.exports = function(req, res) {
           }
 
 
-          return models.Person.findOne({
+          return models.Usuario.findOne({
             where: {
               email: req.body.email
             },
             hooks: false,
             individualHooks: false
           });
-        }).then(function(person) {
-          if (!person) {
+        }).then(function(usuario) {
+          if (!usuario) {
             throw new global.app.orm.Sequelize.ValidationError(null, [
               new global.app.orm.Sequelize.ValidationErrorItem('User not found', null, 'deletedUser')
             ]);
           }
-          jsonAPIBody.data = person;
-          return person
+          jsonAPIBody.data = usuario;
+          return usuario
             .update({
               status: "enabled"
             })
@@ -59,7 +59,7 @@ module.exports = function(req, res) {
     .then(function() {
 
 
-      var personData = {
+      var usuarioData = {
         id: jsonAPIBody.data.dataValues.id,
         username: jsonAPIBody.data.dataValues.username,
         email: jsonAPIBody.data.dataValues.email,
@@ -67,7 +67,7 @@ module.exports = function(req, res) {
 
       };
       var jwtSignature = jwt.sign({
-        data: personData
+        data: usuarioData
       }, global.app.config.get('jwt:secret'), {
         expiresIn: '24h'
       });

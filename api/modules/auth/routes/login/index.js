@@ -22,8 +22,8 @@ module.exports = function(req, res) {
     console.log(usernamePassword);
 
     return findUser(usernamePassword[0])
-      .then(function(person) {
-        if (!person) {
+      .then(function(usuario) {
+        if (!usuario) {
           return res.status(401)
             .json({
               errors: [{
@@ -32,7 +32,7 @@ module.exports = function(req, res) {
               }]
             }); //user not found
         }
-        if (!person.isValidPassword(usernamePassword[1])) {
+        if (!usuario.isValidPassword(usernamePassword[1])) {
           return res.status(401)
             .json({
               errors: [{
@@ -41,7 +41,7 @@ module.exports = function(req, res) {
               }]
             });
         }
-        if (person.status != 'enabled') {
+        if (usuario.status != 'enabled') {
           return res.status(401)
             .json({
               errors: [{
@@ -53,31 +53,31 @@ module.exports = function(req, res) {
 
 
 
-        var personData = {
-          id: person.dataValues.id,
-          username: person.dataValues.username,
-          lastLogout: person.dataValues.lastLogout,
+        var usuarioData = {
+          id: usuario.dataValues.id,
+          username: usuario.dataValues.username,
+          lastLogout: usuario.dataValues.lastLogout,
           date: new Date(),
-          createdAt: person.dataValues.createdAt,
-          updatedAt: person.dataValues.updatedAt,
+          createdAt: usuario.dataValues.createdAt,
+          updatedAt: usuario.dataValues.updatedAt,
           random: Math.random()
         };
 
         req.tokenLifeTime = 600;
-        req.loggedUser = person;
+        req.loggedUser = usuario;
 
         var jwtSignature = jwt.sign({
-          data: personData
+          data: usuarioData
         }, global.app.config.get('jwt:secret'), {
           expiresIn: '10h'
         });
 
-        var personResult = lodash.cloneDeep(person)
-        delete personResult.dataValues.password;
+        var usuarioResult = lodash.cloneDeep(usuario)
+        delete usuarioResult.dataValues.password;
         return res.status(200).json({
           data: {
             Authorization: 'Bearer ' + jwtSignature,
-            profile: personResult
+            profile: usuarioResult
           }
         });
 
@@ -117,8 +117,8 @@ module.exports = function(req, res) {
               });
           }
           return findUser(decoded.data.username)
-            .then(function(person) {
-              if (!person) {
+            .then(function(usuario) {
+              if (!usuario) {
                 return res.status(401)
                   .json({
                     errors: [{
@@ -128,7 +128,7 @@ module.exports = function(req, res) {
                   })
               }
 
-              if (person.status != 'enabled') {
+              if (usuario.status != 'enabled') {
                 return res.status(401)
                   .json({
                     errors: [{
@@ -139,11 +139,11 @@ module.exports = function(req, res) {
               }
               var jwtSignature = jwt.sign({
                 data: {
-                  id: person.dataValues.id,
-                  username: person.dataValues.username,
-                  lastLogout: person.dataValues.lastLogout,
-                  createdAt: person.dataValues.createdAt,
-                  updatedAt: person.dataValues.updatedAt,
+                  id: usuario.dataValues.id,
+                  username: usuario.dataValues.username,
+                  lastLogout: usuario.dataValues.lastLogout,
+                  createdAt: usuario.dataValues.createdAt,
+                  updatedAt: usuario.dataValues.updatedAt,
                   date: new Date(),
                   random: Math.random()
                 }
@@ -152,13 +152,13 @@ module.exports = function(req, res) {
               });
 
               req.tokenLifeTime = 1440;
-              req.loggedUser = person;
-              var personResult = lodash.cloneDeep(person)
-              delete personResult.dataValues.password;
+              req.loggedUser = usuario;
+              var usuarioResult = lodash.cloneDeep(usuario)
+              delete usuarioResult.dataValues.password;
               return res.status(200).json({
                 data: {
                   Authorization: 'Bearer ' + jwtSignature,
-                  profile: personResult
+                  profile: usuarioResult
                 }
               });
             });
@@ -184,9 +184,9 @@ function findUser(username) {
   console.log('checking');
   var models = global.app.orm.sequelize.models;
   return models
-    .Person.findOne({
+    .Usuario.findOne({
       where: {
-        gitUser: username
+        usuario: username
       }
     })
 }

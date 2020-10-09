@@ -9,7 +9,7 @@ module.exports = function(req, res) {
   var models = global.app.orm.sequelize.models;
   req.body.lastLogout = new Date().toISOString();
   return models
-    .Person.create(req.body).then(function(user) {
+    .Usuario.create(req.body).then(function(user) {
       return res.status(201).json({
         data: user
       });
