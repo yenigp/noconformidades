@@ -4,11 +4,6 @@ const bcrypt = require('bcryptjs');
 exports.loadModel = function loadModel() {
     const Reserva = global.app.orm.sequelize.define('Reserva',
         lodash.extend({}, global.app.orm.mixins.attributes, {
-          "id": {
-            "type": global.app.orm.Sequelize.INTEGER,
-            "allowNull": false,
-            "primaryKey": true
-          },
             "horasalida": {
                 "type": global.app.orm.Sequelize.STRING
 
@@ -289,6 +284,16 @@ exports.loadModel = function loadModel() {
                     foreignKey: 'idproducto',
                     constraints: false
                 });
+            models.Reserva.belongsTo(models.Reserva,
+                {
+                    foreignKey: 'idserviciocotizacion',
+                    constraints: false
+                });
+            models.Reserva.belongsToMany(models.Turista, 
+                {
+                    through: models.TuristaReserva
+                 });
+                
         }
 
 };
