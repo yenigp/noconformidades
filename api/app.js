@@ -7,6 +7,7 @@ var morgan      = require('morgan');
 var bodyParser  = require('body-parser');
 var cors        = require('cors');
 var compression = require('compression');
+var moment      = require('moment');
 
 var http        = require('http');
 var https       = require('https');
@@ -33,6 +34,7 @@ global.utils    = require('./common/utils/index');
 global.app.logger   = require('./common/utils/index').logger;
 global.app.security = require('./common/middleware/auth');
 global.security = require('./common/middleware/auth');
+global.savedb = require('./common/db/backup');
 
 app.use(global.app.config.get('api:prefix') + '/public', express.static(__dirname + '/public', {
   maxAge: 604800000
