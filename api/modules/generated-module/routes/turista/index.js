@@ -27,6 +27,14 @@ module.exports = function (req, res) {
       model: models.Pais,
       attributes:["id", "codigo", "descripcion"]
     },
+    {
+      model: models.TuristaReserva,
+      include: [
+        {
+          model: models.Reserva
+        }
+      ]
+    }
   ]
 
   query=jsonAPI.prepareQuery(query);
