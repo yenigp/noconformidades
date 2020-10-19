@@ -56,8 +56,8 @@ module.exports = function (req, res) {
               status: "enabled|blocked"
               lastLogout: date
               description: txt
-              rol: "programador|admin"
-              CreatorId: Person
+              RolId: Roles
+              CreatorId: Usuario
               AreaId: Area
               createdAt: 2018-09-05 20:28:13
               updatedAt: 2018-09-05 20:28:13
@@ -83,8 +83,8 @@ module.exports = function (req, res) {
         status: "enabled|blocked"
         lastLogout: date
         description: txt
-        rol: "programador|admin"
-        CreatorId: Person
+        RolId: Roles
+        CreatorId: Usuario
         AreaId: Area
       }
     return:
@@ -102,8 +102,8 @@ module.exports = function (req, res) {
               status: "enabled|blocked"
               lastLogout: date
               description: txt
-              rol: "programador|admin"
-              CreatorId: Person
+              RolId: Roles
+              CreatorId: Usuario
               AreaId: Area
               createdAt: 2018-09-05 20:28:13
               updatedAt: 2018-09-05 20:28:13
@@ -129,8 +129,8 @@ module.exports = function (req, res) {
         status: "enabled|blocked"
         lastLogout: date
         description: txt
-        rol: "programador|admin"
-        CreatorId: Person
+        RolId: Roles
+        CreatorId: Usuario
         AreaId: Area
       }
     return:
@@ -148,8 +148,8 @@ module.exports = function (req, res) {
               status: "enabled|blocked"
               lastLogout: date
               description: txt
-              rol: "programador|admin"
-              CreatorId: Person
+              RolId: Roles
+              CreatorId: Usuario
               AreaId: Area
               createdAt: 2018-09-05 20:28:13
               updatedAt: 2018-09-05 20:28:13
@@ -189,8 +189,8 @@ module.exports = function (req, res) {
               status: "enabled|blocked"
               lastLogout: date
               description: txt
-              rol: "programador|admin"
-              CreatorId: Person
+              RolId: Roles
+              CreatorId: Usuario
               AreaId: Area
               createdAt: 2018-09-05 20:28:13
               updatedAt: 2018-09-05 20:28:13
