@@ -23,16 +23,27 @@ module.exports = function (req, res) {
       model: models.Area,
       attributes:["nombre"]
     },
+    {
+      model: models.Roles,
+      attributes: ["nombre"],
+      include: [{
+        model: models.RolPermiso,
+        include: [{
+          model: models.Permisos,
+          attribute:["nombre"]
+        }]
+      }]
+    }
   ]
 
   query=jsonAPI.prepareQuery(query);
   return models
-    .NCUsuario.findAll(query)
+    .Usuario.findAll(query)
     .then(function (data) {
       jsonAPIBody.data                  = data;
       jsonAPIBody.meta.pagination.count = data.length;
       global.app.utils.jsonAPI.cleanQuery(query);
-      return models.NCUsuario.count(query);
+      return models.Usuario.count(query);
     })
     .then(function (total) {
       jsonAPIBody.meta.pagination.total = total;
@@ -40,7 +51,7 @@ module.exports = function (req, res) {
     })
     .catch(global.app.orm.Sequelize.ValidationError, function (error) {
       global.app.utils.logger.error(error, {
-        module   : 'nc_usuario/index',
+        module   : 'usuario/index',
         submodule: 'routes',
         stack    : error.stack
       });
@@ -49,7 +60,7 @@ module.exports = function (req, res) {
     })
     .catch(function (error) {
       global.app.utils.logger.error(error, {
-        module   : 'nc_usuario/index',
+        module   : 'usuario/index',
         submodule: 'routes',
         stack    : error.stack
       });
