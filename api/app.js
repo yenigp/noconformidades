@@ -78,12 +78,6 @@ function getRequestDuration(req) {
 function saveSystemLog(req, res, wasFinished) {
 
   var models = global.app.orm.sequelize.models;
-  var Sequelize = global.app.orm.Sequelize;
-
-	var jsonAPI = global.app.utils.jsonAPI;
-  var jsonAPIBody = {
-    data: {}
-  };
 
   
   var SystemLog = models.SystemLog;
