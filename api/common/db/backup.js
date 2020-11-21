@@ -50,11 +50,11 @@ function devNotification(data) {
 }
 
 function CrearBackup(){
-    const task = cron.schedule('00 18 * * 0-6', () => {
+    cron.schedule('00 18 * * 0-6', () => {
         console.log('Ejecuntandose salva de la base de datos a las 6:00PM');
 
 
-        var script = execFile(
+        execFile(
             `/home/yeni/Documentos/noconformidades/cron/pg_backup.sh`,
             (error, stdout, stderr) => {
               if (error !== null) {
