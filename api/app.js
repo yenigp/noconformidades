@@ -52,12 +52,6 @@ var helmet = require('helmet');
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(function (req, res, next) {
-  /**
-   * para mitigar las peticiones duplicadas de los navegadores
-   * ver
-   * https://github.com/expressjs/express/issues/2512
-   * */
-  ;
   req.connection.setTimeout(1000 * 60 * 10);
   return next();
 });
