@@ -42,12 +42,6 @@ exports.loadModel = function loadModel() {
             "noUpdate": true
             
           },
-          "clasificacion": {
-            "type": global.app.orm.Sequelize.ENUM,
-            "values": ["interna", "externa"],
-            "allowNull": false
-              
-          },
           "tipo": {
             "type": global.app.orm.Sequelize.ENUM,
             "values": ["queja", "reclamación"],
