@@ -80,7 +80,7 @@ function saveSystemLog(req, res, wasFinished) {
   var models = global.app.orm.sequelize.models;
 
   
-  var SystemLog = models.SystemLog;
+  models.SystemLog;
   if (req.body) {
     delete req.body.image;
     delete req.body.password;
