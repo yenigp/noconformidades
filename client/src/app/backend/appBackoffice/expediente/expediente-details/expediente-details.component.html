@@ -1,0 +1,115 @@
+<div class="loading-shade-full" style="background: rgba(0, 0, 0, 0.02) !important" *ngIf="isLoading">
+  <mat-spinner *ngIf="isLoading"> </mat-spinner>
+</div>
+
+<div class="container">
+  <div style="margin-top: 10px">
+    <div>Información sobre el Expediente</div>
+    <div>Código: {{ Expediente.NoConformidad.codigo }}</div>
+    <div>Estado: {{ Expediente.estado }}</div>
+  </div>
+  <div fxLayout="row" ngClass.gt-sm="mt-4" fxLayoutAlign="space-between center" class="filter-row mat-elevation-z1">
+    <span fxHide.xs class="mat-title mb-0">{{ 'Lista de No Conformidades' }}</span>
+    <span fxHide fxShow.xs class="mat-title mb-0">{{ 'No Conformidad' }}</span>
+  </div>
+
+  <div
+    *ngIf="Expediente.NoConformidadId != null"
+    fxLayout="row wrap"
+    class="w-100 py-2"
+    fxLayoutAlign="center start"
+    fxLayoutAlign.lt-md="center start"
+    fxLayoutGap="gappx"
+  >
+    <mat-card class="product-card">
+      <mat-card-header id="title">
+        <mat-card-title>{{ Expediente.NoConformidad.codigo }}</mat-card-title>
+      </mat-card-header>
+      <div class="w-100" fxLayout="row" fxLayoutAlign="center center"></div>
+
+      <mat-card-content style="margin-top: 10px">
+        <hr />
+        <div class="" id="product-card">
+          <div style="text-align: center"><b>Detalles</b></div>
+          <div>código: {{ Expediente.NoConformidad.codigo }}</div>
+          <div>Tipo: {{ Expediente.NoConformidad.Tipo.nombre }}</div>
+          <div>Proceso: {{ Expediente.NoConformidad.Proceso.nombre }}</div>
+          <div>Norma: {{ Expediente.NoConformidad.Norma.nombre }}</div>
+          <div>Fecha Registro: {{ Expediente.NoConformidad.FechaRegistro }}</div>
+          <div>Fecha Revisión: {{ Expediente.NoConformidad.FechaRevision }}</div>
+          <div>Descripción: {{ Expediente.NoConformidad.descripcion }}</div>
+          <div>Gravedad: {{ Expediente.NoConformidad.gravedad }}</div>
+          <div>Resultado: {{ Expediente.NoConformidad.resultado }}</div>
+          <div>Estado: {{ Expediente.NoConformidad.status }}</div>
+          <div>Área: {{ Expediente.NoConformidad.AreaId }}</div>
+          <div>Sucursal: {{ Expediente.NoConformidad.Sucursal.nombagenciaviajes }}</div>
+          <div>Fecha Cierre: {{ Expediente.NoConformidad.FechaCierre }}</div>
+          <div>Fecha Término: {{ Expediente.NoConformidad.FechaTermino }}</div>
+          <div *ngIf="Expediente.NoConformidad.TipoId == 2">
+            Tipo de Incidencia: {{ Expediente.NoConformidad.Incidencia.tipo }}
+          </div>
+          <div *ngIf="Expediente.NoConformidad.TipoId == 2">
+            Causa Investigación: {{ Expediente.NoConformidad.Incidencia.CausaInvestigacion }}
+          </div>
+          <div *ngIf="Expediente.NoConformidad.TipoId == 4">
+            Observación:: {{ Expediente.NoConformidad.Auditoria.observacion }}
+          </div>
+          <div *ngIf="Expediente.NoConformidad.TipoId == 3">
+            Servicio: {{ Expediente.NoConformidad.QuejasReclamaciones.ServicioId }}
+          </div>
+          <div *ngIf="Expediente.NoConformidad.TipoId == 3">
+            Producto: {{ Expediente.NoConformidad.QuejasReclamaciones.ProductoId }}
+          </div>
+          <div *ngIf="Expediente.NoConformidad.TipoId == 3">
+            Turista: {{ Expediente.NoConformidad.QuejasReclamaciones.TuristaId }}
+          </div>
+          <div *ngIf="Expediente.NoConformidad.TipoId == 3">
+            Reserva: {{ Expediente.NoConformidad.QuejasReclamaciones.ReservaId }}
+          </div>
+          <div *ngIf="Expediente.NoConformidad.TipoId == 3">
+            Clasificación: {{ Expediente.NoConformidad.QuejasReclamaciones.clasificacion }}
+          </div>
+          <div *ngIf="Expediente.NoConformidad.TipoId == 3">
+            Costo de No Calidad: {{ Expediente.NoConformidad.QuejasReclamaciones.CostoNoCalidad }}
+          </div>
+          <div *ngIf="Expediente.NoConformidad.TipoId == 3">
+            Observación: {{ Expediente.NoConformidad.QuejasReclamaciones.observacion }}
+          </div>
+          <hr />
+          <img
+            src="../../../../../assets/images/logos/havanatur_loading_page.png"
+            alt="Empty"
+            style="height: 85px; width: 500px"
+          />
+        </div>
+        <hr />
+      </mat-card-content>
+      <mat-card-actions class="mb-0" fxLayoutAlign="end center">
+        <button
+          matTooltip="{{ 'Editar no conformidad' }}"
+          (click)="this.onEditNoConformidad(Expediente.NoConformidadId)"
+          mat-icon-button
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button matTooltip="{{ 'Exportar no conformidad' }}" (click)="this.downloadPDF()" mat-icon-button>
+          <mat-icon>picture_as_pdf</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div
+    *ngIf="Expediente.NoConformidadId == null"
+    style="padding: 32px 0px"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+  >
+    <img src="../../../../../assets/images/empty.svg" alt="Empty" style="height: 160px; width: 160px" />
+    <h1 class="text-muted mt-3">Este expediente no tiene ninguna no conformidad asociada</h1>
+  </div>
+</div>
+
+<button (click)="onAddNoConformidad()" id="AddBtn" mat-fab color="primary">
+  <mat-icon> add </mat-icon>
+</button>

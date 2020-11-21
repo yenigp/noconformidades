@@ -33,4 +33,14 @@ exports.loadModel = function loadModel() {
 
             }
         });
+
+        IndicadoresObjetivos.associate = function() {
+            var models = global.app.orm.sequelize.models;
+            models.IndicadoresObjetivos.belongsTo(models.Indicadores, {
+                foreignKey: 'IndicadoresId'
+            });
+            models.IndicadoresObjetivos.belongsTo(models.ObjetivosCalidad, {
+              foreignKey: 'ObjetivosId'
+          })
+        }
 };

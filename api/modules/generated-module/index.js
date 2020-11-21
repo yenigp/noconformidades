@@ -31,6 +31,12 @@ exports.loadModels = function loadModels() {
     require('./models/turista.js').loadModel();
     require('./models/turistareserva.js').loadModel();
     require('./models/tiponc').loadModel();
+    require('./models/tipoac').loadModel();
+    require('./models/encuentas').loadModel();
+    require('./models/preguntas').loadModel();
+    require('./models/categorias').loadModel();
+    require('./models/respuestas').loadModel();
+    require('./models/roles').loadModel()
 
 };
 
@@ -39,25 +45,23 @@ exports.loadTasks = function loadTasks() {
 };
 
 exports.setRoutes = function setRoutes() {
-    //require('./routes/accion_correctiva/registry').registry();
-    //require('./routes/accion_mejora/registry').registry();
     //require('./routes/accion_tarea/registry').registry();
-    //require('./routes/acciones/registry').registry();
+    require('./routes/acciones/registry').registry();
     //require('./routes/agenciamercado/registry').registry();
     require('./routes/agenciaviajes/registry').registry();
     require('./routes/auditoria/registry').registry();
-    //require('./routes/dictamen/registry').registry();
-    //require('./routes/expediente/registry').registry();
+    require('./routes/dictamen/registry').registry();
+    require('./routes/expediente/registry').registry();
     require('./routes/incidencia/registry').registry();
     //require('./routes/indicadores_objetivos/registry').registry();
-    //require('./routes/indicadores/registry').registry();
+    require('./routes/indicadores/registry').registry();
     require('./routes/mercado/registry').registry();
     //require('./routes/mercadopais/registry').registry();
-    //require('./routes/modalidad_turistica/registry').registry();
     require('./routes/usuario/registry').registry();
+    require('./routes/roles/registry').registry();
     require('./routes/noconformidad/registry').registry();
     require('./routes/norma/registry').registry();
-    //require('./routes/objetivo_calidad/registry').registry();
+    require('./routes/objetivoscalidad/registry').registry();
     require('./routes/pais/registry').registry();
     require('./routes/proceso/registry').registry();
     require('./routes/prodservicio/registry').registry();
@@ -66,12 +70,14 @@ exports.setRoutes = function setRoutes() {
     require('./routes/reserva/registry').registry();
     //require('./routes/reservapadre/registry').registry();
     require('./routes/area/registry').registry();
-    //require('./routes/sc_cargo/registry').registry();
-    //require('./routes/sc_log/registry').registry();
-    //require('./routes/sc_rol/registry').registry();
     require('./routes/sucursal/registry').registry();
-    //require('./routes/tareas/registry').registry();
+    require('./routes/tareas/registry').registry();
     require('./routes/turista/registry').registry();
     //require('./routes/turistareserva/registry').registry();
     require('./routes/tiponc/registry').registry();
+    require('./routes/tipoac/registry').registry();
+    require('./routes/encuestas/registry').registry();
+    require('./routes/categorias/registry').registry();
+    require('./routes/preguntas/registry').registry();
+    require('./routes/respuestas/registry').registry();
 };

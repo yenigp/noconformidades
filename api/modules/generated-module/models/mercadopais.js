@@ -24,5 +24,16 @@ exports.loadModel = function loadModel() {
 
             }
     });
+    MercadoPais.removeAttribute('id');
+
+    MercadoPais.associate = function() {
+      var models = global.app.orm.sequelize.models;
+      models.MercadoPais.belongsTo(models.Mercado, {
+          foreignKey: 'MercadoId'
+      });
+      models.MercadoPais.belongsTo(models.Pais, {
+        foreignKey: 'PaisId'
+    })
+  }
 
 };

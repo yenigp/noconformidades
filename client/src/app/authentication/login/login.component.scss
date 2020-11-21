@@ -21,6 +21,9 @@ $havanatur-color:#0d47a1;
   #toolbarHeader {
     border-top-left-radius: 6px !important;
     border-top-right-radius: 6px !important;
+    //background-image: url('../../../assets/images/banner/banner6.jpg');
+    //background-position: center;
+    //background-size: cover;
 
     #progressBar {
       border-top-left-radius: 6px !important;
@@ -39,7 +42,7 @@ $havanatur-color:#0d47a1;
 
       border-radius: 50%;
       border: solid 2.2px #bbb;
-      background-image: url('../../../assets/images/users/profile2.png');
+      background-image: url('../../../assets/images/users/profile3.png');
       background-position: center;
       background-size: cover;
     }
@@ -72,7 +75,7 @@ $havanatur-color:#0d47a1;
 }
 
 .login-background {
-  // background: url('../../../assets/images/background/auto_5.jpg') no-repeat;
+  //background:url('../../../assets/images/background/auto_5.jpg') no-repeat;
   background-size: cover;
   background-position: center;
   background-color: #fafafa;

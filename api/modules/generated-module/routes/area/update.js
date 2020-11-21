@@ -9,6 +9,14 @@ module.exports = function (req, res) {
     data: {}
   };
 
+  if (req.area.SucursalId != req.loggedUser.SucursalId){
+    return res.status(403).json({
+      errors: [{
+        field: "Autorización",
+        title: "Usted no tiene acceso a actualizar dicha Área"
+      }]
+    })
+  }
   return req
     .area
     .update(req.body)

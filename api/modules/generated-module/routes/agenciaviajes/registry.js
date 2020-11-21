@@ -13,15 +13,15 @@ exports.registry = function registry() {
 
   global.app.express
     .route(agenciaviajesCollectionRoute)
-    .post(require('./create'))
+    //.post(require('./create'))
     .get(require('./index'));
 
   global
     .app.express
-    .param('id', function (req, res, next, id) {
+    .param('agenciaviajesId', function (req, res, next, agenciaviajesId) {
       return models
         .AgenciaViajes
-        .findByPk(id, {
+        .findByPk(agenciaviajesId, {
           include: [{ all: true }]
         }).then(function (data) {
           if (!data) {
@@ -34,7 +34,7 @@ exports.registry = function registry() {
         })
         .catch(global.app.orm.Sequelize.ValidationError, function (error) {
           global.app.logger.error(error, {
-            module: 'AgenciaViajes/:id',
+            module: 'AgenciaViajes/:agenciaviajesId',
             submodule: 'index',
             stack: error.stack
           });
@@ -43,7 +43,7 @@ exports.registry = function registry() {
         })
         .catch(function (error) {
           global.app.logger.error(error, {
-            module: 'AgenciaViajes/:id',
+            module: 'AgenciaViajes/:agenciaviajesId',
             submodule: 'index',
             stack: error.stack
           });
@@ -53,20 +53,20 @@ exports.registry = function registry() {
     }
     );
 
-  var agenciaviajesSingleRoute = agenciaviajesCollectionRoute + '/:id';
+  var agenciaviajesSingleRoute = agenciaviajesCollectionRoute + '/:agenciaviajesId';
 
   global.app.express
     .route(agenciaviajesSingleRoute)
-    .patch(require('./update'))
+    //.patch(require('./update'))
     .get(require('./show'))
-    .delete(require('./delete'));
+    //.delete(require('./delete'));
 
-  var agenciaviajesProfileRoute = '/v1/profile';
+  /*var agenciaviajesProfileRoute = '/v1/profile';
 
   global.app.express
     .route(agenciaviajesProfileRoute)
-    .patch(function(req,res,next){
-      //req.agenciaviajes=req.loggedUser;
+    /*.patch(function(req,res,next){
+      req.agenciaviajes=req.loggedUser;
       return next();
-    }, require('./update'))
+    }, require('./update'))*/
 };

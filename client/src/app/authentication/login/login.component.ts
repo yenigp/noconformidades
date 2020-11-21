@@ -65,11 +65,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
         this.loggedInUserService.updateUserProfile(result.data);
         this.showToastr.showSucces('Usted está logeado en nuestro sistema.', 'Felicidades!', 5500);
         this.inLoading = false;
-        this.router.navigate(['/backend/empresas']);
+        this.router.navigate(['/backend']);
       },
       (error) => {
         this.inLoading = false;
-        console.log(error)
+        console.log(error);
         this.router.navigate(['/authentication']);
       },
     );

@@ -4,12 +4,12 @@ import { FormBuilder, FormControl, FormGroup, Validators, FormGroupName } from '
 import { ShowToastrService } from 'src/app/core/services/show-toastr/show-toastr.service';
 import { LoggedInUserService } from 'src/app/core/services/loggedInUser/logged-in-user.service';
 import { environment } from 'src/environments/environment';
-// import { RolesService } from 'src/app/backend/services/roles/roles.service';
+import { RolesService } from 'src/app/backend/services/roles/roles.service';
+import { SucursalService } from 'src/app/backend/services/sucursal/sucursal.service';
 
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UtilsService } from 'src/app/core/services/utils/utils.service';
 import { UserService } from 'src/app/backend/services/user/user.service';
-
 
 @Component({
   selector: 'app-dialog-add-edit-user',
@@ -35,15 +35,18 @@ export class DialogAddEditUserComponent implements OnInit {
   formPass: FormGroup;
   isChangePass = false;
   role: any;
-  // Roles: any[] = [];
-  Roles: any[] = ['admin', 'programador'];
-  Companies: any[] = [];
+  sucursal: any;
+  Roles: any[] = [];
+  Sucursal: any[] = [];
+  //Roles: any[] = ['admin', 'programador'];
+  //Companies: any[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<DialogAddEditUserComponent>,
     private loggedInUserService: LoggedInUserService,
-    // private rolesService: RolesService,
+    private rolesService: RolesService,
+    private sucursalService: SucursalService,
     private fb: FormBuilder,
     public spinner: NgxSpinnerService,
     public utilsService: UtilsService,
@@ -56,6 +59,7 @@ export class DialogAddEditUserComponent implements OnInit {
 
     this.isEditing = data.isEditing;
     this.role = data.role;
+    this.sucursal = data.sucursal;
     this.selectedUser = data.selectedUser;
   }
 
@@ -71,26 +75,29 @@ export class DialogAddEditUserComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm();
-    // this.rolesService.getAllRoles().subscribe((data) => {
-    //   this.Roles = data.data;
-    // })
+    this.rolesService.getAllRoles().subscribe((data) => {
+      this.Roles = data.data;
+    });
+    this.sucursalService.getAllSucursal().subscribe((data) => {
+      this.Sucursal = data.data;
+    });
   }
 
   createForm(): void {
     if (this.isEditing) {
       this.form = this.fb.group({
-        gitUser: [this.selectedUser && this.selectedUser.gitUser ? this.selectedUser.gitUser : null, [Validators.required]],
+        gitUser: [
+          this.selectedUser && this.selectedUser.gitUser ? this.selectedUser.gitUser : null,
+          [Validators.required],
+        ],
         email: [
           this.selectedUser && this.selectedUser.email ? this.selectedUser.email : null,
           [Validators.required, Validators.email],
         ],
-        rol: [this.selectedUser && this.selectedUser.rol ? this.selectedUser.rol : null,
-        [Validators.required],
-        ],
-        description: [this.selectedUser && this.selectedUser.description ? this.selectedUser.description : null,],
-
+        rol: [this.selectedUser && this.selectedUser.rol ? this.selectedUser.rol : null, [Validators.required]],
+        description: [this.selectedUser && this.selectedUser.description ? this.selectedUser.description : null],
       });
-      console.log(this.form)
+      console.log(this.form);
     } else {
       this.formPass = this.fb.group(
         {
@@ -109,7 +116,7 @@ export class DialogAddEditUserComponent implements OnInit {
     }
   }
 
-  ngOnDestroy(): void { }
+  ngOnDestroy(): void {}
 
   matchValidator(group: FormGroup) {
     const pass = group.controls['password'].value;

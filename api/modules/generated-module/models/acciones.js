@@ -6,17 +6,30 @@ exports.loadModel = function loadModel() {
         lodash.extend({}, global.app.orm.mixins.attributes, {
             "codigo": {
                 "type": global.app.orm.Sequelize.STRING,
+                "unique": true,
+                "validate": {
+                    isUnique(value) {
+                      return Acciones.findOne({
+                        where: {codigo:value}
+                      }).then((codigo) => {
+                        if (codigo) {throw new Error('Error: el código' + ' ' + (value) + ' ' + 'ya existe')}
+                      })
+                    }
+                },
                 "allowNull": false
 
             },
-            "tipo": {
-                "type": global.app.orm.Sequelize.ENUM,
-                "values": ["Acción Correctiva", "Acción Mejora"],
-                "defaultValue": "Acción Correctiva",
+            "TipoId": {
+                "type": global.app.orm.Sequelize.INTEGER,
+                "references": {
+                    "model": "TipoAC",
+                    "key": "id"
+                },
+                "onUpdate": "cascade",
+                "onDelete": "cascade",
                 "allowNull": false
-
-            },
-            "acciontomar": {
+              },
+            "AccionTomar": {
                 "type": global.app.orm.Sequelize.STRING,
                 "allowNull": false
 
@@ -27,7 +40,7 @@ exports.loadModel = function loadModel() {
                 "defaultValue": "registrada"
         
               },
-              "fechacumplimiento": {
+              "FechaCumplimiento": {
                 "type": global.app.orm.Sequelize.DATE,
                 "allowNull": false
         
@@ -54,12 +67,15 @@ exports.loadModel = function loadModel() {
             var models = global.app.orm.sequelize.models;
             models.Acciones.belongsTo(models.Usuario, {
                 as: 'Creator'
-            });         
-            /*models.Acciones.belongsToMany(models.Tareas, {
-                through: models.AccionTarea 
+            }); 
+            models.Acciones.belongsTo(models.TipoAC, {
+                as: 'Tipo'
+            });        
+            models.Acciones.hasMany(models.AccionTarea, {
+                foreignKey: 'AccionesId'
             });
-            models.Acciones.belongsToMany(models.NoConformidad, {
-                through: models.NCAcciones
-            });*/
+            models.Acciones.hasMany(models.NCAcciones, {
+                foreignKey: 'AccionesId'
+            });
         }
 };

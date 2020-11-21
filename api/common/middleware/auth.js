@@ -4,12 +4,30 @@
 
 var jwt = require('jsonwebtoken');
 var moment = require('moment');
+const { model } = require('mongoose');
+const area = require('../../modules/generated-module/routes/area');
+const sucursal = require('../../modules/generated-module/routes/sucursal');
 exports.ensureAuthenticated = ensureAuthenticated;
 exports.basicCheckUser = basicCheckUser;
 exports.basicStrategyVerifyCallback = basicStrategyVerifyCallback;
 exports.ensureHasPermission = ensureHasPermission;
 exports.getPermissionsByUserId = getPermissionsByUserId;
+exports.isUsuario = isUsuario;
+exports.isAuditor = isAuditor;
+exports.isJefeProceso = isJefeProceso;
+exports.isSuperAdmin = isSuperAdmin;
+exports.isAdmin = isAdmin;
+exports.isEspRRHH = isEspRRHH;
+exports.isEspCalidadSucursal = isEspCalidadSucursal;
+exports.isEspCalidadEmpresa = isEspCalidadEmpresa;
+exports.isSupervisor = isSupervisor;
+exports.isDirectorSucursal = isDirectorSucursal;
+exports.ensureSucursal = ensureSucursal;
+exports.ensureUsuario = ensureUsuario;
 
+/**
+ * Verificando autenticación
+ */
 function ensureAuthenticated() {
   var models = global.app.orm.sequelize.models;
   return function(req, res, next) {
@@ -42,9 +60,21 @@ function ensureAuthenticated() {
             });
         } else {
 
-          return models.Usuario.findByPk(
-            decoded.data.id
-          ).then(function(user) {
+          return  models.Usuario.findByPk(
+            decoded.data.id,
+            {
+              include: [
+                {
+                model: models.Sucursal,
+                as:'Sucursal'
+                },
+                {
+                  model: models.Roles,
+                  as:'Role'
+                }
+            ]
+            }
+          ).then(async function(user) {
             if (!user) {
               return res.status(401).json({
                 errors: [{
@@ -63,7 +93,7 @@ function ensureAuthenticated() {
             }
 
             var tokenlastLogout = moment(decoded.data.lastLogout);
-            var personlastLogout = moment(user.dataValues.lastLogout);
+            var usuariolastLogout = moment(user.dataValues.lastLogout);
 
             if (decoded.data.lastLogout == undefined) {
               return res.status(401).json({
@@ -74,7 +104,7 @@ function ensureAuthenticated() {
               })
             }
 
-            if (personlastLogout.diff(tokenlastLogout, 'seconds') > 0) {
+            if (usuariolastLogout.diff(tokenlastLogout, 'seconds') > 0) {
               return res.status(401).json({
                 errors: [{
                   field: "Authorization",
@@ -83,6 +113,8 @@ function ensureAuthenticated() {
               })
             } else {
               req.loggedUser = user;
+              console.log(req.loggedUser.Sucursal.nombagenciaviajes)
+              console.log(req.loggedUser.Role.nombre)
               return next();
             }
           }).catch(function(e) {
@@ -99,39 +131,372 @@ function ensureAuthenticated() {
   }
 }
 
+/**
+ * Veridicando si el usuario se va a eliminar él mismo
+ */
+function ensureUsuario(){
+  models = global.app.orm.sequelize.models;
+
+  return function(req, res, next) {
+    console.log(req.params.usuarioId)
+    models.Usuario.findByPk(req.params.usuarioId)
+    .then(function (userX) {
+      if (userX.id !== req.loggedUser.id){
+        return next();
+      }
+      else {
+        return res.status(403).json({
+          errors: [{
+            field: "Denegado",
+            title: "Usted no se puede eliminar así mismo"
+          }]
+        })
+      }
+    }) 
+  }
+}
 
 
-function ensureHasPermission(permissionId) {
+/**
+ * Verificando la Sucursal o si su rol es SuperAdmin
+ */
+function ensureSucursal() {
+  var models = global.app.orm.sequelize.models;
+  return function(req, res, next) {
+      if (req.body.SucursalId == req.loggedUser.SucursalId){
+        return next();
+      }else if (req.loggedUser.RolId == 4) {
+        return next();
+      }
+      else {
+        return res.status(403).json({
+          errors: [{
+            field: "Autorización",
+            title: "Usted no tiene permiso para gestionar usuarios de esta Sucursal"
+          }]
+        })
+      }
+    }
+  }
+
+/**
+ * Verificando si el rol del usuario es Administrador de Sucursal
+ */
+function isAdmin(){
+  var models = global.app.orm.sequelize.models;
+  return function(req, res, next) {
+
+    return models.Usuario.findByPk(req.loggedUser.id)
+      .then(function(usuarioX) {
+        var rol = usuarioX.RolId;
+
+        return models.Roles.findOne({
+          where: {id: rol, nombre: "AdminSucursal", nombre: "AdminEmpresa"}
+        })
+      }).then(function(isAdminSucursalX) {
+        console.log(isAdminSucursalX)
+        if (!isAdminSucursalX) {
+          return res.status(403).json({
+            errors: [{
+              field: "Autenticación",
+              title: "Su usuario no es Administrador"
+            }]
+          })
+        } else {
+          return next();
+        }
+      })
+  }
+}
+
+/**
+ * Verificando que el rol del usuario se Administrador de Empresa
+ */
+function isEspRRHH(){
+  var models = global.app.orm.sequelize.models;
+  return function(req, res, next) {
+
+    return models.Usuario.findByPk(req.loggedUser.id)
+      .then(function(usuarioX) {
+        var rol = usuarioX.RolId;
+
+        return models.Roles.findOne({
+          where: {id: rol, nombre: "EspRRHH"}
+        })
+      }).then(function(isEspRRHHX) {
+        if (!isEspRRHHX) {
+          return res.status(403).json({
+            errors: [{
+              field: "Autorización",
+              title: "Acceso no autorizado"
+            }]
+          })
+        } else {
+          return next();
+        }
+      })
+  }
+}
+
+/**
+ * Verificiando si el rol del usuario es Usuario
+ */
+function isUsuario(){
+  var models = global.app.orm.sequelize.models;
+  return function(req, res, next) {
+
+    return models.Usuario.findByPk(req.loggedUser.id)
+      .then(function(usuarioX) {
+        var rol = usuarioX.RolId;
+
+        return models.Roles.findOne({
+          where: {id: rol, nombre: "Usuario"}
+        })
+      }).then(function(isUsuarioX) {
+        if (!isUsuarioX) {
+          return res.status(403).json({
+            errors: [{
+              field: "Autorización",
+              title: "Acceso no autorizado"
+            }]
+          })
+        } else {
+          return next();
+        }
+      })
+  }
+}
+
+/**
+ * Verificando que el rol del usuario es Auditor
+ */
+function isAuditor(){
+  var models = global.app.orm.sequelize.models;
+  return function(req, res, next) {
+
+    return models.Usuario.findByPk(req.loggedUser.id)
+      .then(function(usuarioX) {
+        var rol = usuarioX.RolId;
+
+        return models.Roles.findOne({
+          where: {id: rol, nombre: "Auditor"}
+        })
+      }).then(function(isAuditorX) {
+        if (!isAuditorX) {
+          return res.status(403).json({
+            errors: [{
+              field: "Autorización",
+              title: "Acceso no autorizado"
+            }]
+          })
+        } else {
+          return next();
+        }
+      })
+  }
+}
+
+/**
+ * Verificando que el rol del usuario es Jefe de Proceso
+ */
+function isJefeProceso(){
+  var models = global.app.orm.sequelize.models;
+  return function(req, res, next) {
+
+    return models.Usuario.findByPk(req.loggedUser.id)
+      .then(function(usuarioX) {
+        var rol = usuarioX.RolId;
+
+        return models.Roles.findOne({
+          where: {id: rol, nombre: "JefeProceso"}
+        })
+      }).then(function(isJefeProcesoX) {
+        if (!isJefeProcesoX) {
+          return res.status(403).json({
+            errors: [{
+              field: "Autorización",
+              title: "Acceso no autorizado"
+            }]
+          })
+        } else {
+          return next();
+        }
+      })
+  }
+}
+
+/**
+ * Verificando que el rol del usuario es SuperAdmin
+ */
+function isSuperAdmin(){
+  var models = global.app.orm.sequelize.models;
+  return function(req, res, next) {
+
+    return models.Usuario.findByPk(req.loggedUser.id)
+      .then(function(usuarioX) {
+        var rol = usuarioX.RolId;
+
+        return models.Roles.findOne({
+          where: {id: rol, nombre: "SuperAdmin"}
+        })
+      }).then(function(isSuperAdminX) {
+        if (!isSuperAdminX) {
+          return res.status(403).json({
+            errors: [{
+              field: "Autorización",
+              title: "Acceso no autorizado"
+            }]
+          })
+        } else {
+          return next();
+        }
+      })
+  }
+}
+
+/**
+ * Verificando que el rol del usuario es EspCalidadSucursal
+ */
+function isEspCalidadSucursal(){
+  var models = global.app.orm.sequelize.models;
+  return function(req, res, next) {
+
+    return models.Usuario.findByPk(req.loggedUser.id)
+      .then(function(usuarioX) {
+        var rol = usuarioX.RolId;
+
+        return models.Roles.findOne({
+          where: {id: rol, nombre: "EspCalidadSucursal"}
+        })
+      }).then(function(isEspCalidadSucursalX) {
+        if (!isEspCalidadSucursalX) {
+          return res.status(403).json({
+            errors: [{
+              field: "Autorización",
+              title: "Acceso no autorizado"
+            }]
+          })
+        } else {
+          return next();
+        }
+      })
+  }
+}
+
+/**
+ * Verificando que el rol del usuario es EspCalidadEmpresa
+ */
+function isEspCalidadEmpresa(){
+  var models = global.app.orm.sequelize.models;
+  return function(req, res, next) {
+
+    return models.Usuario.findByPk(req.loggedUser.id)
+      .then(function(usuarioX) {
+        var rol = usuarioX.RolId;
+
+        return models.Roles.findOne({
+          where: {id: rol, nombre: "EspCalidadEmpresa"}
+        })
+      }).then(function(isEspCalidadEmpresaX) {
+        if (!isEspCalidadEmpresaX) {
+          return res.status(403).json({
+            errors: [{
+              field: "Autorización",
+              title: "Acceso no autorizado"
+            }]
+          })
+        } else {
+          return next();
+        }
+      })
+  }
+}
+
+/**
+ * Verificando que el rol del usuario es Supervisor
+ */
+function isSupervisor(){
+  var models = global.app.orm.sequelize.models;
+  return function(req, res, next) {
+
+    return models.Usuario.findByPk(req.loggedUser.id)
+      .then(function(usuarioX) {
+        var rol = usuarioX.RolId;
+
+        return models.Roles.findOne({
+          where: {id: rol, nombre: "Supervisor"}
+        })
+      }).then(function(isSupervisorX) {
+        if (!isSupervisorX) {
+          return res.status(403).json({
+            errors: [{
+              field: "Autorización",
+              title: "Acceso no autorizado"
+            }]
+          })
+        } else {
+          return next();
+        }
+      })
+  }
+}
+
+/**
+ * Verificando que el rol del Usuario es DirectorSucursal
+ */
+function isDirectorSucursal(){
+  var models = global.app.orm.sequelize.models;
+  return function(req, res, next) {
+
+    return models.Usuario.findByPk(req.loggedUser.id)
+      .then(function(usuarioX) {
+        var rol = usuarioX.RolId;
+
+        return models.Roles.findOne({
+          where: {id: rol, nombre: "DirectorSucursal"}
+        })
+      }).then(function(isDirectorSucursalX) {
+        if (!isDirectorSucursalX) {
+          return res.status(403).json({
+            errors: [{
+              field: "Autorización",
+              title: "Acceso no autorizado"
+            }]
+          })
+        } else {
+          return next();
+        }
+      })
+  }
+}
+
+
+function ensureHasPermission(permisoId) {
   var models = global.app.orm.sequelize.models;
   return function(req, res, next) {
     var method = req.method.toLowerCase();
 
-    return models.RoleUsuario.findAll({
-      where: {
-        UsuarioId: req.loggedUser.id
-      },
-      raw: true,
-      logging: console.log,
-      attributes: ["RoleId"]
-    }).then(function(roles) {
-      var listRoleId = roles.map(function(item) {
-        return item.RoleId;
-      });
-      return models.RolePermission.findOne({
+    return models.Usuario.findByPk(req.loggedUser.id)
+      .then(function(usuarioX) {
+        var rol = usuarioX.RolId;
+        console.log(rol, permisoId)
+
+      return models.RolPermiso.findOne({
         where: {
-          RoleId: {
-            [global.app.orm.Sequelize.Op.in]: listRoleId
+          RolId: {
+            [global.app.orm.Sequelize.Op.in]: rol
           },
-          PermissionId: permissionId,
+          PermisoId: permisoId,
           [method]: 1
         }
       })
-    }).then(function(rolePermissionX) {
-      if (!rolePermissionX) {
+    }).then(function(rolPermisoX) {
+      console.log(rolPermisoX)
+      if (!rolPermisoX) {
         return res.status(403).json({
           errors: [{
-            field: "Authentication",
-            title: "Your user dont have enough permissions"
+            field: "Autenticación",
+            title: "Su usuario no tiene ningún permiso"
           }]
         })
       } else {
@@ -198,25 +563,25 @@ function basicCheckUser(bearer, done) {
             console.log('Usuario no existeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
             return done({
               status: 401,
-              key: 'user',
-              message: 'user not found'
+              key: 'usuario',
+              message: 'usuario no encontrado'
             }, null);
           }
           if (user.dataValues.usuario != decoded.data.username) {
             console.log('Usuario de otra api');
             return done({
               status: 401,
-              key: 'user',
-              message: 'user not found :('
+              key: 'usuario',
+              message: 'usuario no encontrado :('
             }, null);
           }
 
           if (user.dataValues.status !== 'enabled') {
-            console.log('user disableddddddddddddddddddddddddddddddddd');
+            console.log('usuario deshabilitadooooooooooooooooooooooooooooooooo');
             return done({
               status: 401,
-              key: 'user',
-              message: 'user is disabled'
+              key: 'usuario',
+              message: 'el usuario está deshabilitado'
             }, null);
 
           }
@@ -270,57 +635,48 @@ function getPermissionsByUserId(UserId) {
   console.log(UserId)
   var models = global.app.orm.sequelize.models;
   var Sequelize = global.app.orm.Sequelize;
-  return models.RolePerson.findAll({
-    where: {
-      UsuarioId: UserId
-    },
-    attributes: ["RoleId"],
-    raw: true
-  }).then(function(roles) {
-    {
-      var items = roles.map(function(item) {
-        return item.RoleId
-      });
+  return models.Usuario.findByPk(UserId)
+  .then(function(usuarioX) {
+    var rol = usuarioX.RolId;
 
-      return models.RolePermission.findAll({
+      return models.RolPermiso.findAll({
         where: {
-          RoleId: {
-            $in: items
+          RolId: {
+            $in: rol
           }
         },
         include: [{
-          model: models.Permission,
-          as: 'Permission',
-          attributes: ["name"]
+          model: models.Permisos,
+          as: 'Permisos',
+          attributes: ["nombre"]
         }],
         raw: true,
-        attributes: ["PermissionId", "canGet", "canPost", "canPatch", 'canDelete', "canSee"]
+        attributes: ["PermisoId", "canGet", "canPost", "canPatch", 'canDelete', "canSee"]
       });
-    }
-  }).then(function(RolePermission) {
-    var permissions = {}
-    var PermissionId = 0;
-    var permissionList = [];
-    for (var i = 0; i < RolePermission.length; i++) {
-      PermissionId = RolePermission[i]['Permission.name'];
-      if (permissions[PermissionId] == undefined) {
-        permissionList.push
-        permissions[PermissionId] = {
-          canGet: RolePermission[i].canGet,
-          canPost: RolePermission[i].canPost,
-          canPatch: RolePermission[i].canPatch,
-          canDelete: RolePermission[i].canDelete,
-          canSee: RolePermission[i].canSee,
+  }).then(function(RolPermiso) {
+    var permiso = {}
+    var PermisoId = 0;
+    var permisoList = [];
+    for (var i = 0; i < RolPermiso.length; i++) {
+      PermisoId = RolPermiso[i]['Permiso.nombre'];
+      if (permiso[PermisoId] == undefined) {
+        permisoList.push
+        permiso[PermisoId] = {
+          canGet: RolPermiso[i].canGet,
+          canPost: RolPermiso[i].canPost,
+          canPatch: RolPermiso[i].canPatch,
+          canDelete: RolPermiso[i].canDelete,
+          canSee: RolPermiso[i].canSee,
         }
       } else {
-        permissions[PermissionId].canGet = permissions[PermissionId].canGet || RolePermission[id].canGet;
-        permissions[PermissionId].canPatch = permissions[PermissionId].canPatch || RolePermission[i].canPatch;
-        permissions[PermissionId].canSee = permissions[PermissionId].canSee || RolePermission[i].canSee;
-        permissions[PermissionId].canPost = permissions[PermissionId].canPost || RolePermission[i].canPost;
-        permissions[PermissionId].canDelete = permissions[PermissionId].canDelete || RolePermission[i].canDelete;
+        permiso[PermisoId].canGet = permiso[PermisoId].canGet || RolPermiso[id].canGet;
+        permiso[PermisoId].canPatch = permiso[PermisoId].canPatch || RolPermiso[i].canPatch;
+        permiso[PermisoId].canSee = permiso[PermisoId].canSee || RolPermiso[i].canSee;
+        permiso[PermisoId].canPost = permiso[PermisoId].canPost || RolPermiso[i].canPost;
+        permiso[PermisonId].canDelete = permiso[PermisoId].canDelete || RolPermiso[i].canDelete;
       }
     }
-    return permissions;
+    return permiso;
   })
 
 }

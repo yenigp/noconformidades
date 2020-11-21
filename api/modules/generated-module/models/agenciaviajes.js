@@ -106,8 +106,8 @@ exports.loadModel = function loadModel() {
                 foreignKey: 'idagenciaviajesmatriz',
                 constraints: false
             });
-            models.AgenciaViajes.belongsToMany(models.Mercado, {
-                through: models.AgenciaMercado
+            models.AgenciaViajes.hasMany(models.AgenciaMercado, {
+                foreignKey: 'AgenciaViajeId'
             });
         }
 };

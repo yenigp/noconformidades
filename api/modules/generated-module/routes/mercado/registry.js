@@ -18,7 +18,7 @@ exports.registry = function registry() {
 
   global
     .app.express
-    .param('id', function (req, res, next, id) {
+    .param('mercadoId', function (req, res, next, mercadoId) {
       return models
         .Mercado
         .findByPk(id, {
@@ -34,7 +34,7 @@ exports.registry = function registry() {
         })
         .catch(global.app.orm.Sequelize.ValidationError, function (error) {
           global.app.logger.error(error, {
-            module: 'Mercado/:id',
+            module: 'Mercado/:mercadoId',
             submodule: 'index',
             stack: error.stack
           });
@@ -43,7 +43,7 @@ exports.registry = function registry() {
         })
         .catch(function (error) {
           global.app.logger.error(error, {
-            module: 'Mercado/:id',
+            module: 'Mercado/:mercadoId',
             submodule: 'index',
             stack: error.stack
           });
@@ -53,7 +53,7 @@ exports.registry = function registry() {
     }
     );
 
-  var mercadoSingleRoute = mercadoCollectionRoute + '/:id';
+  var mercadoSingleRoute = mercadoCollectionRoute + '/:mercadoId';
 
   global.app.express
     .route(mercadoSingleRoute)
@@ -61,12 +61,12 @@ exports.registry = function registry() {
     .get(require('./show'))
     .delete(require('./delete'));
 
-  var mercadoProfileRoute = '/v1/profile';
+  /*var mercadoProfileRoute = '/v1/profile';
 
   global.app.express
     .route(mercadoProfileRoute)
     .patch(function(req,res,next){
-      //req.mercado=req.loggedUser;
+      req.mercado=req.loggedUser;
       return next();
-    }, require('./update'))
+    }, require('./update'))*/
 };

@@ -162,7 +162,7 @@ module.exports = function (req, res) {
     data += getHelp;
   }
   if (req.query.getByid == true || req.query.getByid == 'true') {
-    data += getByidHelp;
+    data += getByIdHelp;
   }
   if (req.query.post == true || req.query.post == 'true') {
     data += postHelp;

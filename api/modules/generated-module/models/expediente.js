@@ -50,7 +50,7 @@ exports.loadModel = function loadModel() {
                 as: 'Creator'
             });  
             models.Expediente.belongsTo(models.NoConformidad, {
-                as: 'NoConformidad'
+                //as: 'NoConformidad'
             });
         }
 

@@ -4,24 +4,18 @@ exports.registry = function registry() {
   var apiRoute = global.app.config.get('api:prefix');
   var jsonAPI = global.app.utils.jsonAPI;
 
-  var sucursalHelpRoute = apiRoute + '/sucursal-help';
-  global.app.express
-    .route(sucursalHelpRoute)
-    .get(require('./help'));
-
   var sucursalCollectionRoute = apiRoute + '/sucursal';
 
   global.app.express
     .route(sucursalCollectionRoute)
-    .post(require('./create'))
-    .get(require('./index'));
+    .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
     .app.express
-    .param('id', function (req, res, next, id) {
+    .param('sucursalId', function (req, res, next, sucursalId) {
       return models
         .Sucursal
-        .findByPk(id, {
+        .findByPk(sucursalId, {
           include: [{ all: true }]
         }).then(function (data) {
           if (!data) {
@@ -34,7 +28,7 @@ exports.registry = function registry() {
         })
         .catch(global.app.orm.Sequelize.ValidationError, function (error) {
           global.app.logger.error(error, {
-            module: 'Sucursal/:id',
+            module: 'Sucursal/:sucursalId',
             submodule: 'index',
             stack: error.stack
           });
@@ -43,7 +37,7 @@ exports.registry = function registry() {
         })
         .catch(function (error) {
           global.app.logger.error(error, {
-            module: 'Sucursal/:id',
+            module: 'Sucursal/:sucursalId',
             submodule: 'index',
             stack: error.stack
           });
@@ -53,20 +47,10 @@ exports.registry = function registry() {
     }
     );
 
-  var sucursalSingleRoute = sucursalCollectionRoute + '/:id';
+  var sucursalSingleRoute = sucursalCollectionRoute + '/:sucursalId';
 
   global.app.express
     .route(sucursalSingleRoute)
-    .patch(require('./update'))
-    .get(require('./show'))
-    .delete(require('./delete'));
+    .get(global.security.ensureAuthenticated(), require('./show'));
 
-  var sucursalProfileRoute = '/v1/profile';
-
-  global.app.express
-    .route(sucursalProfileRoute)
-    .patch(function(req,res,next){
-      //req.sucursal=req.loggedUser;
-      return next();
-    }, require('./update'))
 };

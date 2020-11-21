@@ -18,6 +18,15 @@ module.exports = function (req, res) {
     model: models.Pais
   });
 
+  query.include=[
+    {
+      model: models.MercadoPais,
+      include:[{
+        model: models.Mercado
+      }]
+    }
+  ]
+
   query=jsonAPI.prepareQuery(query);
   return models
     .Pais.findAll(query)

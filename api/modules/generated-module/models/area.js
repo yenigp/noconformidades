@@ -11,12 +11,9 @@ exports.loadModel = function loadModel() {
               "type": global.app.orm.Sequelize.STRING,
               "allowNull": false,
               "validate":{
-                /*"isAlpha": {
-                  "msg": "El nombre solo puede contener letras"
-                },*/
                 "len":{
                   "args": [3,50],
-                  "msg": "El nombre debe contener como mínimo 3"
+                  "msg": "El nombre debe contener como mínimo 3 carácteres."
                 },
               }
           },
@@ -30,7 +27,7 @@ exports.loadModel = function loadModel() {
             "onDelete": "cascade"
 
         },
-        "sucursalId": {
+        "SucursalId": {
           "type": global.app.orm.Sequelize.INTEGER,
           "comment": "The foreing object that will have the Area.",
           "allowNull": false,
@@ -51,7 +48,7 @@ exports.loadModel = function loadModel() {
               as: 'Creator'
           });          
           models.Area.belongsTo(models.Sucursal, {
-              foreignKey: 'sucursalId',
+              foreignKey: 'SucursalId',
               constraints: false
           });
       }

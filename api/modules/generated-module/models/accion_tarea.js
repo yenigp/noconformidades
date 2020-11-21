@@ -33,4 +33,14 @@ exports.loadModel = function loadModel() {
 
             }
         });
+        AccionTarea.associate = function() {
+            var models = global.app.orm.sequelize.models;
+            models.AccionTarea.belongsTo(models.Acciones, {
+                foreignKey: 'AccionesId'
+            });
+            models.AccionTarea.belongsTo(models.Tareas, {
+              foreignKey: 'TareasId'
+          })
+        }
+        
 };

@@ -1,0 +1,25 @@
+<div class="container">
+  <div>
+    <div>
+      <b>Resumen</b>
+    </div>
+    <ul>
+      <li>Código: {{ noconformidad.codigo }}</li>
+      <li>Fecha Entrada: {{ noconformidad.FechaRegistro }}</li>
+      <li>Fecha Término: {{ noconformidad.FechaTermino }}</li>
+      <li>Proceso: {{ noconformidad.ProcesoId }}</li>
+      <li>Norma: {{ noconformidad.NormaId }}</li>
+      <li>Tipo de No Conformidad: {{ noconformidad.TipoId }}</li>
+    </ul>
+    <b *ngIf="Usuario">Especialista que revisa la no conformidad:</b>
+
+    <div *ngFor="let client of Usuario">
+      <span *ngIf="client.usuario">
+        <div>Usuario: {{ client.usuario }}</div>
+        <div>Password: {{ client.password }}</div>
+        <div>Rol: {{ client.rol }}</div>
+        <p></p>
+      </span>
+    </div>
+  </div>
+</div>

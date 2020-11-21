@@ -1,0 +1,102 @@
+<div class="dialog-content-wrapper">
+  <mat-toolbar class="mb-2" matDialogTitle color="primary" id="toolbarHeader">
+    <mat-toolbar-row fxLayoutAlign="space-between center">
+      <span *ngIf="!isEditing" class="mat-title mb-0">{{ 'Adicionar proceso' }}</span>
+      <span *ngIf="isEditing" class="mat-title mb-0">{{ 'Editar proceso' }}</span>
+      <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div mat-dialog-content class="my-dialog-content">
+    <form [formGroup]="form">
+      <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="gappx">
+        <!--Column Código-->
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Codigo' }}</mat-label>
+          <mat-icon class="greyIcon" matSuffix>account_box</mat-icon>
+          <input
+            type="text"
+            matNativeControl
+            required
+            matInput
+            maxlength="2"
+            [formControl]="form.controls['codigo']"
+            placeholder="{{ 'Ej. GC' }}"
+          />
+          <mat-error *ngIf="form.controls['codigo'].hasError('required')">
+            {{ 'Código' }} <strong>{{ 'es requerido' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['codigo'].hasError('minlength')">
+            {{ 'Código require un mínimo de' }} <strong>{{ '2 caracteres' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['codigo'].hasError('maxlength')">
+            {{ 'Código require un máximo de' }} <strong>{{ '2 caracteres' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['codigo'].hasError('pattern')">
+            {{ 'La estructura del código es' }} <strong>{{ 'AB' }}</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <!--Column Nombre-->
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Nombre' }}</mat-label>
+          <mat-icon class="greyIcon" matSuffix>account_box</mat-icon>
+          <input
+            type="text"
+            matInput
+            matNativeControl
+            required
+            maxlength="50"
+            [formControl]="form.controls['nombre']"
+            placeholder="{{ 'nombre' }}"
+          />
+          <mat-error *ngIf="form.controls['nombre'].hasError('required')">
+            {{ 'Nombre' }} <strong>{{ 'es requerido' }}</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <!--Column tipo-->
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Tipo' }}</mat-label>
+          <mat-icon class="greyIcon" matSuffix>account_box</mat-icon>
+          <mat-select
+            matNativeControl
+            required
+            matInput
+            [formControl]="form.controls['tipo']"
+            placeholder="{{ 'tipo' }}"
+          >
+            <mat-option *ngFor="let item of tipo" [value]="item">
+              {{ item }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!--Column JefeProceso-->
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Jefe de Proceso' }}</mat-label>
+          <mat-icon class="greyIcon" matSuffix>account_box</mat-icon>
+          <mat-select
+            matInput
+            matNativeControl
+            required
+            [formControl]="form.controls['JefeProceso']"
+            placeholder="{{ 'JefeProceso' }}"
+          >
+            <mat-option *ngFor="let item of JefeProceso; let i = index" [value]="item.id">
+              {{ item.nombre + ' ' + item.apellidos }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+
+  <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end start">
+    <button mat-flat-button (click)="onSaveAction()" [disabled]="this.form.invalid" color="primary">
+      {{ 'Guardar' }}
+    </button>
+  </div>
+</div>

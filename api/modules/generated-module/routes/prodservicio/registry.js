@@ -18,10 +18,10 @@ exports.registry = function registry() {
 
   global
     .app.express
-    .param('id', function (req, res, next, id) {
+    .param('prodservicioId', function (req, res, next, prodservicioId) {
       return models
         .ProdServicio
-        .findByPk(id, {
+        .findByPk(prodservicioId, {
           include: [{ all: true }]
         }).then(function (data) {
           if (!data) {
@@ -34,7 +34,7 @@ exports.registry = function registry() {
         })
         .catch(global.app.orm.Sequelize.ValidationError, function (error) {
           global.app.logger.error(error, {
-            module: 'ProdServicio/:id',
+            module: 'ProdServicio/:prodservicioId',
             submodule: 'index',
             stack: error.stack
           });
@@ -43,7 +43,7 @@ exports.registry = function registry() {
         })
         .catch(function (error) {
           global.app.logger.error(error, {
-            module: 'ProdServicio/:id',
+            module: 'ProdServicio/:prodservicioId',
             submodule: 'index',
             stack: error.stack
           });
@@ -53,7 +53,7 @@ exports.registry = function registry() {
     }
     );
 
-  var prodservicioSingleRoute = prodservicioCollectionRoute + '/:id';
+  var prodservicioSingleRoute = prodservicioCollectionRoute + '/:prodservicioId';
 
   global.app.express
     .route(prodservicioSingleRoute)
@@ -61,12 +61,12 @@ exports.registry = function registry() {
     .get(require('./show'))
     .delete(require('./delete'));
 
-  var prodservicioProfileRoute = '/v1/profile';
+  /*var prodservicioProfileRoute = '/v1/profile';
 
   global.app.express
     .route(prodservicioProfileRoute)
     .patch(function(req,res,next){
-      //req.prodservicio=req.loggedUser;
+      req.prodservicio=req.loggedUser;
       return next();
-    }, require('./update'))
+    }, require('./update'))*/
 };

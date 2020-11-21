@@ -7,12 +7,21 @@ exports.loadModel = function loadModel() {
             "nombre": {
                 "type": global.app.orm.Sequelize.STRING,
                 "allowNull": false,
-                "validate":{
-                  "len":{
-                    "args": [3,50],
-                    "msg": "El nombre de la norma debe tener como mínimo 3 carácteres"
-                  },
-                }
+                "unique": true,
+                "validate": {
+                  isUnique(value) {
+                    return Norma.findOne({
+                      where: {nombre:value}
+                    }).then((nombre) => {
+                      if (nombre) {throw new Error('Error: el nombre' + ' ' + (value) + ' ' + 'ya existe')}
+                    })
+                  }
+                },
+            },
+            "status": {
+              "type": global.app.orm.Sequelize.ENUM,
+              "values": ["enabled", "blocked"],
+              "defaultValue": "enabled"
             },
             "CreatorId": {
               "type": global.app.orm.Sequelize.INTEGER,

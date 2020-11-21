@@ -10,7 +10,7 @@ module.exports = function (req, res) {
   };
 
   return req
-    .norma
+    .auditoria
     .update(req.body)
     .then(function (data) {
       return models

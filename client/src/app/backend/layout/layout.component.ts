@@ -10,7 +10,6 @@ import { environment } from 'src/environments/environment';
 import { ShowToastrService } from 'src/app/core/services/show-toastr/show-toastr.service';
 import { NavigationService } from 'src/app/backend/navigation';
 import { PanelNotificationsComponent } from '../common-layout-components/panel-notifications/panel-notifications.component';
-import { StateCreatingprojectService } from '../services/state-creating-product/state-creating-product.service';
 import { SpinnerLoadingService } from '../services/spinner-loading/spinner-loading.service';
 import { AdminEditProfileComponent } from '../common-dialogs-module/admin-edit-profile/admin-edit-profile.component';
 import { Permisos } from 'src/app/core/classes/permisos';
@@ -46,7 +45,6 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    public stateCreatingprojectService: StateCreatingprojectService,
     private router: Router,
     public dialog: MatDialog,
     private navigationService: NavigationService,
@@ -58,7 +56,6 @@ export class LayoutComponent implements OnInit, OnDestroy {
     this.loggedInUser = loggedInUserService.getLoggedInUser();
     this.loggedInUser = loggedInUserService.getLoggedInUser();
     this.all_navigation_data = this.navigationService.getNavBackend();
-
 
     this.navigationData = this.all_navigation_data;
 
@@ -113,7 +110,6 @@ export class LayoutComponent implements OnInit, OnDestroy {
     this.userUpdatedSubscription = this.loggedInUserService.$loggedInUserUpdated.subscribe(() => {
       this.loggedInUser = this.loggedInUserService.getLoggedInUser();
     });
-
   }
 
   ngOnDestroy(): void {
@@ -165,16 +161,17 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   onLogout() {
-    this.authService.logout().subscribe(() => {
-      localStorage.removeItem('user');
-      this.router.navigate(['/authentication']);
-      this.showToastr.showInfo('Usuario deslogeado exitósamente', 'Ok');
-    },
+    this.authService.logout().subscribe(
+      () => {
+        localStorage.removeItem('user');
+        this.router.navigate(['/authentication']);
+        this.showToastr.showInfo('Usuario deslogueado exitósamente', 'Ok');
+      },
       (error) => {
         localStorage.removeItem('user');
         this.router.navigate(['/authentication']);
-        this.showToastr.showInfo('Usuario deslogeado exitósamente', 'Ok');
-      })
+        this.showToastr.showInfo('Usuario deslogueado exitósamente', 'Ok');
+      },
+    );
   }
-
 }

@@ -6,7 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements AfterViewInit {
-  title = 'BACKEND-EMPRESAS';
+  title = 'BACKEND-SGNC';
 
   constructor(private spinner: NgxSpinnerService) {
     this.spinner.show();

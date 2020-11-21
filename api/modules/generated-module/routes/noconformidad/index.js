@@ -19,15 +19,23 @@ module.exports = function (req, res) {
   });
 
   query=jsonAPI.prepareQuery(query);
-  query.include=[{
-      model: models.Incidencia
-    },
+  query.include=[
+      'Incidencia',
+      'Auditoria', 
+      'QuejasReclamaciones',
+      'Proceso',
+      'Norma',
+      'Tipo',
+      'Area',
+      'Sucursal',
     {
-      model: models.Auditoria
+      model: models.NCAcciones,
+      include: [{
+        model: models.Acciones
+      }]
     },
-    {  
-      model: models.QuejasReclamaciones
-  }]
+    'Tipo'
+  ]
   return models
     .NoConformidad.findAll(query)
     .then(function (data) {

@@ -22,7 +22,7 @@ exports.loadModel = function loadModel() {
             "allowNull": false
 
             },
-            "causainvestigacion": {
+            "CausaInvestigacion": {
                 "type": global.app.orm.Sequelize.BOOLEAN,
                 "allowNull": false
 

@@ -4,24 +4,24 @@ exports.registry = function registry() {
   var apiRoute = global.app.config.get('api:prefix');
   var jsonAPI = global.app.utils.jsonAPI;
 
-  /*var auditoriaHelpRoute = apiRoute + '/auditoria-help';
+  var quejasreclamacionesHelpRoute = apiRoute + '/quejasreclamaciones-help';
   global.app.express
-    .route(auditoriaHelpRoute)
-    .get(require('./help'));*/
+    .route(quejasreclamacionesHelpRoute)
+    .get(global.security.ensureAuthenticated(), require('./help'));
 
   var quejasreclamacionesCollectionRoute = apiRoute + '/quejasreclamaciones';
 
   global.app.express
     .route(quejasreclamacionesCollectionRoute)
-    //.post(require('./create'))
-    .get(require('./index'));
+    .post(global.security.ensureAuthenticated(), global.security.isEspCalidadSucursal(), require('./create'))
+    .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
     .app.express
-    .param('id', function (req, res, next, id) {
+    .param('quejasreclamacionesId', function (req, res, next, quejasreclamacionesId) {
       return models
         .QuejasReclamaciones
-        .findByPk(id, {
+        .findByPk(quejasreclamacionesId, {
           include: [{ all: true }]
         }).then(function (data) {
           if (!data) {
@@ -34,7 +34,7 @@ exports.registry = function registry() {
         })
         .catch(global.app.orm.Sequelize.ValidationError, function (error) {
           global.app.logger.error(error, {
-            module: 'QuejasReclamaciones/:id',
+            module: 'QuejasReclamaciones/:quejasreclamacionesId',
             submodule: 'index',
             stack: error.stack
           });
@@ -43,7 +43,7 @@ exports.registry = function registry() {
         })
         .catch(function (error) {
           global.app.logger.error(error, {
-            module: 'QuejasReclamaciones/:id',
+            module: 'QuejasReclamaciones/:quejasreclamacionesId',
             submodule: 'index',
             stack: error.stack
           });
@@ -53,20 +53,20 @@ exports.registry = function registry() {
     }
     );
 
-  var quejasreclamacionesSingleRoute = quejasreclamacionesCollectionRoute + '/:id';
+  var quejasreclamacionesSingleRoute = quejasreclamacionesCollectionRoute + '/:quejasreclamacionesId';
 
   global.app.express
     .route(quejasreclamacionesSingleRoute)
-    //.patch(require('./update'))
-    .get(require('./show'))
-    //.delete(require('./delete'));
+    .patch(global.security.ensureAuthenticated(), require('./update'))
+    .get(global.security.ensureAuthenticated(), require('./show'))
+    .delete(global.security.ensureAuthenticated(), global.security.isJefeProceso(), require('./delete'));
 
-  var quejasreclamacionesProfileRoute = '/v1/profile';
+  /*var quejasreclamacionesProfileRoute = '/v1/profile';
 
   global.app.express
     .route(quejasreclamacionesProfileRoute)
-    /*.patch(function(req,res,next){
-      //req.auditoria=req.loggedUser;
+    .patch(function(req,res,next){
+      req.noconformidades=req.loggedUser;
       return next();
     }, require('./update'))*/
 };

@@ -18,10 +18,10 @@ exports.registry = function registry() {
 
   global
     .app.express
-    .param('id', function (req, res, next, id) {
+    .param('paisId', function (req, res, next, paisId) {
       return models
         .Pais
-        .findByPk(id, {
+        .findByPk(paisId, {
           include: [{ all: true }]
         }).then(function (data) {
           if (!data) {
@@ -34,7 +34,7 @@ exports.registry = function registry() {
         })
         .catch(global.app.orm.Sequelize.ValidationError, function (error) {
           global.app.logger.error(error, {
-            module: 'Pais/:id',
+            module: 'Pais/:paisId',
             submodule: 'index',
             stack: error.stack
           });
@@ -43,7 +43,7 @@ exports.registry = function registry() {
         })
         .catch(function (error) {
           global.app.logger.error(error, {
-            module: 'Pais/:id',
+            module: 'Pais/:paisId',
             submodule: 'index',
             stack: error.stack
           });
@@ -53,7 +53,7 @@ exports.registry = function registry() {
     }
     );
 
-  var paisSingleRoute = paisCollectionRoute + '/:id';
+  var paisSingleRoute = paisCollectionRoute + '/:paisId';
 
   global.app.express
     .route(paisSingleRoute)
@@ -61,12 +61,12 @@ exports.registry = function registry() {
     .get(require('./show'))
     .delete(require('./delete'));
 
-  var paisProfileRoute = '/v1/profile';
+  /*var paisProfileRoute = '/v1/profile';
 
   global.app.express
     .route(paisProfileRoute)
     .patch(function(req,res,next){
-      //req.pais=req.loggedUser;
+      req.pais=req.loggedUser;
       return next();
-    }, require('./update'))
+    }, require('./update'))*/
 };

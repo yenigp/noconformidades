@@ -5,6 +5,16 @@
 module.exports = function (req, res) {
 	var jsonAPI = global.app.utils.jsonAPI;
 
+  if (req.loggedUser.Rol != 4) {
+    if (req.usuario.SucursalId != req.loggedUser.SucursalId){
+      return res.status(403).json({
+        errors: [{
+          field: "Autorización",
+          title: "Usted no tiene acceso a eliminar dicho Usuario"
+        }]
+      })
+    }
+  } 
   return req
     .usuario
     .destroy()

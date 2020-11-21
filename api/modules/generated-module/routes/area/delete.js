@@ -5,6 +5,14 @@
 module.exports = function (req, res) {
 	var jsonAPI = global.app.utils.jsonAPI;
 
+  if (req.area.SucursalId != req.loggedUser.SucursalId){
+    return res.status(403).json({
+      errors: [{
+        field: "Autorización",
+        title: "Usted no tiene acceso a eliminar dicho Área"
+      }]
+    })
+  }
   return req
     .area
     .destroy()

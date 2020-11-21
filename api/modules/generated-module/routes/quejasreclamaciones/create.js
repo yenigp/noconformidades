@@ -1,0 +1,153 @@
+'use strict';
+
+var moment = require('moment');
+
+module.exports = function (req, res) {
+  var models = global.app.orm.sequelize.models;
+  var Sequelize = global.app.orm.Sequelize;
+
+	var jsonAPI = global.app.utils.jsonAPI;
+  var jsonAPIBody = {
+    data: {}
+  };
+
+  //Función que devuelve el codigo de un tipo de no conformidad dado su id.
+  async function BuscarCodigoPorTipoId(TipoId) {
+    //esta funcion busca el codigo en la base de datos, dado un TipoId
+    
+     return await models.TipoNC.findByPk(TipoId).then(function(tipoX){
+      return tipoX.codigo;
+     })
+  }
+  
+  //Función que devuelve el codigo de un proceso dado su id.
+  async function BuscarProcesoPorProcesoId(ProcesoId) {
+    console.log(ProcesoId)
+     return await models.Proceso.findByPk(ProcesoId).then(function(procesoX){
+      return procesoX.codigo;
+     })
+
+  }
+
+  //Función que genera el código de una no conformidad.
+  async function GenerarCodigo(id, length) {
+  id = id.toString();
+  var tiponc = await BuscarCodigoPorTipoId(3);
+  var proceso = await BuscarProcesoPorProcesoId(req.body.ProcesoId);
+  var today = new Date();
+  var year = (today.getFullYear()).toString().slice(2,4);
+  var cabecera=tiponc + proceso + year;
+  var lengthInicial=cabecera.length+id.length;
+  for (var i = length - lengthInicial; i > 0; i--) {
+    id = "0" + id;
+  }
+      
+    return cabecera+ id;
+  }
+
+  //Se obtiene la fecha término de una no conformidad
+  var fechatermino = moment().add(1, 'months');
+  
+  return global
+    .app.orm.sequelize.transaction(async function (t) {
+      return models
+        .NoConformidad
+        .create({
+          ProcesoId: req.body.ProcesoId,
+          NormaId: req.body.NormaId,
+          codigo: await GenerarCodigo(1,10),
+          status: "abierta",
+          FechaRegistro: req.body.FechaRegistro,
+          FechaIdentificacion: req.body.FechaIdentificacion,
+          FechaTermino: fechatermino,
+          TipoId: 3,
+          descripcion: req.body.descripcion,
+          evidencia: req.body.evidencia,
+          JefeProceso: req.body.JefeProceso,
+          SucursalId: req.loggedUser.SucursalId,
+          CreatorId: req.loggedUser.id,
+          EspCalidad: req.loggedUser.id
+        },{
+          transaction: t
+        });
+    })
+    .then(async function (noconformidad) {
+      if (noconformidad.JefeProceso != null) {
+        noconformidad.update({
+          status: "analizando",
+        }).then(function(){
+        return models.NoConformidad.findByPk(noconformidad.id)
+        })
+      return models
+        .QuejasReclamaciones
+        .create({
+          NoConformidadId: noconformidad.id,
+          ServicioId: req.body.ServicioId,
+          ProductoId: req.body.ProductoId,
+          TuristaId: req.body.TuristaId,
+          ReservaId: req.body.ReservaId,
+          tipo: req.body.tipo,
+          clasificacion: req.body.clasificacion,
+          observacion: req.body.observacion,
+          CreatorId: noconformidad.CreatorId
+        }),
+        noconformidad.update({
+          codigo: await GenerarCodigo(noconformidad.id,10),
+        }).then(function(){
+        return models.NoConformidad.findByPk(noconformidad.id)
+        })
+      } else {
+        return models
+        .QuejasReclamaciones
+        .create({
+          NoConformidadId: noconformidad.id,
+          ServicioId: req.body.ServicioId,
+          ProductoId: req.body.ProductoId,
+          TuristaId: req.body.TuristaId,
+          ReservaId: req.body.ReservaId,
+          tipo: req.body.tipo,
+          clasificacion: req.body.clasificacion,
+          observacion: req.body.observacion,
+          CreatorId: noconformidad.CreatorId
+        }),
+        noconformidad.update({
+          codigo: await GenerarCodigo(noconformidad.id,10),
+        }).then(function(){
+        return models.NoConformidad.findByPk(noconformidad.id)
+      })
+    }
+    })
+    .then(function (data) {
+      return models
+        .Expediente
+        .create({
+          NoConformidadId: data.id,
+          evidencia: req.body.evidencia,
+          estado: "abierto",
+          CreatorId: data.CreatorId
+        })
+    })
+    .then(function (data) {
+      jsonAPIBody.data = data.toJSON();
+      return res.status(201).json(jsonAPIBody); // OK.
+    })
+    .catch(global.app.orm.Sequelize.ValidationError, function (error) {
+      global.app.utils.logger.error(error, {
+        module   : 'quejasreclamaciones/create',
+        submodule: 'routes',
+        stack    : error.stack
+      });
+      return res.status(400)
+                .json(jsonAPI.processErrors(error, req, {file:__filename}));
+    })
+    .catch(function (error) {
+      global.app.utils.logger.error(error, {
+        module   : 'quejasreclamaciones/create',
+        submodule: 'routes',
+        stack    : error.stack
+      });
+      return res.status(500)
+                .json(jsonAPI.processErrors(error, req, {file:__filename}));
+    });
+};
+

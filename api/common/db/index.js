@@ -6,18 +6,18 @@ var lodash               = require('lodash');
 var Sequelize            = require('sequelize');
 var noUpdateAttributes   = require('./db-modules/sequelize-noupdate-attributes');
 var addProcessFilesHooks = require('./processFilesHooks');
-var mongoose = require('mongoose');
-var bluebird = require('bluebird');
+//var mongoose = require('mongoose');
+//var bluebird = require('bluebird');
 // To allow automatically setting the transaction to all queries.
 var cls              = require('continuation-local-storage');
 var namespace        = cls.createNamespace('base-api');
 global.app.namespace = namespace;
 Sequelize.cls=namespace;
-mongoose.Promise=bluebird;
+//mongoose.Promise=bluebird;
 var mixins = {};//require('./models');
 
 var dbConfig = global.app.config.get('database');
-var wasLoadedMongo = false;
+//var wasLoadedMongo = false;
 var activeDialect  = dbConfig.activeDialect;
 var defaultOptions = dbConfig.defaultOptions;
 
@@ -185,7 +185,7 @@ module.exports = {
 
 
 
-function setupMongoDbConnection() {
+/*function setupMongoDbConnection() {
   // Build the connection string.
   var url = 'mongodb://';
   if (global.app.config.get('logging:transports:mongodb:username')) {
@@ -233,4 +233,4 @@ function setupMongoDbConnection() {
       submodule: 'logger/db'
     });
   });
-}
+}*/

@@ -161,8 +161,8 @@ exports.loadModel = function loadModel() {
                 foreignKey: 'id_pais',
                 constraints: false
             });
-            models.Turista.belongsToMany(models.Reserva, {
-                through: models.TuristaReserva
+            models.Turista.hasMany(models.TuristaReserva, {
+                foreignKey: 'TuristaID'
             });
         }
 

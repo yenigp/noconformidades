@@ -4,6 +4,7 @@ var ensureAuthenticated                    = middleware.auth.ensureAuthenticated
 
 
 var path = require('path');
+const { isAdminSucursal, ensureAdmin, isSucursal, ensureHasPermission, validSucursal, ensureSucursal } = require('../../common/middleware/auth');
 var EmailTemplate = require('email-templates').EmailTemplate
 
 exports.loadEmails = function loadEmails() {
@@ -21,7 +22,7 @@ exports.setRoutes = function setRoutes() {
   var loginRoute = global.app.config.get('api:prefix') + '/sign-up';
   global.app.express
         .route(loginRoute)
-        .post(require('./routes/sign-up/index'));
+        .post([global.security.ensureAuthenticated(), global.security.ensureSucursal()], require('./routes/sign-up/index'));
       
   var logoutRoute = authRoute + '/logout';
   global.app.express

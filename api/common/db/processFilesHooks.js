@@ -11,7 +11,8 @@ module.exports = function (sequelize) {
     'banner',
     'avatar',
     "mainImage",
-    "file"
+    "file",
+    "evidencia"
   ];
 
   sequelize.addHook('beforeCreate', function (object) {

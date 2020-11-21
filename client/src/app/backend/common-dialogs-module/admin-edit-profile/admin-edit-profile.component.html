@@ -1,5 +1,4 @@
 <div class="dialog-content-wrapper">
-
   <mat-toolbar matDialogTitle color="primary" id="toolbarHeader">
     <mat-toolbar-row fxLayoutAlign="end center">
       <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
@@ -12,86 +11,114 @@
     <form [formGroup]="form">
       <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="gappx">
         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="gappx">
-          <span *ngIf="this.loggedInUser" class="mat-title my-2" style="font-size:24px;">
-            {{this.loggedInUser.username}}
+          <span *ngIf="this.loggedInUser" class="mat-title my-2" style="font-size: 24px">
+            {{ this.loggedInUser.nombre + this.loggedInUser.apellidos }}
           </span>
-          <span *ngIf="!this.loggedInUser" class="mat-title my-2" style="font-size:24px;">
-            {{'Username'}}
+          <span *ngIf="!this.loggedInUser" class="mat-title my-2" style="font-size: 24px">
+            {{ 'Nombre' }}
           </span>
         </div>
 
-
         <mat-form-field appearance="outline">
-          <mat-label>{{'Username'}}</mat-label>
-          <input type="text" matInput [formControl]="form.controls['gitUser']" placeholder="{{'Username'}}">
-          <mat-error *ngIf="form.controls['gitUser'].hasError('required')">
-            {{'username'}} <strong>{{'is required'}}</strong>
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>{{'Email'}}</mat-label>
-          <input type="email" matInput [formControl]="form.controls['email']" placeholder="{{'Email'}}">
-          <mat-icon class="greyIcon" matSuffix>mail</mat-icon>
-          <mat-error *ngIf="form.controls['email'].hasError('required')">
-            {{'email'}} <strong>{{'is required'}}</strong>
-          </mat-error>
+          <mat-label>{{ 'Usuario' }}</mat-label>
+          <input type="text" readonly matInput [formControl]="form.controls['usuario']" placeholder="{{ 'Usuario' }}" />
         </mat-form-field>
 
         <mat-slide-toggle color="primary" (change)="onSelectSliderChange($event)" [checked]="isChangePass">
-          {{'Change password'}}</mat-slide-toggle>
+          {{ 'Cambiar contraseña' }}</mat-slide-toggle
+        >
 
         <div *ngIf="isChangePass" fxLayout="column" class="p-2 mt-2 PassSection" fxLayoutAlign="start stretch">
           <div fxLayout="row wrap" class="mt-2" fxLayoutAlign="space-between center">
             <mat-form-field class="example-full-width" appearance="outline" fxFlex="100">
-              <mat-label>{{'Password'}}</mat-label>
-              <input matInput placeholder="{{'Password'}}" [type]="this.passwordType" required
-                [formControl]="formPass.controls['password']">
-              <mat-icon style="cursor:pointer;" *ngIf="this.passwordType == 'password'" class="greyIcon" matSuffix
-                (click)="this.passwordType = 'text'">
-                visibility</mat-icon>
-              <mat-icon style="cursor:pointer;" *ngIf="this.passwordType == 'text'" class="greyIcon" matSuffix
-                (click)="this.passwordType = 'password'">
-                visibility_off</mat-icon>
+              <mat-label>{{ 'Contraseña' }}</mat-label>
+              <input
+                matInput
+                placeholder="{{ 'Contraseña' }}"
+                [type]="this.passwordType"
+                required
+                [formControl]="formPass.controls['password']"
+              />
+              <mat-icon
+                style="cursor: pointer"
+                *ngIf="this.passwordType == 'password'"
+                class="greyIcon"
+                matSuffix
+                (click)="this.passwordType = 'text'"
+              >
+                visibility</mat-icon
+              >
+              <mat-icon
+                style="cursor: pointer"
+                *ngIf="this.passwordType == 'text'"
+                class="greyIcon"
+                matSuffix
+                (click)="this.passwordType = 'password'"
+              >
+                visibility_off</mat-icon
+              >
               <mat-error *ngIf="formPass.controls['password'].hasError('required')">
-                {{'Password'}} <strong>{{'is required'}}</strong>
+                {{ 'Password' }} <strong>{{ 'es requerido' }}</strong>
               </mat-error>
             </mat-form-field>
 
-            <mat-form-field class="example-full-width" appearance="outline" fxFlex="100"
-              [ngClass]="{'mat-form-field-invalid': formPass.hasError('mismatch'), 'ng-invalid': formPass.hasError('mismatch'), 'ng-valid': !formPass.hasError('mismatch')}">
-              <mat-label>{{'Repeat pass'}}</mat-label>
-              <input matInput placeholder="{{'Repeat pass'}}" required [type]="this.passwordType"
-                [ngClass]="{'ng-invalid': formPass.hasError('mismatch')}" [formControl]="formPass.controls['repeat']">
-              <mat-icon style="cursor:pointer;" *ngIf="this.passwordType == 'password'" class="greyIcon" matSuffix
-                (click)="this.passwordType = 'text'">
-                visibility</mat-icon>
-              <mat-icon style="cursor:pointer;" *ngIf="this.passwordType == 'text'" class="greyIcon" matSuffix
-                (click)="this.passwordType = 'password'">
-                visibility_off</mat-icon>
+            <mat-form-field
+              class="example-full-width"
+              appearance="outline"
+              fxFlex="100"
+              [ngClass]="{
+                'mat-form-field-invalid': formPass.hasError('mismatch'),
+                'ng-invalid': formPass.hasError('mismatch'),
+                'ng-valid': !formPass.hasError('mismatch')
+              }"
+            >
+              <mat-label>{{ 'Confirmar contraseña' }}</mat-label>
+              <input
+                matInput
+                placeholder="{{ 'Confirmar contraseña' }}"
+                required
+                [type]="this.passwordType"
+                [ngClass]="{ 'ng-invalid': formPass.hasError('mismatch') }"
+                [formControl]="formPass.controls['repeat']"
+              />
+              <mat-icon
+                style="cursor: pointer"
+                *ngIf="this.passwordType == 'password'"
+                class="greyIcon"
+                matSuffix
+                (click)="this.passwordType = 'text'"
+              >
+                visibility</mat-icon
+              >
+              <mat-icon
+                style="cursor: pointer"
+                *ngIf="this.passwordType == 'text'"
+                class="greyIcon"
+                matSuffix
+                (click)="this.passwordType = 'password'"
+              >
+                visibility_off</mat-icon
+              >
             </mat-form-field>
           </div>
           <div fxLayout="row" fxLayoutAlign="start center" class="pb-3">
             <mat-error *ngIf="formPass.hasError('mismatch')">
-              {{'Password'}} <strong>{{'most be equals'}}</strong>
+              {{ 'Contraseña' }} <strong>{{ 'no coinciden' }}</strong>
             </mat-error>
           </div>
-
         </div>
-
       </div>
-
     </form>
-
-
-
-
   </div>
 
   <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end start">
-    <button mat-flat-button (click)="onUpdateProfile()" [disabled]="this.form.invalid || (isChangePass && this.formPass.invalid )"
-      color="primary">{{'Save'}}</button>
-
+    <button
+      mat-flat-button
+      (click)="onUpdateProfile()"
+      [disabled]="this.form.invalid || (isChangePass && this.formPass.invalid)"
+      color="primary"
+    >
+      {{ 'Guardar' }}
+    </button>
   </div>
-
 </div>

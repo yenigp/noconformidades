@@ -8,6 +8,23 @@ module.exports = function(req, res) {
   var jsonAPI = global.app.utils.jsonAPI;
   var models = global.app.orm.sequelize.models;
   req.body.lastLogout = new Date().toISOString();
+  if (req.body.RolId == null){
+    req.body.RolId = 1
+  }
+
+  return models.Sucursal.findOne({
+    where: {id: req.body.SucursalId}
+  }).then(function(sucursalX) {
+    if (!sucursalX) {
+      return res.status(404).json({
+        errors:[
+          {
+            field: "sucursal",
+            title: "La Sucursal no existe"
+          }
+        ]
+      })
+  } else{
   return models
     .Usuario.create(req.body).then(function(user) {
       return res.status(201).json({
@@ -34,5 +51,6 @@ module.exports = function(req, res) {
           file: __filename
         }));
     });
-
-};
+  }
+})
+}

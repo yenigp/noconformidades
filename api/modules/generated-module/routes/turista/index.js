@@ -1,6 +1,8 @@
 'use strict';
 
 var lodash  = require('lodash');
+const { Op } = require("sequelize");
+var moment = require('moment');
 
 module.exports = function (req, res) {
   var models = global.app.orm.sequelize.models;
@@ -15,23 +17,28 @@ module.exports = function (req, res) {
 
   var query = jsonAPI.buildQueryFromReq({
     req  : req,
-    model: models.Turista
+    model: models.Turista,
+    attributes: ["nombre"]
   });
 
   query.include=[
     {
       model: models.ReservaPadre,
-      attributes:["id","localizador", "anombrede"]
+      attributes:["localizador"]
     },
     {
       model: models.Pais,
-      attributes:["id", "codigo", "descripcion"]
+      attributes:["descripcion"]
     },
     {
       model: models.TuristaReserva,
       include: [
         {
-          model: models.Reserva
+          model: models.Reserva,
+          attributes: ["locreservapadre","idtipoproducto", "nombservicio"],
+          where: {
+            fcreacion: {[Op.gte]: moment().subtract(1,'y').format('YYYY-MM-DD')}
+          }
         }
       ]
     }

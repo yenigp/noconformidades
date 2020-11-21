@@ -16,6 +16,16 @@ exports.loadModel = function loadModel() {
           },
             "codigo": {
                 "type": global.app.orm.Sequelize.STRING,
+                "unique": true,
+                "validate": {
+                    isUnique(value) {
+                      return Dictamen.findOne({
+                        where: {codigo:value}
+                      }).then((codigo) => {
+                        if (codigo) {throw new Error('Error: el código' + ' ' + (value) + ' ' + 'ya existe')}
+                      })
+                    }
+                  },
                 "allowNull": false
 
             },
@@ -25,15 +35,20 @@ exports.loadModel = function loadModel() {
                 "allowNull": true
 
             },
-            "fechaaprobacion": {
+            "FechaAprobacion": {
                 "type": global.app.orm.Sequelize.DATEONLY,
                 "allowNull": false
 
             },
             "conclusiones": {
                 "type": global.app.orm.Sequelize.STRING,
-                "allowNull": false
-
+                "allowNull": false,
+                "validate":{
+                    "len":{
+                      "args": [10,255],
+                      "msg": "Mínimo 10 y máximo 255 carácteres"
+                    },
+                }
             },
             "CreatorId": {
                 "type": global.app.orm.Sequelize.INTEGER,

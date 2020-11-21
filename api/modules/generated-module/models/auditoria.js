@@ -17,6 +17,12 @@ exports.loadModel = function loadModel() {
           },
             "observacion": {
                 "type": global.app.orm.Sequelize.STRING,
+                "validate":{
+                    "len":{
+                      "args": [10,255],
+                      "msg": "Mínimo 10 y máximo 255 carácteres"
+                    },
+                  },
                 "allowNull": false
 
             },

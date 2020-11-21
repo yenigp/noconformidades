@@ -1,0 +1,71 @@
+<div class="dialog-content-wrapper">
+  <mat-toolbar class="mb-2" matDialogTitle color="primary" id="toolbarHeader">
+    <mat-toolbar-row fxLayoutAlign="space-between center">
+      <span *ngIf="!isEditing" class="mat-title mb-0">{{ 'Adicionar tipo de no conformidad' }}</span>
+      <span *ngIf="isEditing" class="mat-title mb-0">{{ 'Editar tipo de no conformidad' }}</span>
+      <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div mat-dialog-content class="my-dialog-content">
+    <form [formGroup]="form">
+      <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="gappx">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Código' }}</mat-label>
+          <mat-icon class="greyIcon" matSuffix>account_box</mat-icon>
+          <input
+            type="text"
+            maxlength="true"
+            maxlength="2"
+            matInput
+            [formControl]="form.controls['codigo']"
+            placeholder="{{ 'Ej: RI' }}"
+          />
+          <mat-error *ngIf="form.controls['codigo'].hasError('required')">
+            {{ 'Código' }} <strong>{{ 'es requerido' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['codigo'].hasError('minlength')">
+            {{ 'Código require un mínimo de' }} <strong>{{ '2 caracteres' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['codigo'].hasError('maxlength')">
+            {{ 'Código require un máximo de' }} <strong>{{ '2 caracteres' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['codigo'].hasError('pattern')">
+            {{ 'La estructura del código es' }} <strong>{{ 'RI' }}</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <!--Column Nombre-->
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Nombre' }}</mat-label>
+          <mat-icon class="greyIcon" matSuffix>account_box</mat-icon>
+          <input
+            type="text"
+            maxlength="true"
+            maxlength="100"
+            matInput
+            [formControl]="form.controls['nombre']"
+            placeholder="{{ 'nombre' }}"
+          />
+          <mat-error *ngIf="form.controls['nombre'].hasError('required')">
+            {{ 'Nombre' }} <strong>{{ 'es requerido' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['nombre'].hasError('minlength')">
+            {{ 'Nombre require un mínimo de' }} <strong>{{ '3 caracteres' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['nombre'].hasError('maxlength')">
+            {{ 'Nombre require un máximo de' }} <strong>{{ '50 caracteres' }}</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+
+  <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end start">
+    <button mat-flat-button (click)="onSaveAction()" [disabled]="this.form.invalid" color="primary">
+      {{ 'Guardar' }}
+    </button>
+  </div>
+</div>

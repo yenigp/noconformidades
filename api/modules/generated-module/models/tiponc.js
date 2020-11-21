@@ -6,17 +6,32 @@ exports.loadModel = function loadModel() {
         lodash.extend({}, global.app.orm.mixins.attributes, {
             "codigo": {
                 "type": global.app.orm.Sequelize.STRING,
+                "unique": true,
                 "validate": {
                   "isUppercase": true,
+                  isUnique(value) {
+                    return TipoNC.findOne({
+                      where: {codigo:value}
+                    }).then((codigo) => {
+                      if (codigo) {throw new Error('Error: el código' + ' ' + (value) + ' ' + 'ya existe')}
+                    })
+                  }
                 },
-                "allowNull": false
-
+              "allowNull": false
+              
             },
             "nombre": {
               "type": global.app.orm.Sequelize.STRING,
-              /*"validate": {
-                "isAlphanumeric": true,
-              },*/
+              "unique": true,
+              "validate": {
+                isUnique(value) {
+                  return TipoNC.findOne({
+                    where: {nombre:value}
+                  }).then((nombre) => {
+                    if (nombre) {throw new Error('Error: el nombre' + ' ' + (value) + ' ' + 'ya existe')}
+                  })
+                }
+              },
               "allowNull": false
 
             },  

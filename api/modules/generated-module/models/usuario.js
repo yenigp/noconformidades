@@ -8,9 +8,6 @@ exports.loadModel = function loadModel() {
                 "type": global.app.orm.Sequelize.STRING,
                 "allowNull": false,
                 "validate":{
-                  /*"isAlpha": {
-                    "msg": "El nombre solo puede contener letras"
-                  },*/
                   "len":{
                     "args": [2,20],
                     "msg": "El nombre debe tener como mínimo 2 carácteres"
@@ -21,9 +18,6 @@ exports.loadModel = function loadModel() {
                 "type": global.app.orm.Sequelize.STRING,
                 "allowNull": false,
                 "validate":{
-                  /*"isAlpha": {
-                    "msg": "El apellido solo puede contener letras"
-                  },*/
                   "max":{
                     "args": [3,50],
                     "msg": "Mínimo 3 y máximo 50 carácteres"
@@ -40,8 +34,15 @@ exports.loadModel = function loadModel() {
                   },
                   "notNull": {
                     "msg": "Por favor, registre el correo electrónico"
-                }
-              },
+                },
+                  isUnique(value) {
+                    return Usuario.findOne({
+                    where: {email:value}
+                    }).then((email) => {
+                     if (email) {throw new Error('Error: el correo' + ' ' + (value) + ' ' + 'ya existe')}
+                    })
+                   }
+                },
             },
             "usuario": {
                 "type": global.app.orm.Sequelize.STRING,
@@ -52,6 +53,13 @@ exports.loadModel = function loadModel() {
                   "notNull": {
                     "msg": "Por favor, registre el nombre de usuario"
                 },
+                  isUnique(value) {
+                    return Usuario.findOne({
+                    where: {usuario:value}
+                    }).then((usuario) => {
+                    if (usuario) {throw new Error('Error: el usuario' + ' ' + (value) + ' ' + 'ya existe')}
+                    })
+                }
               }
             },
             "password": {
@@ -82,10 +90,15 @@ exports.loadModel = function loadModel() {
                 "type": global.app.orm.Sequelize.TEXT('long')
 
             },
-            "rol": {
-                "type": global.app.orm.Sequelize.ENUM,
-                "values": ["admin", "supervisor", "espCalidad", "jefeMercado", "director"],
-                "defaultValue": "supervisor"
+            "RolId": {
+                "type": global.app.orm.Sequelize.INTEGER,
+                "references": {
+                    "model": "Roles",
+                    "key": "id"
+                },
+                "onUpdate": "cascade",
+                "onDelete": "cascade"
+
             },
             "CreatorId": {
                 "type": global.app.orm.Sequelize.INTEGER,
@@ -97,16 +110,13 @@ exports.loadModel = function loadModel() {
                 "onDelete": "cascade"
 
             },
-        "AreaId": {
-            "type": global.app.orm.Sequelize.INTEGER,
-            "references": {
-                "model": "Area",
-                "key": "id"
+            "SucursalId": {
+                "type": global.app.orm.Sequelize.INTEGER,
+                "comment": "The foreing object that will have the Usuario.",
+                "allowNull": false,
+                "noUpdate": true
+      
             },
-            "onUpdate": "cascade",
-            "onDelete": "cascade",
-            "allowNull": false
-        },
 
         }), {
             comment: 'A example model.',
@@ -121,7 +131,14 @@ exports.loadModel = function loadModel() {
         models.Usuario.belongsTo(models.Usuario, {
             as: 'Creator'
         });
-        models.Usuario.belongsTo(models.Area);
+        models.Usuario.belongsTo(models.Sucursal, {
+            foreignKey: 'SucursalId',
+            constraints: false
+        });
+
+        models.Usuario.belongsTo(models.Roles, {
+            foreignKey: 'RolId'
+        });
     }
 
     Usuario.prototype.isValidPassword = function(password) {

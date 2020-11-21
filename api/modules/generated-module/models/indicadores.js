@@ -17,35 +17,39 @@ exports.loadModel = function loadModel() {
             "nombre": {
                 "type": global.app.orm.Sequelize.STRING,
                 "allowNull": false,
+                "unique": true,
                 "validate":{
-                  "isAlpha": {
-                    "msg": "El nombre de un indicador solo puede contener letras"
-                  },
                   "len":{
                     "args": [3,50],
                     "msg": "Mínimo 3 y máximo 50 carácteres"
                   },
-                }
+                    isUnique(value) {
+                      return Indicadores.findOne({
+                        where: {nombre:value}
+                      }).then((nombre) => {
+                        if (nombre) {throw new Error('Error: el nombre' + ' ' + (value) + ' ' + 'ya existe')}
+                      })
+                    }
+                },
             },
             "proposito": {
                 "type": global.app.orm.Sequelize.STRING,
                 "allowNull": false
 
             },
-            "plazodesde": {
+            "PlazoDesde": {
                 "type": global.app.orm.Sequelize.DATEONLY,
                 "allowNull": false
 
             },
-            "plazohasta": {
+            "PlazoHasta": {
                 "type": global.app.orm.Sequelize.DATEONLY,
                 "allowNull": false
 
             },
-            "tipomedicion": {
+            "TipoMedicion": {
                 "type": global.app.orm.Sequelize.ENUM,
-                "values": ["Numérico", "Porcentaje", "Probabilidad", "Medida-Impacto"],
-                "defaultValue": "enabled"
+                "values": ["Numérico", "Porcentaje", "Probabilidad", "Medida-Impacto"]
 
             },
             "cumplimiento": {
@@ -53,17 +57,17 @@ exports.loadModel = function loadModel() {
                 "allowNull": false
 
             },
-            "frecuenciaseguimiento": {
+            "FrecuenciaSeguimiento": {
                 "type": global.app.orm.Sequelize.INTEGER,
                 "allowNull": false
 
             },
-            "frecuenciaanalisis": {
+            "FrecuenciaAnalisis": {
                 "type": global.app.orm.Sequelize.INTEGER,
                 "allowNull": false
 
             },
-            "tipoanalisis": {
+            "TipoAnalisis": {
               "type": global.app.orm.Sequelize.ENUM,
               "values": ["Actividad", "Calidad", "Desempeño", "Gestión", "Objetivo", "Proceso", "Riesgo"],
               "defaultValue": "Calidad"
@@ -78,7 +82,7 @@ exports.loadModel = function loadModel() {
                 "onUpdate": "cascade",
                 "onDelete": "cascade"
       
-            },
+            }
 
         }), {
             comment: 'A example model.',
@@ -96,9 +100,8 @@ exports.loadModel = function loadModel() {
             models.Indicadores.belongsTo(models.Proceso, {
                 as: 'Proceso'
             });
-            models.Indicadores.belongsToMany(models.ObjetivosCalidad, {
-                through: models.IndicadoresObjetivos
+            models.Indicadores.hasMany(models.IndicadoresObjetivos, {
+                foreignKey: 'IndicadoresId'
             })
         }
-
 };

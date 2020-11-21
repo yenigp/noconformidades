@@ -15,31 +15,28 @@ module.exports = function (req, res) {
 
   var query = jsonAPI.buildQueryFromReq({
     req  : req,
-    model: models.Usuario
+    model: models.Usuario,
   });
 
   query.include=[
     {
-      model: models.Area,
-      attributes:["nombre"]
+      model: models.Sucursal,
+      attributes:["nombagenciaviajes"]
     },
     {
       model: models.Roles,
-      attributes: ["nombre"],
-      include: [{
-        model: models.RolPermiso,
-        include: [{
-          model: models.Permisos,
-          attribute:["nombre"]
-        }]
-      }]
+      attributes: ["nombre"]
     }
   ]
 
   query=jsonAPI.prepareQuery(query);
+  /*if (req.loggedUser.RolId != 4){
+    query.where.SucursalId = req.loggedUser.SucursalId;
+  } */ 
   return models
     .Usuario.findAll(query)
     .then(function (data) {
+      console.log(query)
       jsonAPIBody.data                  = data;
       jsonAPIBody.meta.pagination.count = data.length;
       global.app.utils.jsonAPI.cleanQuery(query);

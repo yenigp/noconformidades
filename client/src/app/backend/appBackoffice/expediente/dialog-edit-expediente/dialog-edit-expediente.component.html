@@ -1,0 +1,80 @@
+<div class="dialog-content-wrapper">
+  <mat-toolbar class="mb-2" matDialogTitle id="toolbarHeader">
+    <mat-toolbar-row fxLayoutAlign="space-between center">
+      <span *ngIf="!isEditing" class="mat-title mb-0">{{ 'Adicionar expediente' }}</span>
+      <span *ngIf="isEditing" class="mat-title mb-0">{{ 'Editar expediente' }}</span>
+      <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div mat-dialog-content class="my-dialog-content">
+    <form [formGroup]="form">
+      <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="gappx">
+        <div fxLayout="row" fxLayoutAlign="center center" class="ImageLayout">
+          <div fxLayout="column" fxLayoutAlign="start start" fxLayoutAlign.lt-sm="center stretch" class="mb-2">
+            <div
+              *ngIf="loadImage"
+              class="avatar-profile"
+              fxFlex="row"
+              fxLayoutAlign="center center"
+              style="background-size: cover; background-position: center center; flex: none"
+              [style.background-image]="this.utilsService.getSafeImage(imageBrand)"
+            >
+              <button id="photoCameraBtn" mat-icon-button (click)="openFileBrowser($event)">
+                <mat-icon style="color: white" aria-label="Example icon-button with a heart icon">
+                  photo_camera
+                </mat-icon>
+              </button>
+            </div>
+            <div *ngIf="!loadImage" class="avatar-profile" fxFlex="row" fxLayoutAlign="center center">
+              <mat-icon class="avatar-icon">backup</mat-icon>
+
+              <button id="photoCameraBtn" style="position: absolute" mat-icon-button (click)="openFileBrowser($event)">
+                <mat-icon style="color: white" aria-label="Example icon-button with a heart icon">
+                  photo_camera
+                </mat-icon>
+              </button>
+            </div>
+            <mat-error *ngIf="showErrorImage"> La imagen sobrepasa los <strong>500 Kb</strong> </mat-error>
+            <input type="file" class="hide-style" id="filePicker" (change)="handleFileSelect($event)" />
+          </div>
+        </div>
+
+        <div class="mt-3" fxLayout="row wrap" fxLayoutAlign="space-between start" fxLayoutGap="gappx">
+          <mat-form-field fxFlex="100" fxFlex.lt-md="100" appearance="outline">
+            <mat-label>{{ 'No Conformidad' }}</mat-label>
+            <input
+              type="text"
+              *ngIf="isEditing"
+              readonly
+              [formControl]="form.controls['NoConformidadId']"
+              matInput
+              placeholder="{{ 'No Conformidad' }}"
+            />
+            <input
+              type="text"
+              *ngIf="!isEditing"
+              [formControl]="form.controls['NoConformidadId']"
+              matInput
+              placeholder="{{ 'No Conformidad' }}"
+            />
+            <mat-icon class="greyIcon" matSuffix>unarchive</mat-icon>
+            <mat-error *ngIf="form.controls['NoConformidadId'].hasError('required')">
+              {{ 'No Conformidad' }} <strong>{{ 'es requerida' }}</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <mat-slide-toggle color="primary" [formControl]="form.controls['estado']">{{ 'Estado' }}</mat-slide-toggle>
+        </div>
+
+        <mat-divider class="mb-2"></mat-divider>
+      </div>
+    </form>
+  </div>
+
+  <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end start">
+    <button mat-flat-button (click)="onSave()" [disabled]="this.form.invalid" color="primary">{{ 'GUARDAR' }}</button>
+  </div>
+</div>

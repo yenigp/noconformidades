@@ -10,7 +10,7 @@ module.exports = function (req, res) {
   };
 
   return models.Sucursal.findOne({
-    where: {id: req.body.sucursalId}
+    where: {id: req.body.SucursalId}
   }).then(function(sucursalX) {
     if (!sucursalX) {
       return res.status(404).json({

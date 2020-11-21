@@ -7,31 +7,50 @@ exports.registry = function registry() {
   var noconformidadHelpRoute = apiRoute + '/noconformidad-help';
   global.app.express
         .route(noconformidadHelpRoute)
-        .get(require('./help'));
+        .get(global.security.ensureAuthenticated(), require('./help'));
 
   var noconformidadCollectionRoute = apiRoute + '/noconformidad';
 
   global.app.express
         .route(noconformidadCollectionRoute)
-        .post(require('./create'))
-        .get(require('./index'));
+        .post(global.security.ensureAuthenticated(), require('./create'))
+        .get(global.security.ensureAuthenticated(), require('./index'));
 
-  global
-    .app.express
-    .param('noconformidadId', function (req, res, next, noconformidadId) {
-        return models
-          .NoConformidad
-          .findByPk(noconformidadId, {
-            include: [{all: true}]
-          }).then(function (data) {
-            if (!data) {
-              return res.sendStatus(404); // Not Found.
-            }
-
-            req.noconformidad = data;
-            return next();
-            
-          })
+        global
+        .app.express
+        .param('noconformidadId', function (req, res, next, noconformidadId) {
+            return models
+              .NoConformidad
+              .findByPk(noconformidadId, {
+                include: [
+                  {
+                    model: models.Incidencia
+                  },
+                  {
+                    model: models.Auditoria
+                  },
+                  {
+                    model: models.QuejasReclamaciones
+                  },
+                  {
+                    model: models.NCAcciones,
+                    include: [
+                      {
+                        model: models.Acciones,
+                        attributes: ['codigo', 'estado', 'fechacumplimiento']
+                      },
+                    ]
+                  }
+                ]
+              }).then(function (data) {
+                if (!data) {
+                  return res.sendStatus(404); // Not Found.
+                }
+    
+                req.noconformidad = data;
+                return next();
+                
+              })
           .catch(global.app.orm.Sequelize.ValidationError, function (error) {
             global.app.logger.error(error, {
               module   : 'NoConformidad/:noconformidadId',
@@ -57,7 +76,7 @@ exports.registry = function registry() {
 
   global.app.express
         .route(noconformidadSingleRoute)
-        .patch(require('./update'))
-        .get(require('./show'))
-        .delete(require('./delete'));
+        .patch(global.security.ensureAuthenticated(), require('./update'))
+        .get(global.security.ensureAuthenticated(), require('./show'))
+        .delete(global.security.ensureAuthenticated(), require('./delete'));
 };

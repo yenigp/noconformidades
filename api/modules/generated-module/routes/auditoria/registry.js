@@ -4,24 +4,24 @@ exports.registry = function registry() {
   var apiRoute = global.app.config.get('api:prefix');
   var jsonAPI = global.app.utils.jsonAPI;
 
-  /*var auditoriaHelpRoute = apiRoute + '/auditoria-help';
+  var auditoriaHelpRoute = apiRoute + '/auditoria-help';
   global.app.express
     .route(auditoriaHelpRoute)
-    .get(require('./help'));*/
+    .get(global.security.ensureAuthenticated(), require('./help'));
 
   var auditoriaCollectionRoute = apiRoute + '/auditoria';
 
   global.app.express
     .route(auditoriaCollectionRoute)
-    //.post(require('./create'))
-    .get(require('./index'));
+    .post(global.security.ensureAuthenticated(), require('./create'))
+    .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
     .app.express
-    .param('id', function (req, res, next, id) {
+    .param('auditoriaId', function (req, res, next, auditoriaId) {
       return models
         .Auditoria
-        .findByPk(id, {
+        .findByPk(auditoriaId, {
           include: [{ all: true }]
         }).then(function (data) {
           if (!data) {
@@ -34,7 +34,7 @@ exports.registry = function registry() {
         })
         .catch(global.app.orm.Sequelize.ValidationError, function (error) {
           global.app.logger.error(error, {
-            module: 'Auditoria/:id',
+            module: 'Auditoria/:auditoriaId',
             submodule: 'index',
             stack: error.stack
           });
@@ -43,7 +43,7 @@ exports.registry = function registry() {
         })
         .catch(function (error) {
           global.app.logger.error(error, {
-            module: 'Auditoria/:id',
+            module: 'Auditoria/:auditoriaId',
             submodule: 'index',
             stack: error.stack
           });
@@ -53,20 +53,20 @@ exports.registry = function registry() {
     }
     );
 
-  var auditoriaSingleRoute = auditoriaCollectionRoute + '/:id';
+  var auditoriaSingleRoute = auditoriaCollectionRoute + '/:auditoriaId';
 
   global.app.express
     .route(auditoriaSingleRoute)
-    //.patch(require('./update'))
-    .get(require('./show'))
-    //.delete(require('./delete'));
+    .patch(global.security.ensureAuthenticated(), require('./update'))
+    .get(global.security.ensureAuthenticated(), require('./show'))
+    .delete(global.security.ensureAuthenticated(), require('./delete'));
 
-  var auditoriaProfileRoute = '/v1/profile';
+  /*var auditoriaProfileRoute = '/v1/profile';
 
   global.app.express
     .route(auditoriaProfileRoute)
-    /*.patch(function(req,res,next){
-      //req.auditoria=req.loggedUser;
+    .patch(function(req,res,next){
+      req.auditoria=req.loggedUser;
       return next();
     }, require('./update'))*/
 };

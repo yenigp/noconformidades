@@ -50,8 +50,8 @@ module.exports = function (req, res) {
               
               nombre: Aplicar encuesta de satisfacción a clientes de Taino Tours
               descripcion: Evaluar la calidad del servicio de guía ofrecido a los clientes de Taino Tours
-              fechacomienzo: 2018-09-05 20:28:13
-              fecha fin: 2018-09-05 20:28:13
+              FechaComienzo: 2018-09-05 20:28:13
+              FechaFin: 2018-09-05 20:28:13
               estado: registrada
               CreatorId: Usuario
               createdAt: 2018-09-05 20:28:13

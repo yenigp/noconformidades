@@ -11,28 +11,28 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        loadChildren: () => import('../app/backend/backend.module').then(m => m.BackendModule),
+        loadChildren: () => import('../app/backend/backend.module').then((m) => m.BackendModule),
         canActivate: [AuthenticationGuard],
       },
       {
         path: 'authentication',
-        loadChildren: () => import('../app/authentication/authentication.module').then(m => m.AuthenticationModule),
+        loadChildren: () => import('../app/authentication/authentication.module').then((m) => m.AuthenticationModule),
         canActivate: [AuthenticationGuard],
       },
       {
         path: 'backend',
-        loadChildren: () => import('../app/backend/backend.module').then(m => m.BackendModule),
+        loadChildren: () => import('../app/backend/backend.module').then((m) => m.BackendModule),
         canActivate: [BackendGuard],
       },
       {
         path: 'error',
-        loadChildren: () => import('../app/error/error.module').then(m => m.ErrorModule),
+        loadChildren: () => import('../app/error/error.module').then((m) => m.ErrorModule),
       },
     ],
   },
   {
     path: '**',
-    redirectTo: 'backend/empresas',
+    redirectTo: 'backend',
   },
 ];
 
@@ -40,4 +40,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' })],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

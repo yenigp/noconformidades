@@ -58,7 +58,7 @@ module.exports = function (req, res) {
               description: txt
               RolId: Roles
               CreatorId: Usuario
-              AreaId: Area
+              SucursalId: Sucursal
               createdAt: 2018-09-05 20:28:13
               updatedAt: 2018-09-05 20:28:13
             }
@@ -85,7 +85,7 @@ module.exports = function (req, res) {
         description: txt
         RolId: Roles
         CreatorId: Usuario
-        AreaId: Area
+        SucursalId: Sucursal
       }
     return:
       status 201:
@@ -104,7 +104,7 @@ module.exports = function (req, res) {
               description: txt
               RolId: Roles
               CreatorId: Usuario
-              AreaId: Area
+              SucursalId: Sucursal
               createdAt: 2018-09-05 20:28:13
               updatedAt: 2018-09-05 20:28:13
             }
@@ -131,7 +131,7 @@ module.exports = function (req, res) {
         description: txt
         RolId: Roles
         CreatorId: Usuario
-        AreaId: Area
+        Sucursal: Sucursal
       }
     return:
       status 200:
@@ -150,7 +150,7 @@ module.exports = function (req, res) {
               description: txt
               RolId: Roles
               CreatorId: Usuario
-              AreaId: Area
+              SucursalId: Sucursal
               createdAt: 2018-09-05 20:28:13
               updatedAt: 2018-09-05 20:28:13
             }
@@ -191,7 +191,7 @@ module.exports = function (req, res) {
               description: txt
               RolId: Roles
               CreatorId: Usuario
-              AreaId: Area
+              SucursalId: Sucursal
               createdAt: 2018-09-05 20:28:13
               updatedAt: 2018-09-05 20:28:13
             }

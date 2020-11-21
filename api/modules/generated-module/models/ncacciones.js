@@ -23,16 +23,6 @@ exports.loadModel = function loadModel() {
           "onUpdate": "cascade",
           "onDelete": "cascade"
 
-        },
-        "CreatorId": {
-          "type": global.app.orm.Sequelize.INTEGER,
-          "references": {
-              "model": "Usuario",
-              "key": "id"
-          },
-          "onUpdate": "cascade",
-          "onDelete": "cascade"
-
         }
 
         }), {
@@ -43,4 +33,13 @@ exports.loadModel = function loadModel() {
 
             }
         });
-};
+        NCAcciones.associate = function() {
+          var models = global.app.orm.sequelize.models;
+          models.NCAcciones.belongsTo(models.NoConformidad, {
+              foreignKey: 'NoConformidadId'
+          });
+          models.NCAcciones.belongsTo(models.Acciones, {
+            foreignKey: 'AccionesId'
+        })
+      }
+  }

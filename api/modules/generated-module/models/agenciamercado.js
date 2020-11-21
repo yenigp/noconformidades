@@ -29,4 +29,15 @@ exports.loadModel = function loadModel() {
 
             }
         });
+        AgenciaMercado.removeAttribute('id');
+
+        AgenciaMercado.associate = function() {
+          var models = global.app.orm.sequelize.models;
+          models.AgenciaMercado.belongsTo(models.AgenciaViajes, {
+              foreignKey: 'AgenciaViajeId'
+          });
+          models.AgenciaMercado.belongsTo(models.Mercado, {
+            foreignKey: 'MercadoId'
+        })
+      }
 };

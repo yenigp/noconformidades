@@ -4,24 +4,20 @@ exports.registry = function registry() {
   var apiRoute = global.app.config.get('api:prefix');
   var jsonAPI = global.app.utils.jsonAPI;
 
-  var turistaHelpRoute = apiRoute + '/turista-help';
-  global.app.express
-    .route(turistaHelpRoute)
-    .get(require('./help'));
+ 
 
   var turistaCollectionRoute = apiRoute + '/turista';
 
   global.app.express
     .route(turistaCollectionRoute)
-    .post(require('./create'))
-    .get(require('./index'));
+    .get([global.security.ensureAuthenticated()], require('./index'));
 
   global
     .app.express
-    .param('id', function (req, res, next, idturista) {
+    .param('turistaId', function (req, res, next, turistaId) {
       return models
         .Turista
-        .findByPk(id, {
+        .findByPk(turistaId, {
           include: [{ all: true }]
         }).then(function (data) {
           if (!data) {
@@ -34,7 +30,7 @@ exports.registry = function registry() {
         })
         .catch(global.app.orm.Sequelize.ValidationError, function (error) {
           global.app.logger.error(error, {
-            module: 'Turista/:id',
+            module: 'Turista/:turistaId',
             submodule: 'index',
             stack: error.stack
           });
@@ -43,7 +39,7 @@ exports.registry = function registry() {
         })
         .catch(function (error) {
           global.app.logger.error(error, {
-            module: 'Turista/:id',
+            module: 'Turista/:turistaId',
             submodule: 'index',
             stack: error.stack
           });
@@ -53,20 +49,9 @@ exports.registry = function registry() {
     }
     );
 
-  var turistaSingleRoute = turistaCollectionRoute + '/:id';
+  var turistaSingleRoute = turistaCollectionRoute + '/:turistaId';
 
   global.app.express
     .route(turistaSingleRoute)
-    .patch(require('./update'))
-    .get(require('./show'))
-    .delete(require('./delete'));
-
-  var turistaProfileRoute = '/v1/profile';
-
-  global.app.express
-    .route(turistaProfileRoute)
-    .patch(function(req,res,next){
-      //req.turista=req.loggedUser;
-      return next();
-    }, require('./update'))
+    .get([global.security.ensureAuthenticated()], require('./show'));
 };

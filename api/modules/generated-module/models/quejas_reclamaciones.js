@@ -31,7 +31,7 @@ exports.loadModel = function loadModel() {
           "TuristaId": {
             "type": global.app.orm.Sequelize.INTEGER,
             "comment": "The foreing object that will have the Turista.",
-            "allowNull": false,
+            "allowNull": true,
             "noUpdate": true
 
           },
@@ -40,6 +40,19 @@ exports.loadModel = function loadModel() {
             "comment": "The foreing object that will have the Area.",
             "allowNull": false,
             "noUpdate": true
+            
+          },
+          "clasificacion": {
+            "type": global.app.orm.Sequelize.ENUM,
+            "values": ["interna", "externa"],
+            "allowNull": false
+              
+          },
+          "tipo": {
+            "type": global.app.orm.Sequelize.ENUM,
+            "values": ["queja", "reclamación"],
+            "allowNull": false
+
           },        
           "clasificacion": {
             "type": global.app.orm.Sequelize.ENUM,
@@ -47,7 +60,7 @@ exports.loadModel = function loadModel() {
             "allowNull": false
     
           },
-          "costonocalidad": {
+          "CostoNoCalidad": {
             "type": global.app.orm.Sequelize.FLOAT
 
           },
@@ -80,21 +93,25 @@ exports.loadModel = function loadModel() {
                 as: 'Creator'
             });   
             models.QuejasReclamaciones.belongsTo(models.NoConformidad, {
-                as: 'NoConformidad'
+                //as: 'NoConformidad'
             });
             models.QuejasReclamaciones.belongsTo(models.ProdServicio, {
+                as: 'Servicio',
                 foreignKey: 'ServicioId',
                 constraints: false
             });
             models.QuejasReclamaciones.belongsTo(models.Producto, {
+                as: 'Producto',
                 foreignKey: 'ProductoId',
                 constraints: false
             });
             models.QuejasReclamaciones.belongsTo(models.Turista, {
+                as: 'Turista',
                 foreignKey: 'TuristaId',
                 constraints: false
             });
             models.QuejasReclamaciones.belongsTo(models.ReservaPadre, {
+                as: 'Reserva',
                 foreignKey: 'ReservaId',
                 constraints: false
             });

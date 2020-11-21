@@ -8,8 +8,12 @@ exports.loadModel = function loadModel() {
                 "type": global.app.orm.Sequelize.STRING,
                 "allowNull": false,
                 "validate":{
-                  "isAlpha": {
-                    "msg": "El nombre de un objetivo solo puede contener letras"
+                  isUnique(value) {
+                    return ObjetivosCalidad.findOne({
+                      where: {nombre:value}
+                    }).then((nombre) => {
+                      if (nombre) {throw new Error('Error: el nombre' + ' ' + (value) + ' ' + 'ya existe')}
+                    })
                   },
                   "len":{
                     "args": [3,50],
@@ -17,15 +21,15 @@ exports.loadModel = function loadModel() {
                   },
                 }
             },
-            "fechacomienzo": {
+            "FechaComienzo": {
                 "type": global.app.orm.Sequelize.DATEONLY,
 
             },
-            "fechafin": {
+            "FechaFin": {
               "type": global.app.orm.Sequelize.DATE
       
             },
-            "valoralcanzar": {
+            "ValorAlcanzar": {
                 "type": global.app.orm.Sequelize.INTEGER,
                 "allowNull": false
 
@@ -35,7 +39,7 @@ exports.loadModel = function loadModel() {
                 "allowNull": false
 
             },
-            "periodicidadseguimiento": {
+            "PeriodicidadSeguimiento": {
                 "type": global.app.orm.Sequelize.INTEGER,
                 "allowNull": false
 
@@ -69,8 +73,8 @@ exports.loadModel = function loadModel() {
           models.ObjetivosCalidad.belongsTo(models.Usuario, {
               as: 'Creator'
           });    
-          models.ObjetivosCalidad.belongsToMany(models.Indicadores, {
-              through: models.IndicadoresObjetivos
+          models.ObjetivosCalidad.hasMany(models.IndicadoresObjetivos, {
+              foreignKey: 'ObjetivosId'
           })
         }  
 };

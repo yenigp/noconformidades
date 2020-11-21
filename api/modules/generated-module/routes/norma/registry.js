@@ -7,21 +7,21 @@ exports.registry = function registry() {
   var normaHelpRoute = apiRoute + '/norma-help';
   global.app.express
     .route(normaHelpRoute)
-    .get(require('./help'));
+    .get(global.security.ensureAuthenticated(), require('./help'));
 
   var normaCollectionRoute = apiRoute + '/norma';
 
   global.app.express
     .route(normaCollectionRoute)
-    .post(require('./create'))
-    .get(require('./index'));
+    .post([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()],require('./create'))
+    .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
     .app.express
-    .param('id', function (req, res, next, id) {
+    .param('normaId', function (req, res, next, normaId) {
       return models
         .Norma
-        .findByPk(id, {
+        .findByPk(normaId, {
           include: [{ all: true }]
         }).then(function (data) {
           if (!data) {
@@ -34,7 +34,7 @@ exports.registry = function registry() {
         })
         .catch(global.app.orm.Sequelize.ValidationError, function (error) {
           global.app.logger.error(error, {
-            module: 'Norma/:id',
+            module: 'Norma/:normaId',
             submodule: 'index',
             stack: error.stack
           });
@@ -43,7 +43,7 @@ exports.registry = function registry() {
         })
         .catch(function (error) {
           global.app.logger.error(error, {
-            module: 'Norma/:id',
+            module: 'Norma/:normaId',
             submodule: 'index',
             stack: error.stack
           });
@@ -53,20 +53,20 @@ exports.registry = function registry() {
     }
     );
 
-  var normaSingleRoute = normaCollectionRoute + '/:id';
+  var normaSingleRoute = normaCollectionRoute + '/:normaId';
 
   global.app.express
     .route(normaSingleRoute)
-    .patch(require('./update'))
-    .get(require('./show'))
-    .delete(require('./delete'));
+    .patch([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./update'))
+    .get(global.security.ensureAuthenticated(), require('./show'))
+    .delete([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./delete'));
 
-  var normaProfileRoute = '/v1/profile';
+  /*var normaProfileRoute = '/v1/profile';
 
   global.app.express
     .route(normaProfileRoute)
     .patch(function(req,res,next){
-      //req.norma=req.loggedUser;
+      req.norma=req.loggedUser;
       return next();
-    }, require('./update'))
+    }, require('./update'))*/
 };

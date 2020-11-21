@@ -21,11 +21,14 @@ module.exports = function (req, res) {
   query.include=[
     {
       model: models.Sucursal,
-      attributes:["id","nombagenciaviajes"]
+      attributes:["nombagenciaviajes"]
     },
   ]
 
   query=jsonAPI.prepareQuery(query);
+  if (req.loggedUser.RolId != 4){
+    query.where.SucursalId = req.loggedUser.SucursalId;
+  } 
   return models
     .Area.findAll(query)
     .then(function (data) {

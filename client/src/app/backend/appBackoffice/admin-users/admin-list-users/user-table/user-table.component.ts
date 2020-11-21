@@ -2,14 +2,7 @@ import { UserService } from './../../../../services/user/user.service';
 import { IPagination } from 'src/app/core/classes/pagination.class';
 import { IUser } from 'src/app/core/classes/user.class';
 import { debounceTime } from 'rxjs/operators';
-import {
-  Component,
-  HostListener,
-  OnInit,
-  ViewChild,
-  ViewEncapsulation,
-  Input
-} from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild, ViewEncapsulation, Input } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
@@ -28,7 +21,7 @@ import { ConfirmationDialogComponent } from 'src/app/backend/common-dialogs-modu
   selector: 'app-user-table',
   templateUrl: './user-table.component.html',
   styleUrls: ['./user-table.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class UserTableComponent implements OnInit {
   @Input() role;
@@ -45,14 +38,7 @@ export class UserTableComponent implements OnInit {
   selection: SelectionModel<any>;
   imageUrl: any;
   showActionsBtn = false;
-  displayedColumns: string[] = [
-    'select',
-    'gitUser',
-    'email',
-    'rol',
-    'status',
-    'actions'
-  ];
+  displayedColumns: string[] = ['select', 'gitUser', 'email', 'rol', 'status', 'actions'];
   pageSizeOptions: number[] = [10, 25, 100, 1000];
   searchElementCount = 0;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -65,7 +51,7 @@ export class UserTableComponent implements OnInit {
 
     public dialog: MatDialog,
     private utilsService: UtilsService,
-    private showToastr: ShowToastrService
+    private showToastr: ShowToastrService,
   ) {
     this.dataSource = new MatTableDataSource([]);
     this.selection = new SelectionModel<any>(true, []);
@@ -78,7 +64,7 @@ export class UserTableComponent implements OnInit {
     this.refreshData();
     this.createSearchForm();
 
-    this.searchForm.valueChanges.subscribe(val => {
+    this.searchForm.valueChanges.subscribe((val) => {
       const data = this.filterUsersByName(val.textCtrl);
       this.dataSource = new MatTableDataSource<IUser>(data);
       this.dataSource.paginator = this.paginator;
@@ -87,21 +73,17 @@ export class UserTableComponent implements OnInit {
   }
 
   refreshData(): void {
-
-    this.userService
-      .getAllUsers({ limit: 0, offset: 0 }, { role: this.role })
-      .subscribe(
-        data => {
-          this.initTable(data.data);
-          this.searchElementCount = data.meta.total;
-          this.selection.clear();
-        },
-        error => {
-          this.utilsService.errorHandle(error);
-          this.selection.clear();
-        }
-      );
-
+    this.userService.getAllUsers({ limit: 0, offset: 0 }, { role: this.role }).subscribe(
+      (data) => {
+        this.initTable(data.data);
+        this.searchElementCount = data.meta.total;
+        this.selection.clear();
+      },
+      (error) => {
+        this.utilsService.errorHandle(error);
+        this.selection.clear();
+      },
+    );
   }
 
   initTable(data) {
@@ -113,7 +95,7 @@ export class UserTableComponent implements OnInit {
 
   createSearchForm() {
     this.searchForm = this.fb.group({
-      textCtrl: ['', [Validators.required]]
+      textCtrl: ['', [Validators.required]],
     });
   }
 
@@ -128,14 +110,11 @@ export class UserTableComponent implements OnInit {
 
   filterUsersByName(name: string) {
     let temp = this.allUsers.filter(
-      user =>
+      (user) =>
         user.username.toLowerCase().indexOf(name.toLowerCase()) >= 0 ||
-        (user.name &&
-          user.name.toLowerCase().indexOf(name.toLowerCase()) >= 0) ||
-        (user.lastName &&
-          user.lastName.toLowerCase().indexOf(name.toLowerCase()) >= 0) ||
-        (user.email &&
-          user.email.toLowerCase().indexOf(name.toLowerCase()) >= 0)
+        (user.name && user.name.toLowerCase().indexOf(name.toLowerCase()) >= 0) ||
+        (user.lastName && user.lastName.toLowerCase().indexOf(name.toLowerCase()) >= 0) ||
+        (user.email && user.email.toLowerCase().indexOf(name.toLowerCase()) >= 0),
     );
     this.searchElementCount = temp.length;
     return temp;
@@ -161,9 +140,7 @@ export class UserTableComponent implements OnInit {
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    this.isAllSelected()
-      ? this.selection.clear()
-      : this.dataSource.data.forEach(row => this.selection.select(row));
+    this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach((row) => this.selection.select(row));
   }
 
   /** The label for the checkbox on the passed row */
@@ -171,9 +148,7 @@ export class UserTableComponent implements OnInit {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${
-      this.selection.isSelected(row) ? 'deselect' : 'select'
-      } row ${row.position + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
 
   //////////////////////////////
@@ -187,11 +162,11 @@ export class UserTableComponent implements OnInit {
       data: {
         isEditing: false,
         selectedUser: null,
-        role: this.role
-      }
+        role: this.role,
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       this.refreshData();
     });
   }
@@ -199,7 +174,7 @@ export class UserTableComponent implements OnInit {
   onEditUser(person): void {
     let dialogRef: MatDialogRef<DialogAddEditUserComponent, any>;
     this.userService.getUser(person).subscribe(
-      data => {
+      (data) => {
         dialogRef = this.dialog.open(DialogAddEditUserComponent, {
           panelClass: 'app-dialog-add-edit-user',
           maxWidth: '100vw',
@@ -207,17 +182,17 @@ export class UserTableComponent implements OnInit {
           data: {
             isEditing: true,
             selectedUser: data.data,
-            role: this.role
-          }
+            role: this.role,
+          },
         });
 
-        dialogRef.afterClosed().subscribe(result => {
+        dialogRef.afterClosed().subscribe((result) => {
           this.refreshData();
         });
       },
-      err => {
+      (err) => {
         this.utilsService.errorHandle(err, 'User', 'Listing');
-      }
+      },
     );
   }
 
@@ -226,24 +201,16 @@ export class UserTableComponent implements OnInit {
       width: '450px',
       data: {
         title: 'Confirmación',
-        question: '¿Está seguro que desea eliminar el usuario?'
-      }
+        question: '¿Está seguro que desea eliminar el usuario?',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(async result => {
+    dialogRef.afterClosed().subscribe(async (result) => {
       try {
         if (result) {
-
-          const data = await Promise.all(
-            users.map(item => this.userService.removeUser(item))
-          );
-          this.showToastr.showSucces(
-            'Users successfully removed',
-            'Succes',
-            7500
-          );
+          const data = await Promise.all(users.map((item) => this.userService.removeUser(item)));
+          this.showToastr.showSucces('Users successfully removed', 'Succes', 7500);
           this.refreshData();
-
         }
       } catch (error) {
         this.utilsService.errorHandle(error);
@@ -263,7 +230,7 @@ export class UserTableComponent implements OnInit {
         'dni',
         'countries',
         'status',
-        'actions'
+        'actions',
       ];
     }
   }

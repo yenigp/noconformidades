@@ -33,11 +33,11 @@ exports.loadModel = function loadModel() {
           foreignKey: 'idmercado',
           constraints: false
       });
-      models.Mercado.belongsToMany(models.Pais, {
-          through: models.MercadoPais
+      models.Mercado.hasMany(models.MercadoPais, {
+          foreignKey: 'MercadoId'
       });
-      models.Mercado.belongsToMany(models.AgenciaViajes, {
-        through: models.AgenciaMercado
+      models.Mercado.hasMany(models.AgenciaMercado, {
+        foreignKey: 'MercadoId'
       });
     }
 

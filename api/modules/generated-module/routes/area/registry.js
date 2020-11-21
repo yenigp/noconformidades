@@ -7,14 +7,14 @@ exports.registry = function registry() {
   var areaHelpRoute = apiRoute + '/area-help';
   global.app.express
         .route(areaHelpRoute)
-        .get(require('./help'));
+        .get([global.security.ensureAuthenticated(), global.security.isEspRRHH()], require('./help'));
 
   var areaCollectionRoute = apiRoute + '/area';
 
   global.app.express
         .route(areaCollectionRoute)
-        .post(require('./create'))
-        .get(require('./index'));
+        .post([global.security.ensureAuthenticated(), global.security.ensureSucursal(), global.security.isEspRRHH()], require('./create'))
+        .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
     .app.express
@@ -57,7 +57,7 @@ exports.registry = function registry() {
 
   global.app.express
         .route(areaSingleRoute)
-        .patch(require('./update'))
-        .get(require('./show'))
-        .delete(require('./delete'));
+        .patch([global.security.ensureAuthenticated(), global.security.isEspRRHH()], require('./update'))
+        .get([global.security.ensureAuthenticated(), global.security.isEspRRHH()], require('./show'))
+        .delete([global.security.ensureAuthenticated(), global.security.isEspRRHH()], require('./delete'));
 };

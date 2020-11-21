@@ -5,6 +5,9 @@ var path        = require('path');
 var validations = require('../../common/utils/validations');
 var paths       = require('../../common/utils/paths');
 var uuid        = require('uuid');
+const { trimEnd } = require('lodash');
+const { dir } = require('console'); 
+const noconformidad = require('../../modules/generated-module/routes/noconformidad');
 
 /**
  * Util to handle file creation on Sequelize hooks from an attribute
@@ -44,6 +47,12 @@ exports.createFileFromAttributeDataUri = function (object, attribute) {
       var destination      = paths.public;
       if (splittedFileData[0].startsWith('private')){
         destination = paths.private;
+      }
+      if (splittedFileData[0].startsWith('evidencia')){
+        destination = `../../public/${noconformidad.codigo}`;
+        if (!fs.existsSync(destination)){
+          fs.mkdirSync(fileDir)
+        }
       }
 
       var writeFile = Sequelize.Promise.promisify(fs.writeFile);
@@ -112,6 +121,12 @@ exports.updateFileFromAttributeDataUri = function (object, attribute) {
           var destination      = paths.public;
           if (splittedFileData[0].startsWith('private')){
             destination = paths.private;
+          }
+          if (splittedFileData[0].startsWith('evidencia')){
+            destination = (`../../public/${data.codigo}`);
+            if (!fs.existsSync(destination)){
+              fs.mkdirSync(fileDir)
+            }
           }
           return writeFile(path.join(process.cwd(), destination, fullFileName), fileData, 'base64')
             .then(function () {

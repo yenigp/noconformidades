@@ -10,7 +10,7 @@ module.exports = function (req, res) {
   };
 
   return req
-    .mercado
+    .agenciaviajes
     .update(req.body)
     .then(function (data) {
       return models

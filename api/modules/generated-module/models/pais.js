@@ -48,8 +48,8 @@ exports.loadModel = function loadModel() {
         foreignKey: 'id_pais',
         constraints: false
       });
-      models.Pais.belongsToMany(models.Mercado, {
-        through: models.MercadoPais
+      models.Pais.hasMany(models.MercadoPais, {
+        foreignKey: 'PaisId'
       });
     }
 

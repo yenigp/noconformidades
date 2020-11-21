@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (req, res) {
+module.exports = async function (req, res) {
   var models = global.app.orm.sequelize.models;
   var Sequelize = global.app.orm.Sequelize;
 
@@ -9,9 +9,15 @@ module.exports = function (req, res) {
     data: {}
   };
 
-  return models.Usuario.findOne({
-    where: {id: req.body.jefeproceso, rol: 'jefeMercado'}
-  }).then(function(usuarioX) {
+  async function ObtenerRolJefeProceso(jefeproceso){
+    return await models.Usuario.findByPk(jefeproceso).then(function(jefeprocesoX){
+      return jefeprocesoX.RolId;
+     })
+  }
+  
+  return models.Roles.findOne({
+    where: {id: await ObtenerRolJefeProceso(req.body.JefeProceso), nombre: "JefeProceso"}
+  }).then(async function(usuarioX) {
     if (!usuarioX) {
       return res.status(404).json({
         errors:[
@@ -23,12 +29,12 @@ module.exports = function (req, res) {
       })
   } else{
     return global
-    .app.orm.sequelize.transaction(function (t) {
+    .app.orm.sequelize.transaction(async function (t) {
       return models
         .Proceso
         .create(req.body,{transaction:t});
     })
-    .then(function (data) {
+    .then(await function (data) {
       jsonAPIBody.data = data.toJSON();
       return res.status(201).json(jsonAPIBody); // OK.
     })

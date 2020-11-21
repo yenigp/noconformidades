@@ -11,5 +11,6 @@ module.exports = {
   paths        : require('./paths'),
   mM        : require('./mismisimo'),
   cipher    : require('./cipher'),
-  async     : require('./async')
+  async     : require('./async'),
+  loadrol   : require('./load-rol')
 };

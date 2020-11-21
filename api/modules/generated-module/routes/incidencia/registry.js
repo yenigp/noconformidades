@@ -4,24 +4,24 @@ exports.registry = function registry() {
   var apiRoute = global.app.config.get('api:prefix');
   var jsonAPI = global.app.utils.jsonAPI;
 
-  //var incidenciaHelpRoute = apiRoute + '/incidencia-help';
-  /*global.app.express
+  var incidenciaHelpRoute = apiRoute + '/incidencia-help';
+  global.app.express
     .route(incidenciaHelpRoute)
-    .get(require('./help'));*/
+    .get(global.security.ensureAuthenticated(), require('./help'));
 
   var incidenciaCollectionRoute = apiRoute + '/incidencia';
 
   global.app.express
     .route(incidenciaCollectionRoute)
-    //.post(require('./create'))
-    .get(require('./index'));
+    .post(global.security.ensureAuthenticated(), global.security.isSupervisor(), require('./create'))
+    .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
     .app.express
-    .param('id', function (req, res, next, id) {
+    .param('incidenciaId', function (req, res, next, incidenciaId) {
       return models
         .Incidencia
-        .findByPk(id, {
+        .findByPk(incidenciaId, {
           include: [{ all: true }]
         }).then(function (data) {
           if (!data) {
@@ -34,7 +34,7 @@ exports.registry = function registry() {
         })
         .catch(global.app.orm.Sequelize.ValidationError, function (error) {
           global.app.logger.error(error, {
-            module: 'Incidencia/:id',
+            module: 'Incidencia/:incidenciaId',
             submodule: 'index',
             stack: error.stack
           });
@@ -43,7 +43,7 @@ exports.registry = function registry() {
         })
         .catch(function (error) {
           global.app.logger.error(error, {
-            module: 'Incidencia/:id',
+            module: 'incidencia/:incidenciaId',
             submodule: 'index',
             stack: error.stack
           });
@@ -53,20 +53,20 @@ exports.registry = function registry() {
     }
     );
 
-  var incidenciaSingleRoute = incidenciaCollectionRoute + '/:id';
+  var incidenciaSingleRoute = incidenciaCollectionRoute + '/:incidenciaId';
 
   global.app.express
     .route(incidenciaSingleRoute)
-    //.patch(require('./update'))
+    .patch(global.security.ensureAuthenticated(), require('./update'))
     .get(require('./show'))
-    //.delete(require('./delete'));
+    .delete(global.security.ensureAuthenticated(), require('./delete'));
 
-  var incidenciaProfileRoute = '/v1/profile';
+  /*var incidenciaProfileRoute = '/v1/profile';
 
   global.app.express
     .route(incidenciaProfileRoute)
-    /*.patch(function(req,res,next){
-      //req.incidencia=req.loggedUser;
+    .patch(function(req,res,next){
+      req.incidencia=req.loggedUser;
       return next();
     }, require('./update'))*/
 };

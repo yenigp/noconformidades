@@ -1,4 +1,3 @@
-
 import { Component, OnInit, ViewChild, HostListener, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
@@ -20,7 +19,10 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 
 import { Subject } from 'rxjs';
 // import { DialogEditHospitalsComponent } from '../dialog-edit-hospitals/dialog-edit-hospitals.component';
+import { RolesService } from 'src/app/backend/services/roles/roles.service';
+import { SucursalService } from 'src/app/backend/services/sucursal/sucursal.service';
 import { LogsService } from 'src/app/backend/services/logs/logs.service';
+import { isNgTemplate } from '@angular/compiler';
 
 @Component({
   selector: 'app-admin-log-table',
@@ -45,7 +47,17 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
   formFilters: FormGroup;
   expandedElement: false;
   allData: any[] = [];
-  displayedColumns: string[] = ['url', 'method', 'error', 'statusCode', 'username', 'PersonId', 'cargo', 'timestamp'];
+  displayedColumns: string[] = [
+    'url',
+    'method',
+    'error',
+    'statusCode',
+    'username',
+    'UsuarioId',
+    'cargo',
+    'sucursal',
+    'createdAt',
+  ];
   dataSource = new MatTableDataSource<any>([]);
   pageSizeOptions: number[] = [10, 15, 25, 50, 100];
   selection = new SelectionModel<any>(true, []);
@@ -56,25 +68,102 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
   maxDate = new Date();
   pageEvent: PageEvent;
   applyStyle = false;
-
-  Roles = [
+  sucursal = [
     {
-      label: 'Admin',
-      value: "admin"
+      label: 'Casa Matriz',
+      value: 'HAVANATUR CASA MATRIZ OSDE1',
     },
     {
-      label: 'Programador',
-      value: 'programador'
-    }
+      label: 'Havanatur T&T La Habana',
+      value: 'ZZZUEB HAVANATUR TOUR & TRAVEL LA HABANA',
+    },
+    {
+      label: 'Sucursal Centro',
+      value: 'SUCURSAL HAVANATUR TOUR AND TRAVEL CENTRO',
+    },
+    {
+      label: 'Sucursal Varadero',
+      value: 'SUCURSAL HAVANATUR TOUR AND TRAVEL VARADERO',
+    },
+    {
+      label: 'Sucursal Oriente Sur',
+      value: 'SUCURSAL HAVANATUR TOUR AND TRAVEL ORIENTE SUR',
+    },
+    {
+      label: 'Sucursal Oriente Norte',
+      value: 'SUCURSAL HAVANATUR TOUR AND TRAVEL ORIENTE NORTE',
+    },
+    {
+      label: 'Sucursal Centro Este',
+      value: 'SUCURSAL HAVANATUR TOUR AND TRAVEL CENTRO ESTE',
+    },
+    {
+      label: 'Sucursal Pinar del Río',
+      value: 'SUCURSAL HAVANATUR TOUR AND TRAVEL PINAR DEL RIO',
+    },
+    {
+      label: 'Sucursal Celimar',
+      value: 'SUCURSAL HAVANATUR TOUR AND TRAVEL CELIMAR',
+    },
+    {
+      label: 'Sucursal La Habana',
+      value: 'S. HAVANATUR T. AND T. LA HABANA',
+    },
+  ];
+  Rol = [
+    {
+      label: 'Usuario',
+      value: 'Usuario',
+    },
+    {
+      label: 'Auditor',
+      value: 'Auditor',
+    },
+    {
+      label: 'JefeProceso',
+      value: 'JefeProceso',
+    },
+    {
+      label: 'SuperAdmin',
+      value: 'SuperAdmin',
+    },
+    {
+      label: 'AdminSucursal',
+      value: 'AdminSucursal',
+    },
+    {
+      label: 'AdminEmpresa',
+      value: 'AdminEmpresa',
+    },
+    {
+      label: 'EspCalidadSucursal',
+      value: 'EspCalidadSucursal',
+    },
+    {
+      label: 'EspCalidadEmpresa',
+      value: 'EspCalidadEmpresa',
+    },
+    {
+      label: 'Supervisor',
+      value: 'Supervisor',
+    },
+    {
+      label: 'DirectorSucursal',
+      value: 'DirectorSucursal',
+    },
+    {
+      label: 'EspRRHH',
+      value: 'EspRRHH',
+    },
   ];
 
   query: IPagination = {
     limit: 10,
     total: 0,
     offset: 0,
-    order: '-timestamp',
+    order: '-createdAt',
     page: 1,
-    filter: null
+    filter: null,
   };
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -89,8 +178,6 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
       this.applyStyle = true;
     }
   }
-
-
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -124,7 +211,6 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
     this.showFilterClient = true;
   }
 
-
   onInitTable(data) {
     if (data.length > 100) {
       this.pageSizeOptions = [10, 15, 25, 50, 100, data.length];
@@ -142,8 +228,10 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
     private toastr: ToastrService,
     private loggedInUserService: LoggedInUserService,
     private elementService: LogsService,
-    private breadcrumbService: BreadcrumbService) {
-
+    private breadcrumbService: BreadcrumbService,
+    private rolesService: RolesService,
+    private sucursalService: SucursalService,
+  ) {
     this.loggedInUser = this.loggedInUserService.getLoggedInUser();
     this.breadcrumbService.clearBreadcrumd();
     this.breadcrumbService.setBreadcrumd('Listado de Logs', true);
@@ -151,40 +239,37 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
     const $this = this;
     this.createSearchForm();
 
-    this.searchForm.valueChanges
-      .pipe(debounceTime(500))
-      .subscribe(val => {
-
-        if (val.textCtrl.length !== 0) {
-          if (val.textCtrl.toString().trim() !== '') {
-            this.query.filter = {
-              filterText: val.textCtrl.toString().trim(),
-              properties: []
-            };
-            this.onFilterData();
-            this.paginator.firstPage();
-          }
-        } else {
-          this.query = {
-            limit: 10,
-            total: 0,
-            offset: 0,
-            order: '-timestamp',
-            page: 1,
-            filter: null
+    this.searchForm.valueChanges.pipe(debounceTime(500)).subscribe((val) => {
+      if (val.textCtrl.length !== 0) {
+        if (val.textCtrl.toString().trim() !== '') {
+          this.query.filter = {
+            filterText: val.textCtrl.toString().trim(),
+            properties: [],
           };
           this.onFilterData();
           this.paginator.firstPage();
         }
-      });
+      } else {
+        this.query = {
+          limit: 10,
+          total: 0,
+          offset: 0,
+          order: '-createdAt',
+          page: 1,
+          filter: null,
+        };
+        this.onFilterData();
+        this.paginator.firstPage();
+      }
+    });
   }
 
   onChangeFilterInput() {
     const val = this.searchForm.value;
-    if ((val.textCtrl) && (val.textCtrl !== '')) {
+    if (val.textCtrl && val.textCtrl !== '') {
       this.query.filter = {
         filterText: val.textCtrl,
-        properties: []
+        properties: [],
       };
 
       this.query.filter.properties.push('filter[$or][name][$like]');
@@ -196,10 +281,10 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
   createSearchForm() {
     let startDate = new Date();
     let endDate = new Date();
-    startDate.setTime(endDate.getTime() - (24 * 60 * 60 * 1000));
+    startDate.setTime(endDate.getTime() - 24 * 60 * 60 * 1000);
 
     this.searchForm = this.fb.group({
-      textCtrl: ['', [Validators.required]]
+      textCtrl: ['', [Validators.required]],
     });
     this.formFilters = this.fb.group({
       url: [null, []],
@@ -207,12 +292,12 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
       stringUser: [null, []],
       statusCode: [null, []],
       cargo: [null, []],
+      sucursal: [null, []],
       method: [null, []],
       startDate: [startDate],
-      endDate: [endDate]
+      endDate: [endDate],
     });
   }
-
 
   onStringSelectElement($event) {
     if ($event) {
@@ -245,18 +330,25 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
       limit: 10,
       total: 0,
       offset: 0,
-      order: '-timestamp',
+      order: '-createdAt',
       page: 1,
-      filter: null
+      filter: null,
     };
 
-    this.elementService.getAllLogs(this.query, this.searchFilters).subscribe(data => {
+    /*this.rolesService.getAllRoles().subscribe((data) => {
+      this.cargo = data.data;
+    });*/
+
+    /*this.sucursalService.getAllSucursal().subscribe((data) => {
+      this.sucursal = data.data;
+    });*/
+
+    this.elementService.getAllLogs(this.query, this.searchFilters).subscribe((data) => {
       this.onInitPagination(data.meta);
       this.onInitTable(data.data);
     });
 
     this.innerWidth = window.innerWidth;
-
   }
 
   onRefresh() {
@@ -268,22 +360,6 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  getCargo(cargo) {
-    switch (cargo) {
-      case 'admin':
-        return 'Admin';
-        break;
-
-      case 'programador':
-        return 'Programador';
-        break;
-
-      default:
-        return '';
-        break;
-    }
-  }
-
   buscarLogs() {
     this.searchFilters = this.formFilters.value;
     console.log(this.searchFilters);
@@ -292,7 +368,6 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
   }
 
   limpiarLogs() {
-
     this.formFilters.get('user').setValue(null);
     this.formFilters.get('stringUser').setValue(null);
     this.formFilters.get('cargo').setValue(null);
@@ -301,7 +376,7 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
     this.formFilters.get('statusCode').setValue(null);
     let endDate = new Date();
     let startDate = new Date();
-    startDate.setTime(endDate.getTime() - (24 * 60 * 60 * 1000));
+    startDate.setTime(endDate.getTime() - 24 * 60 * 60 * 1000);
     this.formFilters.get('startDate').setValue(startDate);
     this.formFilters.get('endDate').setValue(endDate);
 
@@ -312,7 +387,7 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
 
   onRefreshData() {
     this.refreshPaginationFromEvent(null);
-    this.elementService.getAllLogs(this.query, this.searchFilters).subscribe(val => {
+    this.elementService.getAllLogs(this.query, this.searchFilters).subscribe((val) => {
       this.onInitPagination(val.meta);
       this.dataSource = new MatTableDataSource<any>(val.data);
     });
@@ -321,15 +396,16 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
   onFilterData() {
     this.isLoading = true;
     this.refreshPaginationFromEvent(this.pageEvent);
+
     this.elementService.getAllLogs(this.query, this.searchFilters).subscribe(
-      val => {
+      (val) => {
         this.onInitPagination(val.meta);
         this.dataSource = new MatTableDataSource<any>(val.data);
         this.isLoading = false;
       },
-      error => {
+      (error) => {
         this.isLoading = false;
-      }
+      },
     );
   }
 
@@ -341,7 +417,6 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
   }
 
   onPaginateData(event?: PageEvent) {
-
     this.pageEvent = event;
 
     this.onFilterData();
@@ -376,8 +451,8 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
   sortData(sort: Sort) {
     let columnName: string;
     switch (sort.active) {
-      case 'name':
-        columnName = 'name';
+      case 'nombre':
+        columnName = 'nombre';
         break;
       case 'status':
         columnName = sort.active;
@@ -402,35 +477,26 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
 
   returnData(transactions: any[]): any[] {
     const data: any[] = [];
-    transactions.forEach(item => {
-      if (item.Provincia != undefined) {
-        item.Provincia = item.Provincia.nombre;
+    transactions.forEach((item) => {
+      if (item.Roles != undefined) {
+        item.Roles = item.Roles.nombre;
       }
-      if (item.Municipio != undefined) {
-        item.Municipio = item.Municipio.nombre;
+      if (item.Sucursal != undefined) {
+        item.Sucursal = item.Sucursal.nombre;
       }
-      delete item.image;
-      delete item.updateAt;
-      delete item.deleteAt;
-      delete item.timestamp;
 
       data.push(item);
     });
     return data;
   }
 
-  onAdd() {
+  onAdd() {}
 
-  }
+  onEdit(element) {}
 
+  onEditPermisos() {}
 
-  onEdit(element) {
-
-  }
-
-  onEditPermisos() {
-
-  }
+  onEditRoles() {}
 
   onDelete(element) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
@@ -438,35 +504,33 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
       width: '450px',
       data: {
         title: 'Confirmación',
-        question: 'Desea eliminar el elemento?'
-      }
+        question: 'Desea eliminar el elemento?',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.elementService.remove(element).subscribe(
-          data => {
+          (data) => {
             this.successHandle(data);
             this.onRefresh();
             return true;
           },
-          error => {
+          (error) => {
             console.log(error);
-          });
+          },
+        );
       }
     });
   }
 
   successHandle(data) {
     this.onRefreshData();
-    this.toastr.success(
-      'El elemento ha sido eliminado con éxito',
-      'Felicidades',
-      {
-        timeOut: 5000,
-        progressBar: true,
-        positionClass: 'toast-bottom-right'
-      });
+    this.toastr.success('El elemento ha sido eliminado con éxito', 'Felicidades', {
+      timeOut: 5000,
+      progressBar: true,
+      positionClass: 'toast-bottom-right',
+    });
   }
 
   showDetails(element) {
@@ -477,6 +541,4 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
   }
-
-
 }

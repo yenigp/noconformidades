@@ -7,21 +7,21 @@ exports.registry = function registry() {
   var tipoacHelpRoute = apiRoute + '/tipoac-help';
   global.app.express
     .route(tipoacHelpRoute)
-    .get(require('./help'));
+    .get(global.security.ensureAuthenticated(), require('./help'));
 
   var tipoacCollectionRoute = apiRoute + '/tipoac';
 
   global.app.express
     .route(tipoacCollectionRoute)
-    .post(require('./create'))
-    .get(require('./index'));
+    .post([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./create'))
+    .get([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa() || global.security.isEspCalidadSucursal()], require('./index'));
 
   global
     .app.express
-    .param('id', function (req, res, next, id) {
+    .param('tipoacId', function (req, res, next, tipoacId) {
       return models
         .TipoAC
-        .findByPk(id, {
+        .findByPk(tipoacId, {
           include: [{ all: true }]
         }).then(function (data) {
           if (!data) {
@@ -34,7 +34,7 @@ exports.registry = function registry() {
         })
         .catch(global.app.orm.Sequelize.ValidationError, function (error) {
           global.app.logger.error(error, {
-            module: 'TipoAC/:id',
+            module: 'TipoAC/:tipoacId',
             submodule: 'index',
             stack: error.stack
           });
@@ -43,7 +43,7 @@ exports.registry = function registry() {
         })
         .catch(function (error) {
           global.app.logger.error(error, {
-            module: 'TipoAC/:id',
+            module: 'TipoAC/:tipoacId',
             submodule: 'index',
             stack: error.stack
           });
@@ -53,20 +53,20 @@ exports.registry = function registry() {
     }
     );
 
-  var tipoacSingleRoute = tipoacCollectionRoute + '/:id';
+  var tipoacSingleRoute = tipoacCollectionRoute + '/:tipoacId';
 
   global.app.express
     .route(tipoacSingleRoute)
-    .patch(require('./update'))
-    .get(require('./show'))
-    .delete(require('./delete'));
+    .patch([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()],    require('./update'))
+    .get(global.security.ensureAuthenticated(), require('./show'))
+    .delete([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./delete'));
 
-  var tipoacProfileRoute = '/v1/profile';
+  /*var tipoacProfileRoute = '/v1/profile';
 
   global.app.express
     .route(tipoacProfileRoute)
     .patch(function(req,res,next){
-      //req.tiponc=req.loggedUser;
+      req.tiponc=req.loggedUser;
       return next();
-    }, require('./update'))
+    }, require('./update'))*/
 };

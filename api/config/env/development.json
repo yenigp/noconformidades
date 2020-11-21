@@ -6,25 +6,6 @@
     "host": "0.0.0.0",
     "fileLimit": "420000kb"
   },
-  "logging"            : {
-    "transports": {
-      "console": {
-        "enabled"  : true,
-        "colorize" : true,
-        "timestamp": false
-      },
-      "mongodb": {
-        "enabled"   : false,
-        "db"        : "mongodb://localhost/projects",
-        "collection": "SystemLogs",
-        "username"  : "nimdall",
-        "password"  : "nimda321",
-        "decolorize": true,
-        "includeIds": true
-      },
-      "mongo-code": "db.createUser({user:'nimda',pwd:\"nimda321\",roles:[{role:\"dbAdmin\",db:\"repo\"}]})"
-    }
-  },
   "database": {
     "activeDialect": "postgres",
     "dialects": {
@@ -55,15 +36,15 @@
   },
   "mailer": {
     "enabled": true,
-    "sendMail": false,
+    "sendMail": true,
     "activeService": "gmail",
-    "from": "akmedSystem@gmail.com<akmedSystem@gmail.com>",
+    "from": "ygyesexy@gmail.com<ygyesexy@gmail.com>",
     "services": {
       "gmail": {
         "service": "gmail",
         "auth": {
-          "user": "akmedSystem@gmail.com",
-          "pass": "akmedSystem321"
+          "user": "hav.91sgc@gmail.com",
+          "pass": "prueba123456"
         }
       }
     }
@@ -78,7 +59,7 @@
   "developers": {
     "sendNotifications": true,
     "mails": [
-      "hav_yeni@hotmil.com"
+      "hav_yeni@hotmail.com"
     ]
   },
   "jwt": {

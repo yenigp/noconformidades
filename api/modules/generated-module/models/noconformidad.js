@@ -22,34 +22,35 @@ exports.loadModel = function loadModel() {
               },
               "onUpdate": "cascade",
               "onDelete": "cascade",
-              "allowNull": false
+              //"allowNull": false
           },
             "codigo": {
                 "type": global.app.orm.Sequelize.STRING,
+                "unique": true,
                 "allowNull": false,
-                "validate":{
-                  "is": {
-                    "args": /^[A-Z]{4}[0-9]{6}$/i,
-                    "msg": "Sólo se aceptan 4 letras seguidas de 6 números"
-                  },
-                 "max":{
-                    "args": [10],
-                    "msg": "Máximo 10 carácteres"
-                  },
-                }
+                "validate": {
+                    "max": 10,
+                    isUnique(value) {
+                        return NoConformidad.findOne({
+                        where: {codigo:value}
+                          }).then((codigo) => {
+                        if (codigo) {throw new Error('Error: el código' + ' ' + (value) + ' ' + 'ya existe')}
+                        })
+                    }
+                },
             },
-            "fecharegistro": {
+            "FechaRegistro": {
                 "type": global.app.orm.Sequelize.DATE,
                 "defaultValue": global.app.orm.Sequelize.NOW,
                 "allowNull": false
 
             },
-            "fechaidentificacion": {
+            "FechaIdentificacion": {
                 "type": global.app.orm.Sequelize.DATE,
                 "allowNull": false
 
             },
-            "fechatermino": {
+            "FechaTermino": {
                 "type": global.app.orm.Sequelize.DATE,
                 "allowNull": false
 
@@ -83,23 +84,23 @@ exports.loadModel = function loadModel() {
             "resultado": {
                 "type": global.app.orm.Sequelize.ENUM,
                 "values": ["procede", "no procede"],
-                "allowNull": false
+                //"allowNull": false
 
             },
-            "estado": {
+            "status": {
                 "type": global.app.orm.Sequelize.ENUM,
-                "values": ["identificado", "análizado", "corregido", "seguiendo", "cerrado"],
-                "defaultValue": "identificado"
+                "values": ["pendiente", "abierta", "analizando", "cerrado"],
+                "defaultValue": "pendiente"
 
               },
-              "fecharevision": {
+              "FechaRevision": {
                 "type": global.app.orm.Sequelize.DATE,
-                "allowNull": false
+                //"allowNull": false
 
               },
-              "fechacierre": {
+              "FechaCierre": {
                 "type": global.app.orm.Sequelize.DATE,
-                "allowNull": false
+                //"allowNull": false
 
               },
               "AreaId": {
@@ -109,13 +110,14 @@ exports.loadModel = function loadModel() {
                     "key": "id"
                 },
                 "onUpdate": "cascade",
-                "onDelete": "cascade"
+                "onDelete": "cascade",
+                //"allowNull": false
         
               },
               "gravedad": {
                 "type": global.app.orm.Sequelize.ENUM,
                 "values": ["crítica", "mayor"],
-                "allowNull": false
+                //"allowNull": false
                 
               },
               "CreatorId": {
@@ -127,6 +129,22 @@ exports.loadModel = function loadModel() {
                   "onUpdate": "cascade",
                   "onDelete": "cascade"
         
+              },
+              "EspCalidad": {
+                "type": global.app.orm.Sequelize.INTEGER,
+                "comment": "The foreing object that will have the Usuario.",
+                "noUpdate": true
+
+              },
+              "JefeProceso": {
+                "type": global.app.orm.Sequelize.INTEGER,
+                "comment": "The foreing object that will have the Usuario.",
+                //"noUpdate": true
+              },
+              "SucursalId": {
+                "type": global.app.orm.Sequelize.INTEGER,
+                "comment": "The foreing object that will have the Sucursal.",
+                //"noUpdate": true
               }
 
         }), {
@@ -140,12 +158,15 @@ exports.loadModel = function loadModel() {
         NoConformidad.associate = function() {
             var models = global.app.orm.sequelize.models;
             models.NoConformidad.hasOne(models.Auditoria, {
+                as: 'Auditoria',
                 foreignKey: 'NoConformidadId'
             });
             models.NoConformidad.hasOne(models.Incidencia, {
+                as: 'Incidencia',
                 foreignKey: 'NoConformidadId'
             });
             models.NoConformidad.hasOne(models.QuejasReclamaciones, {
+                as: 'QuejasReclamaciones',
                 foreignKey: 'NoConformidadId'
             });
             models.NoConformidad.hasOne(models.Expediente, {
@@ -153,19 +174,39 @@ exports.loadModel = function loadModel() {
                  foreignKey: 'NoConformidadId'
             });
             models.NoConformidad.belongsTo(models.Usuario, {
-                as: 'Creator'
+                as: 'Creator',
+                foreignKey: 'CreatorId'
+            });
+            models.NoConformidad.belongsTo(models.Usuario, {
+                foreignKey: 'EspCalidad',
+                constraints: false
+            });  
+            models.NoConformidad.belongsTo(models.Usuario, {
+                foreignKey: 'JefeProceso',
+                constraints: false
             });  
             models.NoConformidad.belongsTo(models.Proceso, {
-                as: 'Proceso'
+                as: 'Proceso',
+                foreignKey: 'ProcesoId'
             });
             models.NoConformidad.belongsTo(models.Norma, {
-                as: 'Norma'
+                as: 'Norma',
+                foreignKey: 'NormaId'
             });
             models.NoConformidad.belongsTo(models.TipoNC, {
-              as: 'Tipo'
+                as: 'Tipo',
+                foreignKey: 'TipoId'
             });
-            models.NoConformidad.belongsToMany(models.Acciones, {
-                through: models.NCAcciones
+            models.NoConformidad.belongsTo(models.Area, {
+                as: 'Area',
+                foreignKey: 'AreaId'
+              });
+            models.NoConformidad.belongsTo(models.Sucursal, {
+                as: 'Sucursal',
+                foreignKey: 'SucursalId'
+            });
+            models.NoConformidad.hasMany(models.NCAcciones, {
+                foreignKey: 'NoConformidadId'
             });
         }
 

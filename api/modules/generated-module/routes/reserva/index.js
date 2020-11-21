@@ -1,6 +1,8 @@
 'use strict';
 
 var lodash  = require('lodash');
+const { Op } = require("sequelize");
+var moment = require('moment');
 
 module.exports = function (req, res) {
   var models = global.app.orm.sequelize.models;
@@ -15,22 +17,44 @@ module.exports = function (req, res) {
 
   var query = jsonAPI.buildQueryFromReq({
     req  : req,
-    model: models.Reserva
+    model: models.Reserva,
+    where: {
+      fcreacion: {[Op.gte]: moment().subtract(1,'y').format('YYYY-MM-DD')}
+    }
   });
 
   query.include=[
     {
       model: models.ReservaPadre,
-      attributes:["id","localizador", "anombrede"]
+      attributes:["localizador", "id_pais"],
+      include: [{
+        model: models.Pais,
+        attributes: ["codigo", "descripcion"],
+        include: [{
+          model: models.MercadoPais,
+          include: [{
+            model: models.Mercado,
+            attributes: ["nombmercado"],
+            include: [{
+              model: models.AgenciaMercado,
+              include: [{
+                model: models.AgenciaViajes,
+                attributes: ["nombagenciaviajes"]
+              }]
+            }]
+          }]
+        }]
+      }]
     },
     {
       model: models.Producto,
-      attributes:["id","nombproducto"]
+      attributes:["nombproducto"]
     },
     {
       model: models.TuristaReserva,
       include: [{
-        model: models.Turista
+        model: models.Turista,
+        attributes: ["nombre"]
       }]
     }
   ]

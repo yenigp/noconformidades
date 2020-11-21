@@ -27,6 +27,12 @@ module.exports = function (req, res) {
       model: models.Sucursal,
       attributes:["id","nombagenciaviajes"]
     },
+    {
+      model: models.AgenciaMercado,
+      include: [{
+        model: models.Mercado
+      }]
+    }
   ]
 
   query=jsonAPI.prepareQuery(query);

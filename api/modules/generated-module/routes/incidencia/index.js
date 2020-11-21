@@ -15,19 +15,26 @@ module.exports = function (req, res) {
 
   var query = jsonAPI.buildQueryFromReq({
     req  : req,
-    model: models.Incidencia
+    model: models.NoConformidad
   });
 
-  query.include=['NoConformidad']
+
+  query.include=[{model: models.Incidencia}]
+
 
   query=jsonAPI.prepareQuery(query);
+  if (req.loggedUser.RolId != 4){
+    query.where.TipoId = 2
+    query.where.SucursalId = req.loggedUser.SucursalId;
+  }
   return models
-    .Incidencia.findAll(query)
+    .NoConformidad.findAll(query)
     .then(function (data) {
+      console.log(data)
       jsonAPIBody.data                  = data;
       jsonAPIBody.meta.pagination.count = data.length;
       global.app.utils.jsonAPI.cleanQuery(query);
-      return models.Incidencia.count(query);
+      return models.NoConformidad.count(query);
     })
     .then(function (total) {
       jsonAPIBody.meta.pagination.total = total;

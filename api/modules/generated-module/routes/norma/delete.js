@@ -4,7 +4,7 @@ module.exports = function (req, res) {
 	var jsonAPI = global.app.utils.jsonAPI;
 
   return req
-    .sucursal
+    .norma
     .destroy()
     .then(function () {
       return res.sendStatus(204); // No Content.

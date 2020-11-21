@@ -1,0 +1,68 @@
+<div class="dialog-content-wrapper">
+  <mat-toolbar class="mb-2" matDialogTitle color="primary" id="toolbarHeader">
+    <mat-toolbar-row fxLayoutAlign="space-between center">
+      <span *ngIf="!isEditing" class="mat-title mb-0">{{ 'Adicionar usuario' }}</span>
+      <span *ngIf="isEditing" class="mat-title mb-0">{{ 'Editar usuario' }}</span>
+      <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div mat-dialog-content class="my-dialog-content">
+    <form [formGroup]="form">
+      <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="gappx">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Nombre' }}</mat-label>
+          <mat-icon class="greyIcon" matSuffix>account_box</mat-icon>
+          <input type="text" max="15" matInput [formControl]="form.controls['nombre']" placeholder="{{ 'nombre' }}" />
+          <mat-error *ngIf="form.controls['nombre'].hasError('required')">
+            {{ 'Nombre' }} <strong>{{ 'es requerido' }}</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Apellidos' }}</mat-label>
+          <mat-icon class="greyIcon" matSuffix>account_box</mat-icon>
+          <input type="text" matInput [formControl]="form.controls['apellidos']" placeholder="{{ 'apellidos' }}" />
+          <mat-error *ngIf="form.controls['apellidos'].hasError('required')">
+            {{ 'Apellidos' }} <strong>{{ 'es requerido' }}</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Usuario' }}</mat-label>
+          <input type="text" matInput [formControl]="form.controls['usuario']" placeholder="{{ 'usuario' }}" />
+          <mat-icon class="greyIcon" matSuffix>person</mat-icon>
+          <mat-error *ngIf="form.controls['usuario'].hasError('required')">
+            {{ 'usuario' }} <strong>{{ 'es requerido' }}</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Correo' }}</mat-label>
+          <input type="text" matInput [formControl]="form.controls['email']" placeholder="{{ 'correo' }}" />
+          <mat-icon class="greyIcon" matSuffix>email</mat-icon>
+          <mat-error *ngIf="form.controls['email'].hasError('required')">
+            {{ 'Correo' }} <strong>{{ 'es requerido' }}</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Password' }}</mat-label>
+          <input type="text" matInput [formControl]="form.controls['password']" placeholder="{{ 'password' }}" />
+          <mat-icon class="greyIcon" matSuffix>vpn_key</mat-icon>
+          <mat-error *ngIf="form.controls['password'].hasError('required')">
+            {{ 'password' }} <strong>{{ 'es requerido' }}</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+
+  <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end start">
+    <button mat-flat-button (click)="onSaveAction()" [disabled]="this.form.invalid" color="primary">
+      {{ 'Save' }}
+    </button>
+  </div>
+</div>

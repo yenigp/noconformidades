@@ -27,8 +27,8 @@ module.exports = function(req, res) {
           return res.status(401)
             .json({
               errors: [{
-                field: 'User',
-                title: 'User not found'
+                field: 'Usuario',
+                title: 'Usuario no encontrado'
               }]
             }); //user not found
         }
@@ -36,8 +36,8 @@ module.exports = function(req, res) {
           return res.status(401)
             .json({
               errors: [{
-                field: 'password',
-                title: 'Wrong password'
+                field: 'Contraseña',
+                title: 'Contraseña incorrecta'
               }]
             });
         }
@@ -45,8 +45,8 @@ module.exports = function(req, res) {
           return res.status(401)
             .json({
               errors: [{
-                field: 'status',
-                title: 'User not enabled'
+                field: 'Estado',
+                title: 'Usuario no habilitado'
               }]
             });
         }

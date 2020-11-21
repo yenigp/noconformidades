@@ -7,21 +7,21 @@ exports.registry = function registry() {
   var procesoHelpRoute = apiRoute + '/proceso-help';
   global.app.express
     .route(procesoHelpRoute)
-    .get(require('./help'));
+    .get([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./help'));
 
   var procesoCollectionRoute = apiRoute + '/proceso';
 
   global.app.express
     .route(procesoCollectionRoute)
-    .post(require('./create'))
-    .get(require('./index'));
+    .post([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./create'))
+    .get([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./index'));
 
   global
     .app.express
-    .param('id', function (req, res, next, id) {
+    .param('procesoId', function (req, res, next, procesoId) {
       return models
         .Proceso
-        .findByPk(id, {
+        .findByPk(procesoId, {
           include: [{ all: true }]
         }).then(function (data) {
           if (!data) {
@@ -34,7 +34,7 @@ exports.registry = function registry() {
         })
         .catch(global.app.orm.Sequelize.ValidationError, function (error) {
           global.app.logger.error(error, {
-            module: 'Proceso/:id',
+            module: 'Proceso/:procesoId',
             submodule: 'index',
             stack: error.stack
           });
@@ -43,7 +43,7 @@ exports.registry = function registry() {
         })
         .catch(function (error) {
           global.app.logger.error(error, {
-            module: 'Proceso/:id',
+            module: 'Proceso/:procesoId',
             submodule: 'index',
             stack: error.stack
           });
@@ -53,20 +53,20 @@ exports.registry = function registry() {
     }
     );
 
-  var procesoSingleRoute = procesoCollectionRoute + '/:id';
+  var procesoSingleRoute = procesoCollectionRoute + '/:procesoId';
 
   global.app.express
     .route(procesoSingleRoute)
-    .patch(require('./update'))
-    .get(require('./show'))
-    .delete(require('./delete'));
+    .patch([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./update'))
+    .get([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./show'))
+    .delete([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./delete'));
 
-  var procesoProfileRoute = '/v1/profile';
+  /*var procesoProfileRoute = '/v1/profile';
 
   global.app.express
     .route(procesoProfileRoute)
     .patch(function(req,res,next){
-      //req.norma=req.loggedUser;
+      req.proceso=req.loggedUser;
       return next();
-    }, require('./update'))
+    }, require('./update'))*/
 };

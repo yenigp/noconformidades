@@ -4,24 +4,18 @@ exports.registry = function registry() {
   var apiRoute = global.app.config.get('api:prefix');
   var jsonAPI = global.app.utils.jsonAPI;
 
-  var reservaHelpRoute = apiRoute + '/reserva-help';
-  global.app.express
-    .route(reservaHelpRoute)
-    .get(require('./help'));
-
   var reservaCollectionRoute = apiRoute + '/reserva';
 
   global.app.express
     .route(reservaCollectionRoute)
-    .post(require('./create'))
-    .get(require('./index'));
+    .get(/*[global.security.ensureAuthenticated(), global.security.isJefeProceso()],*/ require('./index'));
 
   global
     .app.express
-    .param('id', function (req, res, next, id) {
+    .param('reservaId', function (req, res, next, reservaId) {
       return models
         .Reserva
-        .findByPk(id, {
+        .findByPk(reservaId, {
           include: [{ all: true }]
         }).then(function (data) {
           if (!data) {
@@ -34,7 +28,7 @@ exports.registry = function registry() {
         })
         .catch(global.app.orm.Sequelize.ValidationError, function (error) {
           global.app.logger.error(error, {
-            module: 'Reserva/:id',
+            module: 'Reserva/:reservaId',
             submodule: 'index',
             stack: error.stack
           });
@@ -43,7 +37,7 @@ exports.registry = function registry() {
         })
         .catch(function (error) {
           global.app.logger.error(error, {
-            module: 'Reserva/:id',
+            module: 'Reserva/:reservaId',
             submodule: 'index',
             stack: error.stack
           });
@@ -53,20 +47,10 @@ exports.registry = function registry() {
     }
     );
 
-  var reservaSingleRoute = reservaCollectionRoute + '/:id';
+  var reservaSingleRoute = reservaCollectionRoute + '/:reservaId';
 
   global.app.express
     .route(reservaSingleRoute)
-    .patch(require('./update'))
-    .get(require('./show'))
-    .delete(require('./delete'));
-
-  var reservaProfileRoute = '/v1/profile';
-
-  global.app.express
-    .route(reservaProfileRoute)
-    .patch(function(req,res,next){
-      //req.reserva=req.loggedUser;
-      return next();
-    }, require('./update'))
+    .get([global.security.ensureAuthenticated(), global.security.isJefeProceso()], require('./show'));
+    
 };

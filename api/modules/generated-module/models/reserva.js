@@ -289,10 +289,10 @@ exports.loadModel = function loadModel() {
                     foreignKey: 'idserviciocotizacion',
                     constraints: false
                 });
-            models.Reserva.belongsToMany(models.Turista, 
+            models.Reserva.hasMany(models.TuristaReserva, 
                 {
-                    through: models.TuristaReserva
-                 });
+                    foreignKey: 'ReservaID'
+                });
                 
         }
 

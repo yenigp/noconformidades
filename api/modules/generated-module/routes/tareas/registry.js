@@ -7,14 +7,14 @@ exports.registry = function registry() {
   var tareasHelpRoute = apiRoute + '/tareas-help';
   global.app.express
         .route(tareasHelpRoute)
-        .get(require('./help'));
+        .get([global.security.ensureAuthenticated(), global.security.isJefeProceso()], require('./help'));
 
   var tareasCollectionRoute = apiRoute + '/tareas';
 
   global.app.express
         .route(tareasCollectionRoute)
-        .post(require('./create'))
-        .get(require('./index'));
+        .post([global.security.ensureAuthenticated(), global.security.ensureSucursal(), global.security.isJefeProceso()], require('./create'))
+        .get([global.security.ensureAuthenticated(), global.security.ensureSucursal(), global.security.isJefeProceso()], require('./index'));
 
   global
     .app.express
@@ -57,7 +57,7 @@ exports.registry = function registry() {
 
   global.app.express
         .route(tareasSingleRoute)
-        .patch(require('./update'))
-        .get(require('./show'))
-        .delete(require('./delete'));
+        .patch([global.security.ensureAuthenticated(), global.security.isJefeProceso()], require('./update'))
+        .get([global.security.ensureAuthenticated(), global.security.isJefeProceso()], require('./show'))
+        .delete([global.security.ensureAuthenticated(), global.security.isJefeProceso()],require('./delete'));
 };

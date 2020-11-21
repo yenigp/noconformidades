@@ -12,7 +12,7 @@ import { ShowToastrService } from '../show-toastr/show-toastr.service';
 export class UtilsService {
   urlImage = environment.apiUrl;
 
-  constructor(public sanitizer: DomSanitizer, private showToastr: ShowToastrService, private httpClient: HttpClient) { }
+  constructor(public sanitizer: DomSanitizer, private showToastr: ShowToastrService, private httpClient: HttpClient) {}
 
   public getUrlImages(): string {
     return environment.apiUrl;
@@ -27,7 +27,7 @@ export class UtilsService {
       ? action
         ? 'Error ' + action + ' ' + nomenclator
         : 'Error ' + action
-      : `Server response failed, check your connection to the network, or contact the administrators`;
+      : `La respuesta del servidor falló, verifique su conexión a la red o comuníquese con los administradores`;
     let msg =
       error.error && error.error.errors && error.error.errors.length
         ? error.error.errors.map((item) => item.title)
@@ -40,7 +40,7 @@ export class UtilsService {
       ? action
         ? 'Error ' + action + ' ' + nomenclator
         : 'Error ' + action
-      : `Server response failed, check your connection to the network, or contact the administrators`;
+      : `La respuesta del servidor falló, verifique su conexión a la red o comuníquese con los administradores`;
     let msg = alternative;
     if (error.errors && error.errors.length) {
       msg = error.errors.map((item) => item.title || item.message);
@@ -57,6 +57,4 @@ export class UtilsService {
   getImage(imageUrl: string): Observable<Blob> {
     return this.httpClient.get(this.urlImage, { responseType: 'blob' });
   }
-
-
 }

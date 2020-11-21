@@ -12,7 +12,11 @@ module.exports = function (req, res) {
     .app.orm.sequelize.transaction(function (t) {
       return models
         .TipoNC
-        .create(req.body,{transaction:t});
+        .create({
+          codigo: req.body.codigo,
+          nombre: req.body.nombre,
+          CreatorId: req.loggedUser.id
+        },{transaction:t});
     })
     .then(function (data) {
       jsonAPIBody.data = data.toJSON();

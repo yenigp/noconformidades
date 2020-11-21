@@ -9,12 +9,12 @@ function authenticate(socketConnection, next) {
   }
   auth = auth.split(' ');
 
-  function nextS(error, person) {
-    if (person != undefined && person.dataValues != undefined && !error) {
+  function nextS(error, usuario) {
+    if (usuario != undefined && usuario.dataValues != undefined && !error) {
       socketConnection.request.user = {
-        id          : person.dataValues.id,
-        isSuperAdmin: person.dataValues.level == undefined,
-        username    : person.dataValues.username
+        id          : usuario.dataValues.id,
+        isSuperAdmin: usuario.dataValues.level == undefined,
+        usuario    : usuario.dataValues.usuario
       };
       next(error);
     }

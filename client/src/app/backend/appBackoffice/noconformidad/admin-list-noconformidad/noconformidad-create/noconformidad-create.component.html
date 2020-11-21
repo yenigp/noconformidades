@@ -1,0 +1,629 @@
+<div class="container">
+  <mat-progress-bar color="accent" mode="determinate" value="{{ getProgress() }}"> </mat-progress-bar>
+  <mat-horizontal-stepper
+    [selectedIndex]="stepIndex"
+    (selectionChange)="onSlectionChange($event)"
+    labelPosition="bottom"
+    [linear]="'true'"
+    #stepper
+  >
+    <mat-step [stepControl]="this.form">
+      <div style="float: left; width: 65%" *ngIf="alreadyLoaded">
+        <form [formGroup]="this.form">
+          <ng-template matStepLabel>{{ 'Información básica' }}</ng-template>
+          <div fxLayout="column" class="SteeperLayout" fxLayoutAlign="start stretch" fxLayoutGap="gappx">
+            <div>
+              <div fxLayout="row" class="mt-2" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                <mat-form-field appearance="outline" fxFlex="100" fxFlex.lt-md="100" fxFlex.xs="100">
+                  <mat-label>{{ 'Tipo de no conformidad' }}</mat-label>
+                  <mat-select required [formControl]="form.controls['TipoId']">
+                    <mat-option *ngFor="let item of TipoNC" [value]="item.id">
+                      {{ item.nombre }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-icon class="greyIcon" matSuffix>business</mat-icon>
+                  <mat-error *ngIf="form.controls['TipoId'].hasError('required')">
+                    {{ 'El tipo de no conformidad' }} <strong>{{ 'es requerido' }}</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                <span class="mat-body-2">{{ 'Qué proceso afecta?' }}</span>
+              </div>
+              <div fxLayout="row" class="mt-2" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                <mat-form-field appearance="outline" fxFlex="100" fxFlex.lt-md="100" fxFlex.xs="100">
+                  <mat-label>{{ 'Proceso' }}</mat-label>
+                  <mat-select required [formControl]="form.controls['ProcesoId']">
+                    <mat-option *ngFor="let item of Proceso" [value]="item.id">
+                      {{ item.nombre }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-icon class="greyIcon" matSuffix>business</mat-icon>
+                  <mat-error *ngIf="form.controls['ProcesoId'].hasError('required')">
+                    {{ 'El proceso' }} <strong>{{ 'es requerido' }}</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                <span class="mat-body-2">{{ 'Qué norma afecta?' }}</span>
+              </div>
+              <div fxLayout="row" class="mt-2" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                <mat-form-field appearance="outline" fxFlex="100" fxFlex.lt-md="100" fxFlex.xs="100">
+                  <mat-label>{{ 'Norma' }}</mat-label>
+                  <mat-select required [formControl]="form.controls['NormaId']">
+                    <mat-option *ngFor="let item of Norma" [value]="item.id">
+                      {{ item.nombre }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-icon class="greyIcon" matSuffix>mail</mat-icon>
+                  <mat-error *ngIf="form.controls['NormaId'].hasError('required')">
+                    {{ 'La norma' }} <strong>{{ 'es requerida' }}</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div fxLayout="row" class="mt-2" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                <mat-form-field appearance="outline" fxFlex="50" fxFlex.lt-md="50" fxFlex.xs="50">
+                  <mat-label>Fecha Identificación</mat-label>
+                  <input
+                    matInput
+                    required
+                    [matDatepicker]="startDate"
+                    placeholder="Fecha Identificación"
+                    [formControl]="form.controls['FechaIdentificacion']"
+                    [min]="minDate"
+                    [max]="maxDate"
+                  />
+                  <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                  <mat-datepicker #startDate></mat-datepicker>
+                  <mat-error *ngIf="form.controls['FechaIdentificacion'].hasError('required')">
+                    {{ 'La fecha de identificación' }} <strong>{{ 'es requerida' }}</strong>
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field
+                  *ngIf="form.controls['status'].value == 'analizando'"
+                  appearance="outline"
+                  fxFlex="50"
+                  fxFlex.lt-md="50"
+                  fxFlex.xs="50"
+                >
+                  <mat-label>Fecha Revisión</mat-label>
+                  <input
+                    matInput
+                    required
+                    [matDatepicker]="FechaRevision"
+                    placeholder="Fecha Revisión"
+                    [formControl]="form.controls['FechaRevision']"
+                    [min]="maxDate"
+                    [max]="maxDate"
+                  />
+                  <mat-datepicker-toggle matSuffix [for]="FechaRevision"></mat-datepicker-toggle>
+                  <mat-datepicker #FechaRevision></mat-datepicker>
+                  <mat-error *ngIf="form.controls['FechaRevision'].hasError('required')">
+                    {{ 'La fecha de revisión' }} <strong>{{ 'es requerida' }}</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                <span class="mat-body-2">{{ 'Descripción específica de la no conformidad' }}</span>
+              </div>
+              <div fxLayout="row" class="mt-2" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                <mat-form-field fxFlex="100" fxFlex.lt-md="100" fxFlex.xs="100" appearance="outline">
+                  <mat-label>{{ 'Descripción' }}</mat-label>
+                  <textarea
+                    rows="5"
+                    matInput
+                    required
+                    [formControl]="form.controls['descripcion']"
+                    placeholder="{{ 'Descripción' }}"
+                  ></textarea>
+                  <mat-icon class="greyIcon" matSuffix>edit</mat-icon>
+                  <mat-error *ngIf="form.controls['descripcion'].hasError('required')">
+                    {{ 'Descripción' }} <strong>{{ 'es requerida' }}</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                <span class="mat-body-2">{{ 'Añadir evidencias' }}</span>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="start start" class="ImageLayout">
+                <div fxLayout="column" fxLayoutAlign="start start" fxLayoutAlign.lt-sm="center stretch" class="mb-2">
+                  <div
+                    *ngIf="loadImage"
+                    class="avatar-profile"
+                    fxFlex="row"
+                    fxLayoutAlign="center center"
+                    style="background-size: cover; background-position: center center; flex: none"
+                    [style.background-image]="this.utilsService.getSafeImage(imageBrand)"
+                  >
+                    <button id="photoCameraBtn" mat-icon-button (click)="openFileBrowser($event)">
+                      <mat-icon style="color: white" aria-label="Example icon-button with a heart icon">
+                        photo_camera
+                      </mat-icon>
+                    </button>
+                  </div>
+                  <div *ngIf="!loadImage" class="avatar-profile" fxFlex="row" fxLayoutAlign="center center">
+                    <mat-icon class="avatar-icon">backup</mat-icon>
+
+                    <button
+                      id="photoCameraBtn"
+                      style="position: absolute"
+                      mat-icon-button
+                      (click)="openFileBrowser($event)"
+                    >
+                      <mat-icon style="color: white" aria-label="Example icon-button with a heart icon">
+                        photo_camera
+                      </mat-icon>
+                    </button>
+                  </div>
+                  <mat-error *ngIf="showErrorImage"> La imagen sobrepasa los <strong>500 Kb</strong> </mat-error>
+                  <input type="file" class="hide-style" id="filePicker" (change)="handleFileSelect($event)" />
+                </div>
+              </div>
+
+              <div
+                *ngIf="form.controls['status'].value == 'analizando'"
+                fxLayout="row"
+                fxLayoutAlign="start start"
+                fxLayoutGap="gappx"
+              >
+                <span class="mat-body-2">{{ 'Cuál es la gravedad?' }}</span>
+              </div>
+              <div
+                *ngIf="form.controls['status'].value == 'analizando'"
+                fxLayout="row"
+                class="mt-2"
+                fxLayoutAlign="start start"
+                fxLayoutGap="gappx"
+              >
+                <mat-form-field fxFlex="100" fxFlex.lt-md="100" fxFlex.xs="100" appearance="outline">
+                  <mat-label>{{ 'Gravedad' }}</mat-label>
+                  <mat-icon class="greyIcon" matSuffix>account_box</mat-icon>
+                  <mat-select
+                    matNativeControl
+                    required
+                    matInput
+                    [formControl]="form.controls['gravedad']"
+                    placeholder="{{ 'gravedad' }}"
+                  >
+                    <mat-option *ngFor="let item of Gravedad" [value]="item">
+                      {{ item }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="form.controls['gravedad'].hasError('required')">
+                    {{ 'La gravedad' }} <strong>{{ 'es requerida' }}</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div
+                *ngIf="form.controls['status'].value == 'analizando'"
+                fxLayout="row"
+                fxLayoutAlign="start start"
+                fxLayoutGap="gappx"
+              >
+                <span class="mat-body-2">{{ 'Cuál es su decisión final?' }}</span>
+              </div>
+              <div
+                *ngIf="form.controls['status'].value == 'analizando'"
+                fxLayout="row"
+                class="mt-2"
+                fxLayoutAlign="start start"
+                fxLayoutGap="gappx"
+              >
+                <mat-form-field fxFlex="100" fxFlex.lt-md="100" fxFlex.xs="100" appearance="outline">
+                  <mat-label>{{ 'Resultado' }}</mat-label>
+                  <mat-icon class="greyIcon" matSuffix>account_box</mat-icon>
+                  <mat-select
+                    matNativeControl
+                    required
+                    matInput
+                    [formControl]="form.controls['resultado']"
+                    placeholder="{{ 'resultado' }}"
+                  >
+                    <mat-option *ngFor="let item of Resultado" [value]="item">
+                      {{ item }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="form.controls['resultado'].hasError('required')">
+                    {{ 'El resultado' }} <strong>{{ 'es requerido' }}</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div
+                *ngIf="form.controls['TipoId'].value != '3'"
+                fxLayout="row"
+                fxLayoutAlign="start start"
+                fxLayoutGap="gappx"
+              >
+                <span class="mat-body-2">{{ 'Asignar al Especialista de Calidad' }}</span>
+              </div>
+              <div
+                *ngIf="form.controls['TipoId'].value != '3'"
+                fxLayout="row"
+                class="mt-2"
+                fxLayoutAlign="start start"
+                fxLayoutGap="gappx"
+              >
+                <mat-form-field fxFlex="100" fxFlex.lt-md="100" fxFlex.xs="100" appearance="outline">
+                  <mat-label>{{ 'Especialista de Calidad' }}</mat-label>
+                  <mat-icon class="greyIcon" matSuffix>account_box</mat-icon>
+                  <mat-select
+                    matNativeControl
+                    required
+                    matInput
+                    [formControl]="form.controls['EspCalidad']"
+                    placeholder="{{ 'resultado' }}"
+                  >
+                    <mat-option *ngFor="let item of EspCalidad; let i = index" [value]="item.id">
+                      {{ item.nombre + ' ' + item.apellidos }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="form.controls['EspCalidad'].hasError('required')">
+                    {{ 'El nombre del Especialista de Calidad' }} <strong>{{ 'es requerido' }}</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div
+                *ngIf="form.controls['status'].value == 'abierta'"
+                fxLayout="row"
+                fxLayoutAlign="start start"
+                fxLayoutGap="gappx"
+              >
+                <span class="mat-body-2">{{ 'Asignar al Jefe de Proceso' }}</span>
+              </div>
+              <div
+                *ngIf="form.controls['status'].value == 'abierta'"
+                fxLayout="row"
+                class="mt-2"
+                fxLayoutAlign="start start"
+                fxLayoutGap="gappx"
+              >
+                <mat-form-field fxFlex="100" fxFlex.lt-md="100" fxFlex.xs="100" appearance="outline">
+                  <mat-label>{{ 'Jefe de Proceso' }}</mat-label>
+                  <mat-icon class="greyIcon" matSuffix>account_box</mat-icon>
+                  <mat-select
+                    matInput
+                    matNativeControl
+                    required
+                    [formControl]="form.controls['JefeProceso']"
+                    placeholder="{{ 'JefeProceso' }}"
+                  >
+                    <mat-option *ngFor="let item of JefeProceso; let i = index" [value]="item.id">
+                      {{ item.nombre + ' ' + item.apellidos }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="form.controls['JefeProceso'].hasError('required')">
+                    {{ 'El jefe de proceso' }} <strong>{{ 'es requerido' }}</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                <span class="mat-body-2" *ngIf="form.controls['status'].value == 'analizando'">{{
+                  'Qué área afecta'
+                }}</span>
+              </div>
+              <div
+                fxLayout="row"
+                class="mt-2"
+                fxLayoutAlign="start start"
+                fxLayoutGap="gappx"
+                *ngIf="form.controls['status'].value == 'analizando'"
+              >
+                <mat-form-field appearance="outline" fxFlex="100" fxFlex.lt-md="100" fxFlex.xs="100">
+                  <mat-label>{{ 'Area' }}</mat-label>
+                  <mat-select required [formControl]="form.controls['AreaId']">
+                    <mat-option *ngFor="let item of Area" [value]="item.id">
+                      {{ item.nombre }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-icon class="greyIcon" matSuffix>mail</mat-icon>
+                  <mat-error *ngIf="form.controls['AreaId'].hasError('required')">
+                    {{ 'El área' }} <strong>{{ 'es requerida' }}</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <!---------INCIDENCIA-------------->
+              <div
+                *ngIf="form.controls['TipoId'].value == '3' || form.controls['TipoId'].value == '2'"
+                fxLayout="row"
+                fxLayoutAlign="start start"
+                fxLayoutGap="gappx"
+              >
+                <span *ngIf="form.controls['TipoId'].value == '2'" class="mat-body-2">{{ 'Tipo de Incidencia' }}</span>
+                <span *ngIf="form.controls['TipoId'].value == '3'" class="mat-body-2">{{
+                  'Tipo de Quejas y Reclamaciones'
+                }}</span>
+              </div>
+              <div
+                *ngIf="form.controls['TipoId'].value == '3' || form.controls['TipoId'].value == '2'"
+                fxLayout="row"
+                class="mt-2"
+                fxLayoutAlign="start start"
+                fxLayoutGap="gappx"
+              >
+                <mat-form-field fxFlex="100" fxFlex.lt-md="100" fxFlex.xs="100" appearance="outline">
+                  <mat-label>{{ 'Tipo' }}</mat-label>
+                  <mat-icon class="greyIcon" matSuffix>account_box</mat-icon>
+                  <mat-select
+                    *ngIf="form.controls['TipoId'].value == '2'"
+                    matNativeControl
+                    required
+                    matInput
+                    [formControl]="form.controls['tipo']"
+                    placeholder="{{ 'tipo' }}"
+                  >
+                    <mat-option *ngFor="let item of tipo" [value]="item">
+                      {{ item }}
+                    </mat-option>
+                  </mat-select>
+                  <!--QuejasReclamaciones-->
+                  <mat-select
+                    *ngIf="form.controls['TipoId'].value == '3'"
+                    matNativeControl
+                    required
+                    matInput
+                    [formControl]="form.controls['tipo']"
+                    placeholder="{{ 'tipo' }}"
+                  >
+                    <mat-option *ngFor="let item of tipoqr" [value]="item">
+                      {{ item }}
+                    </mat-option>
+                  </mat-select>
+                  <!--Incidencia-->
+                  <mat-error *ngIf="form.controls['tipo'].hasError('required') && form.controls['TipoId'].value == '2'">
+                    {{ 'El tipo de incidencia' }} <strong>{{ 'es requerido' }}</strong>
+                  </mat-error>
+                  <!--QuejasReclamaciones-->
+                  <mat-error *ngIf="form.controls['tipo'].hasError('required') && form.controls['TipoId'].value == '3'">
+                    {{ 'El tipo de quejas y reclamación' }} <strong>{{ 'es requerido' }}</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div
+                *ngIf="form.controls['TipoId'].value == '2'"
+                fxLayout="row"
+                fxLayoutAlign="start start"
+                fxLayoutGap="gappx"
+              >
+                <span class="mat-body-2">{{ 'Requiere investigación?' }}</span>
+              </div>
+              <div
+                *ngIf="form.controls['TipoId'].value == '2'"
+                fxLayout="row"
+                class="mt-2"
+                fxLayoutAlign="start start"
+                fxLayoutGap="gappx"
+              >
+                <mat-slide-toggle color="primary" [formControl]="form.controls['CausaInvestigacion']">
+                  {{ 'CausaInvestigacion' }}</mat-slide-toggle
+                >
+              </div>
+
+              <!------------Auditoria---------------->
+              <div
+                *ngIf="form.controls['TipoId'].value == '3' || form.controls['TipoId'].value == '4'"
+                fxLayout="row"
+                class="mt-2"
+                fxLayoutAlign="start start"
+                fxLayoutGap="gappx"
+              >
+                <mat-form-field fxFlex="100" fxFlex.lt-md="100" fxFlex.xs="100" appearance="outline">
+                  <mat-label>{{ 'Observación' }}</mat-label>
+                  <textarea
+                    rows="5"
+                    matInput
+                    required
+                    [formControl]="form.controls['observacion']"
+                    placeholder="{{ 'Observación' }}"
+                  ></textarea>
+                  <mat-icon class="greyIcon" matSuffix>edit</mat-icon>
+                  <mat-error *ngIf="form.controls['observacion'].hasError('required')">
+                    {{ 'Observación' }} <strong>{{ 'es requerida' }}</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <!-------------QuejasReclamaciones--------------->
+
+              <!--Producto Column-->
+              <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                <span class="mat-body-2" *ngIf="form.controls['TipoId'].value == '3'">{{
+                  'Qué producto tuvo afectación?'
+                }}</span>
+              </div>
+              <div
+                fxLayout="row"
+                class="mt-2"
+                fxLayoutAlign="start start"
+                fxLayoutGap="gappx"
+                *ngIf="form.controls['TipoId'].value == '3'"
+              >
+                <mat-form-field appearance="outline" fxFlex="100" fxFlex.lt-md="100" fxFlex.xs="100">
+                  <mat-label>{{ 'Producto' }}</mat-label>
+                  <mat-select
+                    required
+                    [formControl]="form.controls['ProductoId']"
+                    (selectionChange)="onChange($event.value)"
+                  >
+                    <mat-option *ngFor="let item of Producto" [value]="item.id">
+                      {{ item.nombproducto }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-icon class="greyIcon" matSuffix>mail</mat-icon>
+                  <mat-error *ngIf="form.controls['ProductoId'].hasError('required')">
+                    {{ 'El producto' }} <strong>{{ 'es requerido' }}</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <!--ServicioColumn-->
+              <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                <span class="mat-body-2" *ngIf="form.controls['TipoId'].value == '3'">{{
+                  'Qué servicio tuvo afectación?'
+                }}</span>
+              </div>
+              <div
+                fxLayout="row"
+                class="mt-2"
+                fxLayoutAlign="start start"
+                fxLayoutGap="gappx"
+                *ngIf="form.controls['TipoId'].value == '3'"
+              >
+                <mat-form-field appearance="outline" fxFlex="100" fxFlex.lt-md="100" fxFlex.xs="100">
+                  <mat-label>{{ 'Servicio' }}</mat-label>
+                  <mat-select required [formControl]="form.controls['ServicioId']">
+                    <mat-option *ngFor="let item of allServicio" [value]="item.id">
+                      {{ item.nombservicio }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-icon class="greyIcon" matSuffix>mail</mat-icon>
+                  <mat-error *ngIf="form.controls['ServicioId'].hasError('required')">
+                    {{ 'El servicio' }} <strong>{{ 'es requerido' }}</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <!--ReservaColumn-->
+              <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                <span class="mat-body-2" *ngIf="form.controls['TipoId'].value == '3'">{{ 'Reserva afectada' }}</span>
+              </div>
+              <div
+                fxLayout="row"
+                class="mt-2"
+                fxLayoutAlign="start start"
+                fxLayoutGap="gappx"
+                *ngIf="form.controls['TipoId'].value == '3'"
+              >
+                <mat-form-field appearance="outline" fxFlex="100" fxFlex.lt-md="100" fxFlex.xs="100">
+                  <mat-label>{{ 'Reserva' }}</mat-label>
+                  <mat-select required [formControl]="form.controls['ReservaId']">
+                    <mat-option *ngFor="let item of allReserva" [value]="item.id">
+                      {{ item.locreservapadre }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-icon class="greyIcon" matSuffix>mail</mat-icon>
+                  <mat-error *ngIf="form.controls['ReservaId'].hasError('required')">
+                    {{ 'El localizador de la reserva' }} <strong>{{ 'es requerido' }}</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <!--ClasificacionColumn-->
+              <div
+                *ngIf="form.controls['TipoId'].value == '3'"
+                fxLayout="row"
+                fxLayoutAlign="start start"
+                fxLayoutGap="gappx"
+              >
+                <span class="mat-body-2">{{ 'La no conformidad se atribuye a la entidad?' }}</span>
+              </div>
+              <div
+                *ngIf="form.controls['TipoId'].value == '3'"
+                fxLayout="row"
+                class="mt-2"
+                fxLayoutAlign="start start"
+                fxLayoutGap="gappx"
+              >
+                <mat-form-field fxFlex="100" fxFlex.lt-md="100" fxFlex.xs="100" appearance="outline">
+                  <mat-label>{{ 'Clasificación' }}</mat-label>
+                  <mat-icon class="greyIcon" matSuffix>account_box</mat-icon>
+                  <mat-select
+                    matNativeControl
+                    required
+                    matInput
+                    [formControl]="form.controls['clasificacion']"
+                    placeholder="{{ 'clasificación' }}"
+                  >
+                    <mat-option *ngFor="let item of clasificacion" [value]="item">
+                      {{ item }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="form.controls['clasificacion'].hasError('required')">
+                    {{ 'La clasificación' }} <strong>{{ 'es requerida' }}</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <mat-form-field *ngIf="form.controls['status'].value == 'analizando'" appearance="fill">
+                <mat-label>{{ 'Costo de no Calidad' }}</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  currency
+                  [formControl]="form.controls['CostoNoCalidad']"
+                  class="example-right-align"
+                />
+                <span matPrefix>$&nbsp;</span>
+                <span matSuffix>.00</span>
+                <mat-error *ngIf="form.controls['CostoNoCalidad'].hasError('required')">
+                  {{ 'El costo es' }} <strong>{{ 'es requerido' }}</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div
+              fxLayout="row"
+              class="w-100 mt-3"
+              ngClass.lt-md="w-80"
+              ngClass.xs="w-100"
+              fxLayoutAlign="end center"
+              fxLayoutGap="gappx"
+            >
+              <button
+                [disabled]="this.form.invalid"
+                (click)="onSaveBasicNoConformidad()"
+                mat-raised-button
+                color="primary"
+              >
+                {{ this.action }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div style="width: 35%; float: left; position: absolute; right: 0">
+        <div *ngIf="this.rellenarUsuarios">
+          <app-resumen-noconformidad [noconformidad]="this.noconformidad"></app-resumen-noconformidad>
+        </div>
+      </div>
+    </mat-step>
+
+    <mat-step [editable]="this.alreadyLoaded && this.form.valid">
+      <ng-template matStepLabel>{{ 'Usuarios' }}</ng-template>
+      <div fxLayout="column" fxLayoutAlign="space-around stretch" fxLayoutGap="gappx">
+        <div *ngIf="this.rellenarUsuarios">
+          <app-array
+            [noconformidad]="this.noconformidad"
+            [Acciones]="this.Acciones"
+            (respuesta)="ProcesarUsuarios($event)"
+          ></app-array>
+        </div>
+      </div>
+
+      <div class="SteeperBtn">
+        <button
+          mat-raised-button
+          class="ml-2"
+          color="primary"
+          [disabled]="this.noconformidadCreated == null || this.noconformidadCreated.id == null"
+          (click)="Finalizar()"
+          matStepperNext
+        >
+          {{ 'Finalizar' }}
+        </button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>

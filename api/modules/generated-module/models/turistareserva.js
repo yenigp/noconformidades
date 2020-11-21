@@ -36,4 +36,16 @@ exports.loadModel = function loadModel() {
 
             }
         });
+
+        TuristaReserva.removeAttribute('id');
+
+        TuristaReserva.associate = function() {
+          var models = global.app.orm.sequelize.models;
+          models.TuristaReserva.belongsTo(models.Turista, {
+              foreignKey: 'TuristaID'
+          });
+          models.TuristaReserva.belongsTo(models.Reserva, {
+            foreignKey: 'ReservaID'
+        })
+      }
 };

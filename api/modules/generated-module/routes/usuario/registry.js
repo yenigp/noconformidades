@@ -7,14 +7,14 @@ exports.registry = function registry() {
   var usuarioHelpRoute = apiRoute + '/usuario-help';
   global.app.express
     .route(usuarioHelpRoute)
-    .get(require('./help'));
+    .get([global.security.ensureAuthenticated(), global.security.isAdmin()], require('./help'));
 
   var usuarioCollectionRoute = apiRoute + '/usuario';
 
   global.app.express
     .route(usuarioCollectionRoute)
-    .post(require('./create'))
-    .get(require('./index'));
+    .post([global.security.ensureAuthenticated(), global.security.ensureSucursal(), global.security.isAdmin()],require('./create'))
+    .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
     .app.express
@@ -57,16 +57,16 @@ exports.registry = function registry() {
 
   global.app.express
     .route(usuarioSingleRoute)
-    .patch(require('./update'))
-    .get(require('./show'))
-    .delete(require('./delete'));
+    .patch(global.security.ensureAuthenticated(), require('./update'))
+    .get(global.security.ensureAuthenticated(), require('./show'))
+    .delete([global.security.ensureAuthenticated(), global.security.isAdmin(), global.security.ensureUsuario()], require('./delete'));
 
   var usuarioProfileRoute = '/v1/profile';
 
   global.app.express
     .route(usuarioProfileRoute)
     .patch(global.security.ensureAuthenticated(),function(req,res,next){
-      //req.usuario=req.loggedUser;
+      req.usuario=req.loggedUser;
       return next();
     }, require('./update'))
 };

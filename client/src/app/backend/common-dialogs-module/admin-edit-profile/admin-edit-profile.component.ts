@@ -1,24 +1,7 @@
-import {
-  Component,
-  Inject,
-  HostListener,
-  ViewEncapsulation,
-  OnInit,
-  OnDestroy
-} from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef
-} from '@angular/material/dialog';
+import { Component, Inject, HostListener, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-  FormGroupName
-} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, FormGroupName } from '@angular/forms';
 import { ShowToastrService } from 'src/app/core/services/show-toastr/show-toastr.service';
 import { LoggedInUserService } from 'src/app/core/services/loggedInUser/logged-in-user.service';
 import { environment } from 'src/environments/environment';
@@ -32,7 +15,7 @@ import { UtilsService } from 'src/app/core/services/utils/utils.service';
   selector: 'app-admin-edit-profile',
   templateUrl: './admin-edit-profile.component.html',
   styleUrls: ['./admin-edit-profile.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class AdminEditProfileComponent implements OnInit {
   innerWidth: any;
@@ -53,7 +36,7 @@ export class AdminEditProfileComponent implements OnInit {
     public spinner: NgxSpinnerService,
     public utilsService: UtilsService,
     private authService: AuthenticationService,
-    private showToatr: ShowToastrService
+    private showToatr: ShowToastrService,
   ) {
     this.urlImage = environment.apiUrl;
     this.dialogRef.disableClose = true;
@@ -76,25 +59,15 @@ export class AdminEditProfileComponent implements OnInit {
 
   createForm(): void {
     this.form = this.fb.group({
-
-      gitUser: [
-        this.loggedInUser && this.loggedInUser.gitUser
-          ? this.loggedInUser.gitUser
-          : null,
-        [Validators.required]
-      ],
-      email: [
-        this.loggedInUser && this.loggedInUser.email
-          ? this.loggedInUser.email
-          : null,
-        [Validators.required, Validators.email]
+      usuario: [
+        this.loggedInUser && this.loggedInUser.usuario ? this.loggedInUser.usuario : null,
+        [Validators.required],
       ],
       password: this.formPass,
-
     });
   }
 
-  ngOnDestroy(): void { }
+  ngOnDestroy(): void {}
 
   matchValidator(group: FormGroup) {
     const pass = group.controls['password'].value;
@@ -103,7 +76,7 @@ export class AdminEditProfileComponent implements OnInit {
       return null;
     }
     return {
-      mismatch: true
+      mismatch: true,
     };
   }
 
@@ -116,9 +89,9 @@ export class AdminEditProfileComponent implements OnInit {
       this.formPass = this.fb.group(
         {
           password: [null, [Validators.required]],
-          repeat: [null, [Validators.required]]
+          repeat: [null, [Validators.required]],
         },
-        { validator: this.matchValidator.bind(this) }
+        { validator: this.matchValidator.bind(this) },
       );
       this.form.addControl('password', this.formPass);
     }
@@ -135,17 +108,17 @@ export class AdminEditProfileComponent implements OnInit {
     // data.id = this.loggedInUser.id;
     this.spinner.show();
     this.authService.editProfile(data).subscribe(
-      newProfile => {
+      (newProfile) => {
         this.loggedInUserService.setNewProfile(newProfile.data);
-        this.showToatr.showSucces('Profile updated successfully');
+        this.showToatr.showSucces('Perfil actualizado satisfactoriamente');
         this.spinner.hide();
         this.dialogRef.close(true);
       },
-      error => {
+      (error) => {
         console.log(error);
         this.utilsService.errorHandle(error, 'User', 'Editing');
         this.spinner.hide();
-      }
+      },
     );
   }
 }

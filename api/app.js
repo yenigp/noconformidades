@@ -35,6 +35,8 @@ global.app.logger   = require('./common/utils/index').logger;
 global.app.security = require('./common/middleware/auth');
 global.security = require('./common/middleware/auth');
 global.savedb = require('./common/db/backup');
+global.restoredb = require('./common/db/restore');
+global.loadrol = require('./common/utils/load-rol');
 
 app.use(global.app.config.get('api:prefix') + '/public', express.static(__dirname + '/public', {
   maxAge: 604800000
@@ -80,7 +82,17 @@ function getRequestDuration(req) {
   return getDurationInMilliseconds(req.startTime);
 }
 function saveSystemLog(req, res, wasFinished) {
-  var SystemLog = global.app.orm.mongoose.model('SystemLog');
+
+  var models = global.app.orm.sequelize.models;
+  var Sequelize = global.app.orm.Sequelize;
+
+	var jsonAPI = global.app.utils.jsonAPI;
+  var jsonAPIBody = {
+    data: {}
+  };
+
+  
+  var SystemLog = models.SystemLog;
   if (req.body) {
     delete req.body.image;
     delete req.body.password;
@@ -88,9 +100,10 @@ function saveSystemLog(req, res, wasFinished) {
   var durationInMilliseconds = getRequestDuration(req);
   console.log("El delay fue:", durationInMilliseconds)
   var bodyLog = {
-    username: req.loggedUser ? req.loggedUser.gitUser : undefined,
-    cargo: req.loggedUser ? req.loggedUser.rol : undefined,
-    PersonId: req.loggedUser ? req.loggedUser.id : undefined,
+    username: req.loggedUser ? req.loggedUser.usuario : undefined,
+    cargo: req.loggedUser ? req.loggedUser.RolId : undefined,
+    UsuarioId: req.loggedUser ? req.loggedUser.id : undefined,
+    sucursal: req.loggedUser ? req.loggedUser.SucursalId : undefined,
     hasUser: req.loggedUser ? true : false,
     path: req.path,
     protocol: req.protocol,
@@ -101,29 +114,35 @@ function saveSystemLog(req, res, wasFinished) {
     wasFinished: wasFinished,
     query: JSON.stringify(req.query),
     body: JSON.stringify(req.body),
-    statusCode: res.statusCode
+    statusCode: res.statusCode,
   }
 
   if (req.statusCode == 500) {
     bodyLog.response = req.errors;
   }
-  // SystemLog.create(bodyLog).then(function (elemento) {
-  //   // console.log(elemento.getRequest());
-  // }).catch(function (e) {
-  //   console.log("Error-- en logs", e)
-  // })
+
+  return global
+  .app.orm.sequelize.transaction(function (t){
+    return models
+    .SystemLog
+    .create(bodyLog).then(function (elemento) {
+      console.log(elemento);
+    }).catch(function (e) {
+      console.log("Error-- en logs", e)
+    })
+  })
 }
 
 // Log API requests.
 app.use(function (req, res, next) {
-  // if ((req.method.toLowerCase() === 'post'
-  //   || req.method.toLowerCase() === 'patch'
-  //   || req.method.toLowerCase() === 'put')
-  //   // && !req.is('application/json')
+   if ((req.method.toLowerCase() === 'post'
+     || req.method.toLowerCase() === 'patch'
+     || req.method.toLowerCase() === 'put')
+      && !req.is('application/json')
 
-  //   ) {
-  //   return res.sendStatus(415); // Unsupported Media Type.
-  // }
+     ) {
+     return res.sendStatus(415); // Unsupported Media Type.
+   }
   req.startTime=process.hrtime();
 
   res.on('finish', function onResFinish() {
@@ -131,12 +150,12 @@ app.use(function (req, res, next) {
     if (req.loggedUser) {
       user = {
         id: req.loggedUser.id,
-        username: req.loggedUser.username,
-        ci: req.loggedUser.ci,
+        username: req.loggedUser.usuario,
+        sucursal: req.loggedUser.SucursalId,
         email: req.loggedUser.email,
       }
     }
-    // saveSystemLog(req, res, true);
+     saveSystemLog(req, res, true);
     req.finished = true;
 
     global.app.utils.logger.info('API request(Finished).', {
@@ -165,12 +184,12 @@ app.use(function (req, res, next) {
     if (req.loggedUser) {
       user = {
         id: req.loggedUser.id,
-        username: req.loggedUser.username,
-        ci: req.loggedUser.ci,
+        username: req.loggedUser.usuario,
+        sucursal: req.loggedUser.SucursalId,
         email: req.loggedUser.email,
       }
     }
-    // saveSystemLog(req, res, false);
+     saveSystemLog(req, res, false);
     global.app.utils.logger.info('API request(Closed by User).', {
       module: 'core',
       submodule: 'api-request',
@@ -201,6 +220,7 @@ app.use(function (req, res, next) {
 
 // loading Db configuration
 var db         = require('./common/db');
+const { models } = require('mongoose');
 global.app.orm = db;
 global.jsonAPI=global.app.utils.jsonAPI;
 global.app.emailTemplates={}
@@ -386,6 +406,16 @@ function (error) {
     key : fs.readFileSync(path.join(selfSignedKeysPath, 'key.pem')),
     cert: fs.readFileSync(path.join(selfSignedKeysPath, 'cert.pem'))
   };*/
+
+  app.use(function (req, res, next) {
+    eventHandler.emit("consumo", {
+        url: req.url,
+        info: "Mensaje desde el app.js del server de sockets"
+    })
+    return res.status(200).json({
+        ok: true
+    });
+  })
 
   serverCreator = /*(global.app.config.get('api:useHttps'))
                   ? https.createServer.bind(this, httpsOptions, app)

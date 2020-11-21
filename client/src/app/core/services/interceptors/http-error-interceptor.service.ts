@@ -1,13 +1,7 @@
 import { ShowToastrService } from './../show-toastr/show-toastr.service';
 import { LoggedInUserService } from 'src/app/core/services/loggedInUser/logged-in-user.service';
 import { Injectable } from '@angular/core';
-import {
-  HttpEvent,
-  HttpInterceptor,
-  HttpHandler,
-  HttpRequest,
-  HttpErrorResponse
-} from '@angular/common/http';
+import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { UtilsService } from '../utils/utils.service';
@@ -20,19 +14,16 @@ export class HttpErrorInterceptorService implements HttpInterceptor {
     private utilsService: UtilsService,
     private showToastr: ShowToastrService,
     private loggedInUserService: LoggedInUserService,
-    private router: Router
+    private router: Router,
   ) {
-    this.router.events.subscribe(event => {
+    this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.url = event.url;
       }
     });
   }
 
-  intercept(
-    request: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
         let errorMessage = '';
@@ -46,7 +37,7 @@ export class HttpErrorInterceptorService implements HttpInterceptor {
         }
         // console.log('ErrorInterceptorService -> errorMessage', errorMessage);
         return throwError(errorMessage);
-      })
+      }),
     );
   }
 
@@ -63,16 +54,16 @@ export class HttpErrorInterceptorService implements HttpInterceptor {
       }
     } else if (err.status == 403) {
       // alert("Acceso denegado")
-      this.router.navigate(['/backend/empresas']);
+      this.router.navigate(['/backend']);
     } else if (err.status == 404) {
       // alert("Producto no encontrado")
-      this.router.navigate(['/backend/empresas']);
+      this.router.navigate(['/backend']);
     } else if (err.status == 400 || err.status == 500) {
       this.utilsService.errorHandle2(err);
     } else if (err.status == 0) {
       this.router.navigate(['/error/conexion-perdida']);
       this.showToastr.showError(
-        `Server response failed, check your connection to the network, or contact the administrators`
+        `La respuesta del servidor falló, verifique su conexión a la red o comuníquese con los administradores`,
       );
     }
   }
