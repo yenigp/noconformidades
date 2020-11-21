@@ -660,7 +660,7 @@ function getPermissionsByUserId(UserId) {
     for (var i = 0; i < RolPermiso.length; i++) {
       PermisoId = RolPermiso[i]['Permiso.nombre'];
       if (permiso[PermisoId] == undefined) {
-        permisoList.push
+        permisoList.push (permiso[PermisoId])
         permiso[PermisoId] = {
           canGet: RolPermiso[i].canGet,
           canPost: RolPermiso[i].canPost,
