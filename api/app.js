@@ -336,7 +336,6 @@ async.series([
     });
   },
   function (cb) {
-    var route, routes = [];
     require('./common/utils/hooks-handler').start();
     global.app.utils = require('./common/utils/index');
     global.app.security = require('./common/middleware').auth;
