@@ -191,7 +191,7 @@ function isAdmin(){
         var rol = usuarioX.RolId;
 
         return models.Roles.findOne({
-          where: {id: rol, nombre: "AdminSucursal", nombre: "AdminEmpresa"}
+          where: {id: rol, nombre: "AdminSucursal" || "AdminEmpresa"}
         })
       }).then(function(isAdminSucursalX) {
         console.log(isAdminSucursalX)
