@@ -7,14 +7,14 @@ exports.registry = function registry() {
   var respuestasHelpRoute = apiRoute + '/respuestas-help';
   global.app.express
         .route(respuestasHelpRoute)
-        .get([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./help'));
+        .get(global.security.ensureAuthenticated(), require('./help'));
 
   var respuestasCollectionRoute = apiRoute + '/respuestas';
 
   global.app.express
         .route(respuestasCollectionRoute)
-        .post([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./create'))
-        .get([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./index'));
+        .post([global.security.ensureAuthenticated(), global.security.isEspCalidadSucursal()], require('./create'))
+        .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
     .app.express
@@ -57,7 +57,7 @@ exports.registry = function registry() {
 
   global.app.express
         .route(respuestasSingleRoute)
-        .patch([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./update'))
-        .get([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./show'))
-        .delete([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./delete'));
+        .patch([global.security.ensureAuthenticated(), global.security.isEspCalidadSucursal()], require('./update'))
+        .get(global.security.ensureAuthenticated(), require('./show'))
+        .delete([global.security.ensureAuthenticated(), global.security.isEspCalidadSucursal()], require('./delete'));
 };

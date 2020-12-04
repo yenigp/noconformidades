@@ -38,8 +38,6 @@ export class DialogAddEditUserComponent implements OnInit {
   sucursal: any;
   Roles: any[] = [];
   Sucursal: any[] = [];
-  //Roles: any[] = ['admin', 'programador'];
-  //Companies: any[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -86,15 +84,30 @@ export class DialogAddEditUserComponent implements OnInit {
   createForm(): void {
     if (this.isEditing) {
       this.form = this.fb.group({
-        gitUser: [
-          this.selectedUser && this.selectedUser.gitUser ? this.selectedUser.gitUser : null,
-          [Validators.required],
+        nombre: [
+          this.selectedUser && this.selectedUser.nombre ? this.selectedUser.nombre : null,
+          [
+            Validators.required,
+            Validators.maxLength(15),
+            Validators.minLength(2),
+            Validators.pattern('^(?=.{3,15}$)[A-ZÁÉÍÓÚ][a-zñáéíóú]+(?: [A-ZÁÉÍÓÚ][a-zñáéíóú]+)?$'),
+          ],
+        ],
+        apellidos: [
+          this.selectedUser && this.selectedUser.apellidos ? this.selectedUser.apellidos : null,
+          [
+            Validators.required,
+            Validators.maxLength(100),
+            Validators.minLength(2),
+            Validators.pattern('^(?=.{3,50}$)[A-ZÁÉÍÓÚ][a-zñáéíóú]+(?: [A-ZÁÉÍÓÚ][a-zñáéíóú]+)?$'),
+          ],
         ],
         email: [
           this.selectedUser && this.selectedUser.email ? this.selectedUser.email : null,
           [Validators.required, Validators.email],
         ],
-        rol: [this.selectedUser && this.selectedUser.rol ? this.selectedUser.rol : null, [Validators.required]],
+        status: [this.selectedUser && this.selectedUser.status ? this.selectedUser.status : null],
+        RolId: [this.selectedUser && this.selectedUser.RolId ? this.selectedUser.RolId : null, [Validators.required]],
         description: [this.selectedUser && this.selectedUser.description ? this.selectedUser.description : null],
       });
       console.log(this.form);
@@ -107,13 +120,37 @@ export class DialogAddEditUserComponent implements OnInit {
         { validator: this.matchValidator.bind(this) },
       );
       this.form = this.fb.group({
-        gitUser: [null, [Validators.required]],
+        nombre: [
+          null,
+          [
+            Validators.required,
+            Validators.maxLength(15),
+            Validators.minLength(2),
+            Validators.pattern('^(?=.{3,15}$)[A-ZÁÉÍÓÚ][a-zñáéíóú]+(?: [A-ZÁÉÍÓÚ][a-zñáéíóú]+)?$'),
+          ],
+        ],
+        apellidos: [
+          null,
+          [
+            Validators.required,
+            Validators.maxLength(50),
+            Validators.minLength(2),
+            Validators.pattern('^(?=.{3,50}$)[A-ZÁÉÍÓÚ][a-zñáéíóú]+(?: [A-ZÁÉÍÓÚ][a-zñáéíóú]+)?$'),
+          ],
+        ],
         email: [null, [Validators.required, Validators.email]],
-        password: this.formPass,
+        usuario: [
+          null,
+          [Validators.required, Validators.maxLength(10), Validators.minLength(2), Validators.pattern('^[a-z{10}]*$')],
+        ],
+        RolId: [null, [Validators.required]],
+        SucursalId: [null, [Validators.required]],
+        status: [null],
         description: [null],
-        rol: [null],
+        password: this.formPass,
       });
     }
+    console.log(this.form);
   }
 
   ngOnDestroy(): void {}
@@ -165,20 +202,32 @@ export class DialogAddEditUserComponent implements OnInit {
       data.avatar = this.imageAvatar;
     }
     if (!this.isEditing) {
+      if (data.status == false) {
+        data.status = 'blocked';
+      }
+      if (data.status == true) {
+        data.status = 'enabled';
+      }
       data.password = this.formPass.value.password;
       this.userService.createUser(data).subscribe(
         (newProfile) => {
-          this.showToastr.showSucces('User successfully created');
+          this.showToastr.showSucces('Usuario creado satisfactoriamente');
           this.spinner.hide();
           this.dialogRef.close(true);
         },
         (error) => {
           console.log(error);
-          this.utilsService.errorHandle(error, 'User', 'Creating');
+          this.utilsService.errorHandle(error, 'Usuario', 'Agregando');
           this.spinner.hide();
         },
       );
     } else {
+      if (data.status == false) {
+        data.status = 'blocked';
+      }
+      if (data.status == true) {
+        data.status = 'enabled';
+      }
       data.id = this.selectedUser.id;
       console.log(data);
       this.userService.editUser(data).subscribe(
@@ -186,13 +235,13 @@ export class DialogAddEditUserComponent implements OnInit {
           if (newProfile.id === this.loggedInUser.id) {
             this.loggedInUserService.setNewProfile(newProfile.data);
           }
-          this.showToastr.showSucces('Profile updated successfully');
+          this.showToastr.showSucces('Perfil actualizado satisfactoriamente');
           this.spinner.hide();
           this.dialogRef.close(true);
         },
         (error) => {
           console.log(error);
-          this.utilsService.errorHandle(error, 'User', 'Editing');
+          this.utilsService.errorHandle(error, 'Usuario', 'Actualizando');
           this.spinner.hide();
         },
       );

@@ -55,25 +55,25 @@
             Observación:: {{ Expediente.NoConformidad.Auditoria.observacion }}
           </div>
           <div *ngIf="Expediente.NoConformidad.TipoId == 3">
-            Servicio: {{ Expediente.NoConformidad.QuejasReclamaciones.ServicioId }}
+            Servicio: {{ Expediente.NoConformidad.QuejasReclamacione.ServicioId }}
           </div>
           <div *ngIf="Expediente.NoConformidad.TipoId == 3">
-            Producto: {{ Expediente.NoConformidad.QuejasReclamaciones.ProductoId }}
+            Producto: {{ Expediente.NoConformidad.QuejasReclamacione.ProductoId }}
           </div>
           <div *ngIf="Expediente.NoConformidad.TipoId == 3">
-            Turista: {{ Expediente.NoConformidad.QuejasReclamaciones.TuristaId }}
+            Turista: {{ Expediente.NoConformidad.QuejasReclamacione.TuristaId }}
           </div>
           <div *ngIf="Expediente.NoConformidad.TipoId == 3">
-            Reserva: {{ Expediente.NoConformidad.QuejasReclamaciones.ReservaId }}
+            Reserva: {{ Expediente.NoConformidad.QuejasReclamacione.ReservaId }}
           </div>
           <div *ngIf="Expediente.NoConformidad.TipoId == 3">
-            Clasificación: {{ Expediente.NoConformidad.QuejasReclamaciones.clasificacion }}
+            Clasificación: {{ Expediente.NoConformidad.QuejasReclamacione.clasificacion }}
           </div>
           <div *ngIf="Expediente.NoConformidad.TipoId == 3">
-            Costo de No Calidad: {{ Expediente.NoConformidad.QuejasReclamaciones.CostoNoCalidad }}
+            Costo de No Calidad: {{ Expediente.NoConformidad.QuejasReclamacione.CostoNoCalidad }}
           </div>
           <div *ngIf="Expediente.NoConformidad.TipoId == 3">
-            Observación: {{ Expediente.NoConformidad.QuejasReclamaciones.observacion }}
+            Observación: {{ Expediente.NoConformidad.QuejasReclamacione.observacion }}
           </div>
           <hr />
           <img
@@ -110,6 +110,6 @@
   </div>
 </div>
 
-<button (click)="onAddNoConformidad()" id="AddBtn" mat-fab color="primary">
+<button *ngIf="this.loggedInUser.RolId != 8" (click)="onAddNoConformidad()" id="AddBtn" mat-fab color="primary">
   <mat-icon> add </mat-icon>
 </button>

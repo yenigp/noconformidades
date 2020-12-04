@@ -60,13 +60,4 @@ exports.registry = function registry() {
     .patch([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./update'))
     .get(global.security.ensureAuthenticated(), require('./show'))
     .delete([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./delete'));
-
-  /*var normaProfileRoute = '/v1/profile';
-
-  global.app.express
-    .route(normaProfileRoute)
-    .patch(function(req,res,next){
-      req.norma=req.loggedUser;
-      return next();
-    }, require('./update'))*/
 };

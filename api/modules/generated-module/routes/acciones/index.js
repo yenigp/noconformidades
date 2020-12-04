@@ -19,6 +19,9 @@ module.exports = function (req, res) {
   });
 
   query=jsonAPI.prepareQuery(query);
+  query.include=['Tipo']
+
+
   return models
     .Acciones.findAll(query)
     .then(function (data) {

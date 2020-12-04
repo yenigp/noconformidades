@@ -1,0 +1,22 @@
+<mat-card class="p-1 mat-elevation-z0" style="border-radius: 8px !important">
+  <div class="responsive_table">
+    <mat-grid-list cols="1" rowHeight="2:1" fxFlex="33%">
+      <span class="mat-body-2" fxLayoutAlign="center center">{{ 'Estratégico' }}</span>
+      <mat-grid-tile [style.background]="'lightblue'" *ngFor="let proceso of this.ProcesoE">
+        {{ proceso.nombre }}
+      </mat-grid-tile>
+    </mat-grid-list>
+    <mat-grid-list cols="1" rowHeight="2:1" fxFlex="33%">
+      <span class="mat-body-2" fxLayoutAlign="center center">{{ 'Realización' }}</span>
+      <mat-grid-tile [style.background]="'lightgreen'" *ngFor="let proceso of this.ProcesoR">
+        {{ proceso.nombre }}
+      </mat-grid-tile>
+    </mat-grid-list>
+    <mat-grid-list cols="1" rowHeight="2:1" fxFlex="33%">
+      <span class="mat-body-2" fxLayoutAlign="center center">{{ 'Apoyo' }}</span>
+      <mat-grid-tile [style.background]="'lightpink'" *ngFor="let proceso of this.ProcesoA">
+        {{ proceso.nombre }}
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+</mat-card>

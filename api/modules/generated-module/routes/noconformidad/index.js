@@ -20,20 +20,31 @@ module.exports = function (req, res) {
 
   query=jsonAPI.prepareQuery(query);
   query.include=[
-      'Incidencia',
-      'Auditoria', 
-      'QuejasReclamaciones',
-      'Proceso',
-      'Norma',
-      'Tipo',
-      'Area',
-      'Sucursal',
+    {
+      model: models.QuejasReclamaciones,
+      include: [{
+        model: models.ProdServicio
+      },
+      {
+        model: models.Producto
+      },
+      {
+        model: models.Reserva
+      }]
+    },
     {
       model: models.NCAcciones,
       include: [{
         model: models.Acciones
       }]
     },
+    'Incidencia',
+    'Auditoria',
+    'Proceso',
+    'Norma',
+    'Tipo',
+    'Area',
+    'Sucursal',
     'Tipo'
   ]
   return models

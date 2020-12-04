@@ -7,7 +7,7 @@ exports.registry = function registry() {
   var indicadoresHelpRoute = apiRoute + '/indicadores-help';
   global.app.express
         .route(indicadoresHelpRoute)
-        .get([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./help'));
+        .get(global.security.ensureAuthenticated(), require('./help'));
 
   var indicadoresCollectionRoute = apiRoute + '/indicadores';
 
@@ -58,6 +58,6 @@ exports.registry = function registry() {
   global.app.express
         .route(indicadoresSingleRoute)
         .patch([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./update'))
-        .get([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./show'))
+        .get(global.security.ensureAuthenticated(), require('./show'))
         .delete([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./delete'));
 };

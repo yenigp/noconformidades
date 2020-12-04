@@ -1,0 +1,32 @@
+<div class="container">
+  <div>
+    <div>
+      <b>Resumen</b>
+    </div>
+    <ul>
+      <li>Código: {{ quejasreclamaciones.codigo }}</li>
+      <li type="date">Fecha Entrada: {{ quejasreclamaciones.FechaRegistro | date: 'dd-MM-yyyy hh:mm' }}</li>
+      <li type="date">
+        Fecha Identificación: {{ quejasreclamaciones.FechaIdentificacion | date: 'dd-MM-yyyy hh:mm' }}
+      </li>
+      <li type="date">Fecha Término: {{ quejasreclamaciones.FechaTermino | date: 'dd-MM-yyyy hh:mm' }}</li>
+      <li type="date">Fecha Cierre: {{ quejasreclamaciones.FechaCierre | date: 'dd-MM-yyyy hh:mm' }}</li>
+      <li>Proceso: {{ quejasreclamaciones.ProcesoId }}</li>
+      <li>Norma: {{ quejasreclamaciones.NormaId ? quejasreclamaciones.NormaId : '' }}</li>
+      <li>Tipo: {{ quejasreclamaciones.tipo ? quejasreclamaciones.tipo : '' }}</li>
+      <li>Producto: {{ quejasreclamaciones.ProductoId ? quejasreclamaciones.ProductoId : '' }}</li>
+      <li>Servicio: {{ quejasreclamaciones.ServicioId ? quejasreclamaciones.ServicioId : '' }}</li>
+      <li>Reserva: {{ quejasreclamaciones.ReservaId ? quejasreclamaciones.ReservaId : '' }}</li>
+    </ul>
+    <b *ngIf="Acciones">Acciones para resolver la no conformidad:</b>
+
+    <div *ngFor="let client of Acciones">
+      <span *ngIf="client.Acciones">
+        <div>Tipo: {{ client.TipoId }}</div>
+        <div>Acción a tomar: {{ client.AccionTomar }}</div>
+        <div>Fecha de cumplimiento: {{ client.FechaCumplimiento }}</div>
+        <p></p>
+      </span>
+    </div>
+  </div>
+</div>

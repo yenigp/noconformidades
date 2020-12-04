@@ -15,6 +15,10 @@ exports.loadModel = function loadModel() {
               "allowNull": false
 
           },
+          "procedencia": {
+              "type": global.app.orm.Sequelize.DATE,
+              "allowNull": false
+          },
             "observacion": {
                 "type": global.app.orm.Sequelize.STRING,
                 "validate":{
@@ -51,7 +55,7 @@ exports.loadModel = function loadModel() {
                 as: 'Creator'
             });  
             models.Auditoria.belongsTo(models.NoConformidad, {
-                as: 'NoConformidad'
+                
             });
         }
 };

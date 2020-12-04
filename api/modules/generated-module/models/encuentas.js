@@ -77,7 +77,7 @@ exports.loadModel = function loadModel() {
                 as: 'Creator'
             });  
             models.Encuestas.hasMany(models.Preguntas, {
-                as: 'Encuesta'
+                as: 'Preguntas'
             });
         }
 

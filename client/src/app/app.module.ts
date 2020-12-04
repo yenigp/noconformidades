@@ -10,7 +10,8 @@ import { HttpErrorInterceptorService } from './core/services/interceptors/http-e
 import { TokenInterceptorService } from './core/services/interceptors/token-interceptor.service';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxSpinnerModule } from 'ngx-spinner';
-
+import * as ng2Charts from 'ng2-charts';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 @NgModule({
   imports: [
@@ -20,6 +21,9 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     HttpClientModule,
     ToastrModule.forRoot(),
     NgxSpinnerModule,
+    ng2Charts.ChartsModule,
+    ColorPickerModule,
+    ng2Charts.ChartsModule,
   ],
   declarations: [AppComponent],
   providers: [
@@ -41,4 +45,4 @@ import { NgxSpinnerModule } from 'ngx-spinner';
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

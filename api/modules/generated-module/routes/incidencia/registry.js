@@ -13,7 +13,7 @@ exports.registry = function registry() {
 
   global.app.express
     .route(incidenciaCollectionRoute)
-    .post(global.security.ensureAuthenticated(), global.security.isSupervisor(), require('./create'))
+    .post([global.security.ensureAuthenticated(), global.security.isSupervisor()], require('./create'))
     .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
@@ -22,7 +22,10 @@ exports.registry = function registry() {
       return models
         .Incidencia
         .findByPk(incidenciaId, {
-          include: [{ all: true }]
+          include: [{
+            model: models.NoConformidad,
+            include: ['Proceso', 'Norma', models.Usuario]
+          }]
         }).then(function (data) {
           if (!data) {
             return res.sendStatus(404); // Not Found.
@@ -58,15 +61,6 @@ exports.registry = function registry() {
   global.app.express
     .route(incidenciaSingleRoute)
     .patch(global.security.ensureAuthenticated(), require('./update'))
-    .get(require('./show'))
-    .delete(global.security.ensureAuthenticated(), require('./delete'));
-
-  /*var incidenciaProfileRoute = '/v1/profile';
-
-  global.app.express
-    .route(incidenciaProfileRoute)
-    .patch(function(req,res,next){
-      req.incidencia=req.loggedUser;
-      return next();
-    }, require('./update'))*/
+    .get(global.security.ensureAuthenticated(), require('./show'))
+    .delete([global.security.ensureAuthenticated(), global.security.isJefeProceso()], require('./delete'));
 };

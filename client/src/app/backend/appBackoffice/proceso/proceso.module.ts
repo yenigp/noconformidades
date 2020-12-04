@@ -6,6 +6,7 @@ import { AdminListProcesoComponent } from './list-proceso/list-proceso.component
 import { AdminProcesoRoutingModule } from './proceso-routing.module';
 import { ProcesoTableComponent } from './list-proceso/proceso-table/proceso-table.component';
 import { DialogAddEditProcesoComponent } from './list-proceso/dialog-add-edit-proceso/dialog-add-edit-proceso.component';
+import { MapaComponent } from './list-proceso/mapa/mapa.component';
 ////////// --------MATERIAL MODULES------- /////////////////////////
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -22,6 +23,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -30,6 +32,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { from } from 'rxjs';
 
 ///////////////////////////////////////////////////////////////////
 
@@ -55,6 +58,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatDividerModule,
     MatMenuModule,
     MatTabsModule,
+    MatGridListModule,
 
     MatCheckboxModule,
     MatPaginatorModule,
@@ -64,6 +68,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatSelectModule,
     MatAutocompleteModule,
   ],
-  declarations: [AdminListProcesoComponent, ProcesoTableComponent, DialogAddEditProcesoComponent],
+  declarations: [AdminListProcesoComponent, ProcesoTableComponent, DialogAddEditProcesoComponent, MapaComponent],
 })
 export class AdminProcesoModule {}

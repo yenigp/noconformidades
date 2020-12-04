@@ -22,22 +22,29 @@ exports.registry = function registry() {
             return models
               .NoConformidad
               .findByPk(noconformidadId, {
-                include: [
+                include: [ 'Incidencia',
+                'Auditoria',
+                'Proceso',
+                'Norma',
+                'Tipo',
                   {
-                    model: models.Incidencia
-                  },
-                  {
-                    model: models.Auditoria
-                  },
-                  {
-                    model: models.QuejasReclamaciones
+                    model: models.QuejasReclamaciones,
+                    include: [{
+                      model: models.ProdServicio
+                    },
+                    {
+                      model: models.Producto
+                    },
+                    {
+                      model: models.Reserva
+                    }]
                   },
                   {
                     model: models.NCAcciones,
                     include: [
                       {
                         model: models.Acciones,
-                        attributes: ['codigo', 'estado', 'fechacumplimiento']
+                        attributes: ['codigo', 'estado', 'FechaCumplimiento']
                       },
                     ]
                   }

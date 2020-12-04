@@ -38,7 +38,7 @@ export class UserTableComponent implements OnInit {
   selection: SelectionModel<any>;
   imageUrl: any;
   showActionsBtn = false;
-  displayedColumns: string[] = ['select', 'gitUser', 'email', 'rol', 'status', 'actions'];
+  displayedColumns: string[] = ['select', 'nombre', 'apellidos', 'email', 'usuario', 'status', 'RolId', 'actions'];
   pageSizeOptions: number[] = [10, 25, 100, 1000];
   searchElementCount = 0;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -111,9 +111,9 @@ export class UserTableComponent implements OnInit {
   filterUsersByName(name: string) {
     let temp = this.allUsers.filter(
       (user) =>
-        user.username.toLowerCase().indexOf(name.toLowerCase()) >= 0 ||
-        (user.name && user.name.toLowerCase().indexOf(name.toLowerCase()) >= 0) ||
-        (user.lastName && user.lastName.toLowerCase().indexOf(name.toLowerCase()) >= 0) ||
+        user.usuario.toLowerCase().indexOf(name.toLowerCase()) >= 0 ||
+        (user.nombre && user.nombre.toLowerCase().indexOf(name.toLowerCase()) >= 0) ||
+        (user.apellidos && user.apellidos.toLowerCase().indexOf(name.toLowerCase()) >= 0) ||
         (user.email && user.email.toLowerCase().indexOf(name.toLowerCase()) >= 0),
     );
     this.searchElementCount = temp.length;
@@ -209,7 +209,7 @@ export class UserTableComponent implements OnInit {
       try {
         if (result) {
           const data = await Promise.all(users.map((item) => this.userService.removeUser(item)));
-          this.showToastr.showSucces('Users successfully removed', 'Succes', 7500);
+          this.showToastr.showSucces('Usuario eliminado satisfactoriamente', 'Succes', 7500);
           this.refreshData();
         }
       } catch (error) {
@@ -221,17 +221,7 @@ export class UserTableComponent implements OnInit {
 
   updateDisplayColumnsData() {
     if (this.role === 'Messenger') {
-      this.displayedColumns = [
-        'select',
-        'avatar',
-        'fullName',
-        'email',
-        'username',
-        'dni',
-        'countries',
-        'status',
-        'actions',
-      ];
+      this.displayedColumns = ['select', 'nombre', 'apellidos', 'email', 'usuario', 'status', 'actions'];
     }
   }
 }

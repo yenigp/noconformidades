@@ -23,12 +23,15 @@ module.exports = function (req, res) {
       model: models.Sucursal,
       attributes:["nombagenciaviajes"]
     },
+    {
+      model: models.Usuario,
+    }
   ]
 
   query=jsonAPI.prepareQuery(query);
   if (req.loggedUser.RolId != 4){
     query.where.SucursalId = req.loggedUser.SucursalId;
-  } 
+  }
   return models
     .Area.findAll(query)
     .then(function (data) {

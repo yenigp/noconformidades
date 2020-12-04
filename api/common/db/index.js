@@ -6,18 +6,14 @@ var lodash               = require('lodash');
 var Sequelize            = require('sequelize');
 var noUpdateAttributes   = require('./db-modules/sequelize-noupdate-attributes');
 var addProcessFilesHooks = require('./processFilesHooks');
-//var mongoose = require('mongoose');
-//var bluebird = require('bluebird');
 // To allow automatically setting the transaction to all queries.
 var cls              = require('continuation-local-storage');
 var namespace        = cls.createNamespace('base-api');
 global.app.namespace = namespace;
 Sequelize.cls=namespace;
-//mongoose.Promise=bluebird;
-var mixins = {};//require('./models');
+var mixins = {};
 
 var dbConfig = global.app.config.get('database');
-//var wasLoadedMongo = false;
 var activeDialect  = dbConfig.activeDialect;
 var defaultOptions = dbConfig.defaultOptions;
 
@@ -79,13 +75,7 @@ module.exports = {
       await wait(6);
       console.log("datasssssssss")
     }
-    // Is this way since each stage needs to be completed for the next to run.
-    // This is not an issue since it will by needed only on app bootstraping.
-    //
-    // - loadModels
-    // - associate models & check for simpleCRUD
-    // - loadFixtures (not needed anymore thanks to migrations)
-    // - setRoutes
+
     global.app.utils.initOnModules({
       hook: function hookRegisteringModels(module, itemPath, cbHook) {
         if ('loadModels' in module) {
@@ -185,52 +175,3 @@ module.exports = {
 
 
 
-/*function setupMongoDbConnection() {
-  // Build the connection string.
-  var url = 'mongodb://';
-  if (global.app.config.get('logging:transports:mongodb:username')) {
-    url += global.app.config.get('logging:transports:mongodb:username');
-
-    if (global.app.config.get('logging:transports:mongodb:password')) {
-      url += ':' + global.app.config.get('logging:transports:mongodb:password');
-    }
-    url += '@';
-  }
-  url = global.app.config.get('logging:transports:mongodb:db')
-    .replace('mongodb://', url);
-
-  // Open DB connection to database.
-  mongoose.connect(url, {
-    useNewUrlParser: true,
-    server: {
-      auto_reconnect: true,
-      useUnifiedTopology: true,
-      socketOptions: {
-        // Needed for long running applications. Prevent 'connection closed' errors.
-        keepAlive: 1
-      }
-    }
-  });
-
-  mongoose.connection.on('error', function (error) {
-    console.log("ERRORRRRRRRRRRRRRRRRRRRRRRRRR")
-    wasLoadedMongo = true;
-    global.app.logger.error(error, {
-      module: 'core',
-      submodule: 'logger/db',
-      stack: error
-    });
-  });
-
-  mongoose.connection.once('open', function () {
-    if (!global.app.orm.mongoose) {
-      mongoose.Promise = bluebird;
-      global.app.orm.mongoose = mongoose;
-    }
-    wasLoadedMongo = true;
-    global.app.logger.info('Logs database connection opened.', {
-      module: 'core',
-      submodule: 'logger/db'
-    });
-  });
-}*/

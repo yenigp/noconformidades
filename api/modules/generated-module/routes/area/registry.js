@@ -58,6 +58,6 @@ exports.registry = function registry() {
   global.app.express
         .route(areaSingleRoute)
         .patch([global.security.ensureAuthenticated(), global.security.isEspRRHH()], require('./update'))
-        .get([global.security.ensureAuthenticated(), global.security.isEspRRHH()], require('./show'))
+        .get(global.security.ensureAuthenticated(), require('./show'))
         .delete([global.security.ensureAuthenticated(), global.security.isEspRRHH()], require('./delete'));
 };

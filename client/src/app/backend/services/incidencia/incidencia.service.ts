@@ -44,7 +44,7 @@ export class IncidenciaService {
     return this.httpClient.get<any>(this.url, { params: httpParams });
   }
 
-  getInciencia(data) {
+  getIncidencia(data) {
     return this.httpClient.get<any>(this.urlId.replace(':incidenciaId', data.id), this.httpOptions);
   }
 }

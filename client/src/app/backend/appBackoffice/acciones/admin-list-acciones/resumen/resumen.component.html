@@ -1,0 +1,24 @@
+<div class="container">
+  <div>
+    <div>
+      <b>Resumen</b>
+    </div>
+    <ul>
+      <li>Código: {{ acciones.codigo }}</li>
+      <li>Tipo: {{ acciones.TipoId }}</li>
+      <li>Acción a tomar: {{ acciones.AccionTomar }}</li>
+      <li type="date">Fecha de cumplimiento: {{ acciones.FechaCumplimiento | date: 'dd-MM-yyyy' }}</li>
+      <li>estado: {{ acciones.estado }}</li>
+    </ul>
+    <b *ngIf="Tareas">Tareas a ejecutar:</b>
+
+    <div *ngFor="let tareas of Tareas">
+      <span *ngIf="tareas.Tareas">
+        <div>Tipo: {{ tareas.TipoId }}</div>
+        <div>Acción a tomar: {{ tareas.AccionTomar }}</div>
+        <div>Fecha de cumplimiento: {{ tareas.FechaCumplimiento }}</div>
+        <p></p>
+      </span>
+    </div>
+  </div>
+</div>

@@ -17,12 +17,27 @@ module.exports = function (req, res) {
         .then(function (indicadorX) {
           return Sequelize.Promise.mapSeries(req.body.ObjetivosCalidad, 
             function(objetivoscalidadX) {
+              console.log(objetivoscalidadX);
               jsonAPIBody.data = indicadorX.toJSON();
-              return models.ObjetivosCalidad.create(objetivoscalidadX)
-          .then(function (objetivoX) {
-              return models.IndicadoresObjetivos.create({ IndicadoresId: indicadorX.id, ObjetivosId: objetivoX.id })
+              return models.ObjetivosCalidad.findOrCreate({
+                where: {
+                  id:    objetivoscalidadX,
+                }})
+                .spread(function(objetivoX, created){
+                  console.log(objetivoX)
+                  if( created ){
+                    return models.IndicadoresObjetivos.create({
+                        IndicadoresId: indicadorX.id,
+                        ObjetivosId: objetivoX.id
+                    });
+                } else {
+                  return models.IndicadoresObjetivos.create({
+                    IndicadoresId: indicadorX.id,
+                    ObjetivosId: objetivoX.id
+                });
+              }
+              })
             })
-          })
         })
         .then(function (data) {
           return res.status(201).json(jsonAPIBody); // OK.

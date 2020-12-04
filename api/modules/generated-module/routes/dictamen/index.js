@@ -19,6 +19,22 @@ module.exports = function (req, res) {
   });
 
   query=jsonAPI.prepareQuery(query);
+  query.include=[
+    {
+      model: models.QuejasReclamaciones,
+      include: [{
+        model: models.NoConformidad
+      },
+      {
+        model: models.Reserva
+      },
+      {
+        model: models.Producto
+      },
+      {
+        model: models.ProdServicio
+      }]
+    }]
   return models
     .Dictamen.findAll(query)
     .then(function (data) {

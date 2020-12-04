@@ -1,0 +1,127 @@
+@import '../.././../../../../assets/scss/theme/variables';
+
+.app-dialog-add-edit-tareas {
+  #toolbarHeader {
+    border-top-left-radius: 6px !important;
+    border-top-right-radius: 6px !important;
+  }
+
+  .mat-dialog-container {
+    padding: 0;
+    // width: 85vw !important; ///parametro ajustable
+
+    .mat-toolbar {
+      flex: 1 0 auto;
+      min-height: initial;
+    }
+
+    .toolbar-bottom {
+      height: auto;
+    }
+  }
+
+  .dialog-content-wrapper {
+    max-height: 94vh;
+    max-width: 95vw;
+    width: 32vw;
+    display: flex;
+    flex-direction: column;
+    width: 50vw !important;
+
+    @media (min-width: 768px) and (max-width: 1980px) {
+      width: 15cm !important;
+    }
+
+    @media (min-width: 320px) and (max-width: 768px) {
+      width: 95vw !important;
+    }
+  }
+
+  .cdk-overlay-pane {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 1000px) {
+    .cdk-overlay-pane {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .mat-dialog-actions {
+    padding: 16px 16px;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    margin-bottom: 0px !important;
+  }
+
+  .my-dialog-content {
+    padding: 0px 16px !important;
+    margin: 0px !important;
+  }
+
+  .mat-dialog-content {
+    display: block;
+    // margin: 0 -24px;
+    // padding: 0 24px;
+    max-height: 76vh;
+    overflow: auto;
+  }
+
+  .PassSection {
+    border-radius: 4px;
+    border: 1.25px solid #eee;
+
+    &:hover {
+      border: 1.25px solid #323232;
+      transition: border 0.5s ease;
+    }
+  }
+
+  ////////////////////////////////////////////////
+
+  .hide-style {
+    display: none;
+  }
+
+  .avatar-profile {
+    position: relative;
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    flex: none !important;
+    background-color: #eee;
+    color: #ccecfc;
+    border: 3px solid $theme-main !important;
+
+    .avatar-icon {
+      font-size: 100px;
+      height: 100px;
+      width: 100px;
+    }
+
+    #photoCameraBtn {
+      opacity: 0;
+
+      mat-icon {
+        font-size: 30px;
+        height: 30px;
+        width: 30px;
+      }
+    }
+
+    &:hover {
+      #photoCameraBtn {
+        opacity: 1;
+        transition: opacity 0.5s ease;
+      }
+    }
+
+    button {
+      position: absolute;
+    }
+  }
+
+  /////////////////////////////////////////////////
+}

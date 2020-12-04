@@ -1,0 +1,44 @@
+<div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
+  <div class="mt-2" fxFlex="50" fxFlex.lt-md="50" fxFlex.xs="50">
+    <mat-card class="example-card">
+      <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>No Conformidades</mat-card-title>
+        <mat-card-subtitle>Total de registros</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <canvas
+          baseChart
+          [data]="pieChartData"
+          [labels]="pieChartLabels"
+          [chartType]="pieChartType"
+          [options]="pieChartOptions"
+          [plugins]="pieChartPlugins"
+          [legend]="pieChartLegend"
+        >
+        </canvas>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="mt-2" fxFlex="50" fxFlex.lt-md="50" fxFlex.xs="50">
+    <mat-card class="example-card">
+      <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>No Conformidades</mat-card-title>
+        <mat-card-subtitle>Promedio anual</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <canvas
+          baseChart
+          [datasets]="barChartData"
+          [labels]="barChartLabels"
+          [options]="barChartOptions"
+          [plugins]="barChartPlugins"
+          [legend]="barChartLegend"
+          [chartType]="barChartType"
+        >
+        </canvas>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<div
+  *ngIf="preguntas.preguntas.length"
+  fxLayout="row wrap"
+  class="w-100 py-2"
+  fxLayoutAlign="start start"
+  fxLayoutAlign.lt-md="center start"
+  fxLayoutGap="gappx"
+>
+  <mat-card *ngFor="let pregunta of preguntas.preguntas; let i = index" style="margin: 15px">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>Consolidado</mat-card-title>
+      <mat-card-subtitle>Encuestas</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <canvas
+        #myChart
+        class="myChart"
+        id="myChart"
+        width="400"
+        height="400"
+        style="display: inline; margin-right: 5em"
+      ></canvas>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,16 @@
+<div class="container">
+  <mat-tab-group color="accent" backgroundColor="primary">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">work</mat-icon>
+        <span class="mat-body-2 mx-2 uppercase" color="primary">{{ 'Acciones' }}</span>
+      </ng-template>
+
+      <ng-template matTabContent>
+        <div class="LayoutTabs" fxFlexFill fxLayout="column" fxLayoutAlign="start stretch">
+          <app-acciones-table [role]="'JefeProceso'"></app-acciones-table>
+        </div>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

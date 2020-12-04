@@ -1,0 +1,27 @@
+<div class="container">
+  <div>
+    <div>
+      <b>Resumen</b>
+    </div>
+    <ul>
+      <li>Código: {{ auditoria.codigo }}</li>
+      <li type="date">Fecha Entrada: {{ auditoria.FechaRegistro | date: 'dd-MM-yyyy hh:mm' }}</li>
+      <li type="date">Fecha Identificación: {{ auditoria.FechaIdentificacion | date: 'dd-MM-yyyy hh:mm' }}</li>
+      <li type="date">Fecha Término: {{ auditoria.FechaTermino | date: 'dd-MM-yyyy hh:mm' }}</li>
+      <li type="date">Fecha Cierre: {{ auditoria.FechaCierre | date: 'dd-MM-yyyy hh:mm' }}</li>
+      <li>Proceso: {{ auditoria.ProcesoId }}</li>
+      <li>Norma: {{ auditoria.NormaId ? auditoria.NormaId : '' }}</li>
+      <li type="date">Procedencia: {{ auditoria.procedencia | date: 'dd-MM-yyyy hh:mm' }}</li>
+    </ul>
+    <b *ngIf="Acciones">Acciones para resolver la no conformidad:</b>
+
+    <div *ngFor="let client of Acciones">
+      <span *ngIf="client.Acciones">
+        <div>Tipo: {{ client.TipoId }}</div>
+        <div>Acción a tomar: {{ client.AccionTomar }}</div>
+        <div>Fecha de cumplimiento: {{ client.FechaCumplimiento }}</div>
+        <p></p>
+      </span>
+    </div>
+  </div>
+</div>

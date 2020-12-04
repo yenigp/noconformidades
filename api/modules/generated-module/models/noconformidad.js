@@ -28,7 +28,7 @@ exports.loadModel = function loadModel() {
                 "type": global.app.orm.Sequelize.STRING,
                 "unique": true,
                 "allowNull": false,
-                "validate": {
+                /*"validate": {
                     "max": 10,
                     isUnique(value) {
                         return NoConformidad.findOne({
@@ -37,7 +37,7 @@ exports.loadModel = function loadModel() {
                         if (codigo) {throw new Error('Error: el código' + ' ' + (value) + ' ' + 'ya existe')}
                         })
                     }
-                },
+                },*/
             },
             "FechaRegistro": {
                 "type": global.app.orm.Sequelize.DATE,
@@ -166,7 +166,6 @@ exports.loadModel = function loadModel() {
                 foreignKey: 'NoConformidadId'
             });
             models.NoConformidad.hasOne(models.QuejasReclamaciones, {
-                as: 'QuejasReclamaciones',
                 foreignKey: 'NoConformidadId'
             });
             models.NoConformidad.hasOne(models.Expediente, {

@@ -85,6 +85,7 @@ module.exports = function (req, res) {
         .Auditoria
         .create ({
           NoConformidadId: noconformidad.id,
+          procedencia: req.body.procedencia,
           observacion: req.body.observacion,
           CreatorId: noconformidad.CreatorId    
         }),

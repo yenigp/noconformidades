@@ -19,6 +19,7 @@ module.exports = function (req, res) {
   });
 
   query=jsonAPI.prepareQuery(query);
+  query.include='Proceso';
   return models
     .Indicadores.findAll(query)
     .then(function (data) {

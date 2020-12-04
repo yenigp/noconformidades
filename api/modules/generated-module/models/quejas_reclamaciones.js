@@ -87,15 +87,13 @@ exports.loadModel = function loadModel() {
                 as: 'Creator'
             });   
             models.QuejasReclamaciones.belongsTo(models.NoConformidad, {
-                //as: 'NoConformidad'
+              foreignKey: 'NoConformidadId',
             });
             models.QuejasReclamaciones.belongsTo(models.ProdServicio, {
-                as: 'Servicio',
                 foreignKey: 'ServicioId',
                 constraints: false
             });
             models.QuejasReclamaciones.belongsTo(models.Producto, {
-                as: 'Producto',
                 foreignKey: 'ProductoId',
                 constraints: false
             });
@@ -104,11 +102,10 @@ exports.loadModel = function loadModel() {
                 foreignKey: 'TuristaId',
                 constraints: false
             });
-            models.QuejasReclamaciones.belongsTo(models.ReservaPadre, {
-                as: 'Reserva',
-                foreignKey: 'ReservaId',
-                constraints: false
-            });
+            models.QuejasReclamaciones.belongsTo(models.Reserva, {
+              foreignKey: 'ReservaId',
+              constraints: false
+          });
             models.QuejasReclamaciones.hasOne(models.Dictamen, { 
                 as: "Dictamen",
                 foreignKey: "QuejasReclamacionesId" });

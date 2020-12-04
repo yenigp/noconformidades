@@ -14,7 +14,7 @@ exports.registry = function registry() {
   global.app.express
     .route(procesoCollectionRoute)
     .post([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./create'))
-    .get([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./index'));
+    .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
     .app.express
@@ -58,15 +58,6 @@ exports.registry = function registry() {
   global.app.express
     .route(procesoSingleRoute)
     .patch([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./update'))
-    .get([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./show'))
+    .get(global.security.ensureAuthenticated(), require('./show'))
     .delete([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./delete'));
-
-  /*var procesoProfileRoute = '/v1/profile';
-
-  global.app.express
-    .route(procesoProfileRoute)
-    .patch(function(req,res,next){
-      req.proceso=req.loggedUser;
-      return next();
-    }, require('./update'))*/
 };

@@ -13,7 +13,7 @@ exports.registry = function registry() {
 
   global.app.express
     .route(auditoriaCollectionRoute)
-    .post(global.security.ensureAuthenticated(), require('./create'))
+    .post([global.security.ensureAuthenticated(), global.security.isAuditor()], require('./create'))
     .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
@@ -22,7 +22,10 @@ exports.registry = function registry() {
       return models
         .Auditoria
         .findByPk(auditoriaId, {
-          include: [{ all: true }]
+          include: [{
+            model: models.NoConformidad,
+            include: ['Proceso', 'Norma', models.Usuario]
+          }]
         }).then(function (data) {
           if (!data) {
             return res.sendStatus(404); // Not Found.
@@ -59,14 +62,5 @@ exports.registry = function registry() {
     .route(auditoriaSingleRoute)
     .patch(global.security.ensureAuthenticated(), require('./update'))
     .get(global.security.ensureAuthenticated(), require('./show'))
-    .delete(global.security.ensureAuthenticated(), require('./delete'));
-
-  /*var auditoriaProfileRoute = '/v1/profile';
-
-  global.app.express
-    .route(auditoriaProfileRoute)
-    .patch(function(req,res,next){
-      req.auditoria=req.loggedUser;
-      return next();
-    }, require('./update'))*/
+    .delete([global.security.ensureAuthenticated(), global.security.isJefeProceso()], require('./delete'));
 };

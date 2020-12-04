@@ -18,7 +18,7 @@ export class AdminListNoConformidadComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.breadcrumbService.clearBreadcrumd();
-    this.breadcrumbService.setBreadcrumd('Listado de no conformidades', true);
+    this.breadcrumbService.setBreadcrumd('Sistema de Gestión de No Conformidades', true);
   }
 
   ngOnDestroy() {

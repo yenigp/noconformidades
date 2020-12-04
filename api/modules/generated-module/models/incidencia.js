@@ -12,7 +12,6 @@ exports.loadModel = function loadModel() {
               },
               "onUpdate": "cascade",
               "onDelete": "cascade",
-              "primaryKey": true,
               "allowNull": false
 
           },
@@ -52,7 +51,7 @@ exports.loadModel = function loadModel() {
                 as: 'Creator'
             });  
             models.Incidencia.belongsTo(models.NoConformidad, {
-                as: 'NoConformidad'
+                //as: 'NoConformidad'
             });
         }
 };

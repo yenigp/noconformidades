@@ -30,9 +30,9 @@ module.exports = function (req, res) {
   ]
 
   query=jsonAPI.prepareQuery(query);
-  /*if (req.loggedUser.RolId != 4){
+  if (req.loggedUser.RolId != 4){
     query.where.SucursalId = req.loggedUser.SucursalId;
-  } */ 
+  }
   return models
     .Usuario.findAll(query)
     .then(function (data) {

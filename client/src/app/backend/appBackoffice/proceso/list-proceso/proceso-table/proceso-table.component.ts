@@ -21,6 +21,7 @@ import { ConfirmationDialogComponent } from 'src/app/backend/common-dialogs-modu
 import { IUser } from 'src/app/core/classes/user.class';
 
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-proceso-table',
@@ -65,7 +66,7 @@ export class ProcesoTableComponent implements OnInit {
     private fb: FormBuilder,
     private loggedInUserService: LoggedInUserService,
     private procesoService: ProcesoService,
-
+    private router: Router,
     public dialog: MatDialog,
     private utilsService: UtilsService,
     private showToastr: ShowToastrService,
@@ -197,6 +198,11 @@ export class ProcesoTableComponent implements OnInit {
         this.utilsService.errorHandle(err, 'Proceso', 'Listing');
       },
     );
+  }
+
+  onMapaProceso(): void {
+    console.log('Holaaaaaaaaaaaaaaa');
+    this.router.navigate(['/backend/proceso/mapa']);
   }
 
   async onRemoveProceso(proceso) {

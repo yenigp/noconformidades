@@ -13,8 +13,8 @@ exports.registry = function registry() {
 
   global.app.express
         .route(categoriasCollectionRoute)
-        .post(require('./create'))
-        .get(require('./index'));
+        .post([global.security.ensureAuthenticated(), global.security.isEspCalidadSucursal()], require('./create'))
+        .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
     .app.express
@@ -57,7 +57,7 @@ exports.registry = function registry() {
 
   global.app.express
         .route(categoriasSingleRoute)
-        .patch(require('./update'))
-        .get(require('./show'))
-        .delete(require('./delete'));
+        .patch([global.security.ensureAuthenticated(), global.security.isEspCalidadSucursal()], require('./update'))
+        .get(global.security.ensureAuthenticated(), require('./show'))
+        .delete([global.security.ensureAuthenticated(), global.security.isEspCalidadSucursal()], require('./delete'));
 };

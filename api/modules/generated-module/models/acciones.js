@@ -7,7 +7,7 @@ exports.loadModel = function loadModel() {
             "codigo": {
                 "type": global.app.orm.Sequelize.STRING,
                 "unique": true,
-                "validate": {
+                /*"validate": {
                     isUnique(value) {
                       return Acciones.findOne({
                         where: {codigo:value}
@@ -15,7 +15,7 @@ exports.loadModel = function loadModel() {
                         if (codigo) {throw new Error('Error: el código' + ' ' + (value) + ' ' + 'ya existe')}
                       })
                     }
-                },
+                },*/
                 "allowNull": false
 
             },

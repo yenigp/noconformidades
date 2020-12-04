@@ -19,6 +19,13 @@ module.exports = function (req, res) {
   });
 
   query=jsonAPI.prepareQuery(query);
+  query.include=[
+    {
+      model: models.IndicadoresObjetivos,
+      include: [{
+        model: models.Indicadores
+      }]
+    }]
   return models
     .ObjetivosCalidad.findAll(query)
     .then(function (data) {

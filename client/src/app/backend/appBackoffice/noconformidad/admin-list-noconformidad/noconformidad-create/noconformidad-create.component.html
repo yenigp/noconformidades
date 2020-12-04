@@ -21,7 +21,7 @@
                       {{ item.nombre }}
                     </mat-option>
                   </mat-select>
-                  <mat-icon class="greyIcon" matSuffix>business</mat-icon>
+                  <mat-icon class="greyIcon" matSuffix>merge_type</mat-icon>
                   <mat-error *ngIf="form.controls['TipoId'].hasError('required')">
                     {{ 'El tipo de no conformidad' }} <strong>{{ 'es requerido' }}</strong>
                   </mat-error>
@@ -39,7 +39,7 @@
                       {{ item.nombre }}
                     </mat-option>
                   </mat-select>
-                  <mat-icon class="greyIcon" matSuffix>business</mat-icon>
+                  <mat-icon class="greyIcon" matSuffix>settings</mat-icon>
                   <mat-error *ngIf="form.controls['ProcesoId'].hasError('required')">
                     {{ 'El proceso' }} <strong>{{ 'es requerido' }}</strong>
                   </mat-error>
@@ -57,7 +57,7 @@
                       {{ item.nombre }}
                     </mat-option>
                   </mat-select>
-                  <mat-icon class="greyIcon" matSuffix>mail</mat-icon>
+                  <mat-icon class="greyIcon" matSuffix>event_note</mat-icon>
                   <mat-error *ngIf="form.controls['NormaId'].hasError('required')">
                     {{ 'La norma' }} <strong>{{ 'es requerida' }}</strong>
                   </mat-error>

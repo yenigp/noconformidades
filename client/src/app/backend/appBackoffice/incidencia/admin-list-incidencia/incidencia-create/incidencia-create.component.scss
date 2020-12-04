@@ -1,0 +1,262 @@
+@import '../../../../../../assets/scss/theme/variables';
+@import '../../../../../../assets/scss/mixins/breakpoints';
+
+app-create-incidencia {
+  .mat-progress-bar {
+    display: block;
+    height: 5.65px;
+    transition: opacity 350ms linear;
+    width: 100%;
+  }
+
+  .mat-progress-bar.mat-accent .mat-progress-bar-buffer {
+    background-color: #e0e0e0;
+  }
+
+  padding: 0px 0px;
+  padding-left: 16px;
+  padding-right: 16px;
+  background: #fafafa !important;
+
+  /////// Steeper Classes /////////////////////
+
+  .mat-stepper-label-position-bottom .mat-horizontal-stepper-header-container {
+    align-items: flex-start;
+    background-color: $theme-main !important;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border: solid 1.7px rgba(0, 0, 0, 0.22);
+  }
+
+  .mat-step-header .mat-step-icon-selected,
+  .mat-step-header .mat-step-icon-state-done,
+  .mat-step-header .mat-step-icon-state-edit {
+    background-color: $theme-accent;
+    border: solid 1.2px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    color: rgba(0, 0, 0, 0.87);
+  }
+
+  .mat-stepper-label-position-bottom .mat-horizontal-stepper-header {
+    box-sizing: border-box;
+    flex-direction: column;
+    height: auto;
+    padding: 16px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+
+  .mat-step-label {
+    padding: 8px 0 0 0;
+    text-align: center;
+    width: 100%;
+    color: #fff !important;
+  }
+
+  .mat-stepper-label-position-bottom .mat-horizontal-stepper-header .mat-step-label {
+    padding: 8px 0 0 0;
+    text-align: center;
+    width: 100%;
+  }
+
+  .mat-step-header {
+    overflow: hidden !important;
+    outline: 0 !important;
+    cursor: pointer !important;
+    box-sizing: border-box;
+    height: auto !important;
+    flex-direction: column !important;
+    position: relative !important;
+    box-sizing: content-box !important;
+    -webkit-tap-highlight-color: transparent !important;
+    background-color: $theme-main !important;
+    color: #323232 !important;
+    max-height: 64px;
+  }
+
+  //////////////////////////////////////////////////////
+
+  .mat-horizontal-content-container {
+    padding: 16px 16px 16px 16px;
+    overflow: auto;
+    max-height: 76vh;
+    border: solid 1.3px rgba(0, 0, 0, 0.22);
+    border-top: none;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+
+    @media (max-width: 800px) {
+      padding: 0 8px 8px 8px !important;
+    }
+
+    background: #fafafa;
+  }
+
+  .mat-form-field {
+    margin-right: 10px;
+  }
+
+  .mat-form-field-wrapper {
+    padding-bottom: 0.1em;
+  }
+
+  .SteeperBtn {
+    margin-left: 8% !important;
+    margin-top: 16px !important;
+  }
+
+  .SteeperLayout {
+    @include media-breakpoint('lt-sm') {
+      margin-left: 0px !important;
+    }
+  }
+
+  .iconHelp {
+    font-size: 14px;
+    color: $grey4;
+    width: 14px;
+    height: 14px;
+  }
+
+  .w-73 {
+    width: 73% !important;
+  }
+
+  .example-chip-list {
+    width: 100%;
+  }
+
+  #ChipContainer {
+    .mat-form-field-appearance-outline .mat-form-field-flex {
+      padding: 0 0.75em 0 0.75em;
+      margin-top: -0.25em;
+      position: relative;
+      height: 150px;
+    }
+  }
+
+  .imageContent {
+    height: 40px;
+    max-height: 40px;
+    max-width: 40px;
+    width: 40px;
+
+    .carAvatar {
+      height: 100% !important;
+      max-width: 100% !important;
+      border: 1px solid;
+      border-color: rgba(0, 0, 0, 0.4);
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+
+  .example-full-width {
+    width: 100%;
+  }
+
+  .example-option-img {
+    vertical-align: middle;
+  }
+
+  .CustomMat {
+    width: 73%;
+
+    @include media-breakpoint('lt-md') {
+      width: 100%;
+    }
+
+    @include media-breakpoint('xs') {
+      width: 100% !important;
+    }
+  }
+
+  .MsgFinal {
+    border-radius: 8px;
+    border: 2px solid #424242;
+    box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  ////////////////////////////////////////////////
+
+  .hide-style {
+    display: none;
+  }
+
+  .avatar-profile {
+    position: relative;
+    height: 200px;
+    min-width: 150px;
+    width: 250px;
+    border-radius: 4px;
+    flex: none !important;
+    background-color: #f5f5f5;
+    color: #bdbdbd;
+    border: 2px solid $theme-main !important;
+
+    .avatar-icon {
+      font-size: 100px;
+      height: 100px;
+      width: 100px;
+    }
+
+    #photoCameraBtn {
+      opacity: 0;
+
+      mat-icon {
+        font-size: 30px;
+        height: 30px;
+        width: 30px;
+      }
+    }
+
+    &:hover {
+      #photoCameraBtn {
+        opacity: 1;
+        transition: opacity 0.5s ease;
+      }
+    }
+
+    button {
+      position: absolute;
+    }
+  }
+
+  .layoutIcons {
+    border-radius: 8px;
+    padding: 8px 0px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba($color: #000000, $alpha: 0.1);
+      transition: all 0.2s ease;
+    }
+  }
+
+  .selectedIcon {
+    border: 1.5px solid #e0e0e0;
+    background-color: #f5f5f5;
+  }
+
+  /////////////////////////////////////////////////
+
+  .example-right-align {
+    text-align: right;
+  }
+
+  input.example-right-align::-webkit-outer-spin-button,
+  input.example-right-align::-webkit-inner-spin-button {
+    display: none;
+  }
+
+  input.example-right-align {
+    -moz-appearance: textfield;
+  }
+
+  ////////////////////////////////////////////////
+
+  .mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+  }
+}

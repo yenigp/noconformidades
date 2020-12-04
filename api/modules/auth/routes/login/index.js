@@ -19,7 +19,6 @@ module.exports = function(req, res) {
     var usernamePassword = new Buffer.from(req.header('Authorization')
         .split('Basic ')[1], 'base64').toString()
       .split(':');
-    console.log(usernamePassword);
 
     return findUser(usernamePassword[0])
       .then(function(usuario) {
@@ -30,7 +29,7 @@ module.exports = function(req, res) {
                 field: 'Usuario',
                 title: 'Usuario no encontrado'
               }]
-            }); //user not found
+            }); 
         }
         if (!usuario.isValidPassword(usernamePassword[1])) {
           return res.status(401)
@@ -101,7 +100,7 @@ module.exports = function(req, res) {
           return res.status(401)
             .json({
               errors: [{
-                field: 'authorization',
+                field: 'autorización',
                 title: 'Invalid bearer authorization'
               }]
             });
@@ -112,8 +111,8 @@ module.exports = function(req, res) {
              * */
             return res.status(401)
               .json({
-                field: 'authorization',
-                title: 'Authorization has expired'
+                field: 'autorización',
+                title: 'La autorización ha expirado'
               });
           }
           return findUser(decoded.data.username)
@@ -122,8 +121,8 @@ module.exports = function(req, res) {
                 return res.status(401)
                   .json({
                     errors: [{
-                      field: 'User',
-                      title: 'User not found'
+                      field: 'Usuario',
+                      title: 'Usuario no encontrado'
                     }]
                   })
               }
@@ -132,8 +131,8 @@ module.exports = function(req, res) {
                 return res.status(401)
                   .json({
                     errors: [{
-                      field: 'status',
-                      title: 'User not enabled'
+                      field: 'Estado',
+                      title: 'Usuario deshabilitado'
                     }]
                   });
               }
@@ -172,8 +171,8 @@ module.exports = function(req, res) {
     return res.status(401)
       .json({
         errors: [{
-          field: 'authentication',
-          title: 'Not valid autentication'
+          field: 'autenticación',
+          title: 'Autenticación no válida'
         }]
       });
 

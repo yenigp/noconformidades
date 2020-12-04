@@ -1,35 +1,16 @@
 <div class="container">
   <mat-tab-group color="accent" backgroundColor="primary">
     <mat-tab>
-
       <ng-template mat-tab-label>
         <mat-icon class="example-tab-icon">group</mat-icon>
-        <span class="mat-body-2 mx-2 uppercase" color="primary">{{'MIS ADMINISTRADORES'}}</span>
+        <span class="mat-body-2 mx-2 uppercase" color="primary">{{ 'Usuarios' }}</span>
       </ng-template>
 
       <ng-template matTabContent>
         <div class="LayoutTabs" fxFlexFill fxLayout="column" fxLayoutAlign="start stretch">
-          <app-user-table [role]="'Admin'"></app-user-table>
+          <app-user-table [role]="'AdminSucursal' || 'AdminEmpresa'"></app-user-table>
         </div>
       </ng-template>
-
     </mat-tab>
-    <mat-tab>
-
-      <ng-template mat-tab-label>
-        <mat-icon class="example-tab-icon">group</mat-icon>
-        <span class="mat-body-2 mx-2 uppercase" color="primary">{{'MIS ADMINISTRADORES 2'}}</span>
-      </ng-template>
-
-      <ng-template matTabContent>
-        <div class="LayoutTabs" fxFlexFill fxLayout="column" fxLayoutAlign="start stretch">
-          <app-user-table [role]="'Admin'"></app-user-table>
-        </div>
-      </ng-template>
-
-    </mat-tab>
-
   </mat-tab-group>
-
-
 </div>

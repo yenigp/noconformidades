@@ -7,14 +7,13 @@ exports.registry = function registry() {
   var agenciaviajesHelpRoute = apiRoute + '/agenciaviajes-help';
   global.app.express
     .route(agenciaviajesHelpRoute)
-    .get(require('./help'));
+    .get(global.security.ensureAuthenticated(), require('./help'));
 
   var agenciaviajesCollectionRoute = apiRoute + '/agenciaviajes';
 
   global.app.express
     .route(agenciaviajesCollectionRoute)
-    //.post(require('./create'))
-    .get(require('./index'));
+    .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
     .app.express
@@ -57,16 +56,6 @@ exports.registry = function registry() {
 
   global.app.express
     .route(agenciaviajesSingleRoute)
-    //.patch(require('./update'))
-    .get(require('./show'))
-    //.delete(require('./delete'));
-
-  /*var agenciaviajesProfileRoute = '/v1/profile';
-
-  global.app.express
-    .route(agenciaviajesProfileRoute)
-    /*.patch(function(req,res,next){
-      req.agenciaviajes=req.loggedUser;
-      return next();
-    }, require('./update'))*/
+    .get(global.security.ensureAuthenticated(), require('./show'))
+    
 };

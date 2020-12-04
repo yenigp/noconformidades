@@ -27,6 +27,11 @@ exports.loadModel = function loadModel() {
             "onDelete": "cascade"
 
         },
+        "JefeMercado": {
+          "type": global.app.orm.Sequelize.INTEGER,
+          "allowNull": false
+  
+        },
         "SucursalId": {
           "type": global.app.orm.Sequelize.INTEGER,
           "comment": "The foreing object that will have the Area.",
@@ -46,7 +51,11 @@ exports.loadModel = function loadModel() {
           var models = global.app.orm.sequelize.models;
           models.Area.belongsTo(models.Usuario, {
               as: 'Creator'
-          });          
+          });       
+          models.Area.belongsTo(models.Usuario, {
+            foreignKey: 'JefeMercado',
+            //constraints: false
+          });    
           models.Area.belongsTo(models.Sucursal, {
               foreignKey: 'SucursalId',
               constraints: false

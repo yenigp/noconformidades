@@ -10,7 +10,7 @@ exports.registry = function registry() {
 
   global.app.express
     .route(turistaCollectionRoute)
-    .get([global.security.ensureAuthenticated()], require('./index'));
+    .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
     .app.express
@@ -53,5 +53,5 @@ exports.registry = function registry() {
 
   global.app.express
     .route(turistaSingleRoute)
-    .get([global.security.ensureAuthenticated()], require('./show'));
+    .get(global.security.ensureAuthenticated(), require('./show'));
 };

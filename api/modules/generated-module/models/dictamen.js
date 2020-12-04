@@ -75,7 +75,7 @@ exports.loadModel = function loadModel() {
                 as: 'Creator'
             });  
             models.Dictamen.belongsTo(models.QuejasReclamaciones, {
-                as: 'QuejasReclamaciones'
+                foreignKey: 'QuejasReclamacionesId'
             });
         }
 

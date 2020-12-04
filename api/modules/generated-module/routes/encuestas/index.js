@@ -17,18 +17,17 @@ module.exports = function (req, res) {
     req  : req,
     model: models.Encuestas
   });
-  
-  query.include= 'Encuesta',
-  [
+
+  /*query.include=[
     {
-      include: [{
-        model: models.Resultados,
-        include: [{
-          model: models.Respuestas
-        }]
-      }]
+      model: 'Preguntas',
+      include:[
+        {
+          model: models.Categorias,
+        }
+      ]
     }
-  ]
+  ]*/
 
   query=jsonAPI.prepareQuery(query);
   return models

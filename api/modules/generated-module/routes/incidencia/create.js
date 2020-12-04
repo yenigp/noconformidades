@@ -79,6 +79,7 @@ module.exports = function (req, res) {
       if (req.body.CausaInvestigacion === false) {
         noconformidad.update({
           status: "cerrado",
+          FechaCierre: moment(),
         }).then(function(){
         return models.NoConformidad.findByPk(noconformidad.id)
         })

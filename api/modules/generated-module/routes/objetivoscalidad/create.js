@@ -14,20 +14,33 @@ module.exports = function (req, res) {
     .app.orm.sequelize.transaction(function (t) {
       return models
         .ObjetivosCalidad
-        .create(req.body,{transaction:t})
+        .create(req.body)
+      })
         .then(function (objetivosX) {
+          console.log(objetivosX.id);
           return Sequelize.Promise.mapSeries(req.body.Indicadores, 
             function(indicadoresX) {
               jsonAPIBody.data = objetivosX.toJSON();
-              return models.Indicadores.create(indicadoresX)
-          .then(function (indicadorX) {
-              return models.IndicadoresObjetivos.create({ ObjetivoId: objetivosX.id, IndicadorId: indicadorX.id })
-            })
+              return models.Indicadores.findOrCreate({
+                where: {
+                  id:    indicadoresX,
+                }})
+                .spread(function(indicadorX, created){
+                  if( created ){
+                    return models.IndicadoresObjetivos.create({
+                        IndicadoresId: indicadorX.id,
+                        ObjetivosId: objetivosX.id
+                    });
+                } else {
+                  return models.IndicadoresObjetivos.create({
+                    IndicadoresId: indicadorX.id,
+                    ObjetivosId: objetivosX.id
+                });
+              }
+              })
           })
         })
-    })
     .then(function (data) {
-      //jsonAPIBody.data = data.toJSON();
       return res.status(201).json(jsonAPIBody); // OK.
     })
     .catch(global.app.orm.Sequelize.ValidationError, function (error) {

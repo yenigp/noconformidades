@@ -13,8 +13,8 @@ exports.registry = function registry() {
 
   global.app.express
         .route(accionesCollectionRoute)
-        .post(require('./create'))
-        .get(require('./index'));
+        .post([global.security.ensureAuthenticated(), global.security.isJefeProceso()], require('./create'))
+        .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
     .app.express
@@ -22,7 +22,7 @@ exports.registry = function registry() {
         return models
           .Acciones
           .findByPk(accionesId, {
-            include: [{all: true}]
+            include: ['Tipo']
           }).then(function (data) {
             if (!data) {
               return res.sendStatus(404); // Not Found.
@@ -57,7 +57,7 @@ exports.registry = function registry() {
 
   global.app.express
         .route(accionesSingleRoute)
-        .patch(require('./update'))
-        .get(require('./show'))
-        .delete(require('./delete'));
+        .patch([global.security.ensureAuthenticated(), global.security.isJefeProceso()], require('./update'))
+        .get(global.security.ensureAuthenticated(), require('./show'))
+        .delete([global.security.ensureAuthenticated(), global.security.isJefeProceso()], require('./delete'));
 };

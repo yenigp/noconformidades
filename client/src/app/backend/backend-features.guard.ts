@@ -16,15 +16,12 @@ import { LoggedInUserService } from 'src/app/core/services/loggedInUser/logged-i
   providedIn: 'root',
 })
 export class BackendFeaturesGuard implements CanActivate, CanLoad {
-  constructor(private loggedInUserService: LoggedInUserService, private router: Router) { }
+  constructor(private loggedInUserService: LoggedInUserService, private router: Router) {}
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (
-      this.loggedInUserService.getLoggedInUser()
-    ) {
-
+    if (this.loggedInUserService.getLoggedInUser()) {
       return true;
     } else {
       this.router.navigate(['/error/acceso-prohibido']);

@@ -14,7 +14,7 @@ exports.registry = function registry() {
   global.app.express
         .route(objetivoscalidadCollectionRoute)
         .post([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./create'))
-        .get([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./index'));
+        .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
     .app.express
@@ -22,8 +22,10 @@ exports.registry = function registry() {
         return models
           .ObjetivosCalidad
           .findByPk(objetivoscalidadId, {
-            include: [{all: true}]
+            include: [{model: models.IndicadoresObjetivos, 
+              include: [{model: models.Indicadores}]}]
           }).then(function (data) {
+            console.log(data);
             if (!data) {
               return res.sendStatus(404); // Not Found.
             }
@@ -58,6 +60,6 @@ exports.registry = function registry() {
   global.app.express
         .route(objetivoscalidadSingleRoute)
         .patch([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./update'))
-        .get([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./show'))
+        .get(global.security.ensureAuthenticated(), require('./show'))
         .delete([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./delete'));
 };

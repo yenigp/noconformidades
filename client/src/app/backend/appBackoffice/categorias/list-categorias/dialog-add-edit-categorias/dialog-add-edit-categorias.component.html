@@ -1,0 +1,79 @@
+<div class="dialog-content-wrapper">
+  <mat-toolbar class="mb-2" matDialogTitle color="primary" id="toolbarHeader">
+    <mat-toolbar-row fxLayoutAlign="space-between center">
+      <span *ngIf="!isEditing" class="mat-title mb-0">{{ 'Adicionar categoría' }}</span>
+      <span *ngIf="isEditing" class="mat-title mb-0">{{ 'Editar categoría' }}</span>
+      <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div mat-dialog-content class="my-dialog-content">
+    <form [formGroup]="form">
+      <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="gappx">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Nombre' }}</mat-label>
+          <mat-icon class="greyIcon" matSuffix>account_box</mat-icon>
+          <input
+            type="text"
+            maxlength="50"
+            matInput
+            [formControl]="form.controls['nombre']"
+            placeholder="{{ 'nombre' }}"
+          />
+          <mat-error *ngIf="form.controls['nombre'].hasError('required')">
+            {{ 'El nombre' }} <strong>{{ 'es requerido' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['nombre'].hasError('maxLength')">
+            {{ 'El nombre' }} <strong>{{ 'debe tener como máximo 50 carácteres' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['nombre'].hasError('minLength')">
+            {{ 'El nombre' }} <strong>{{ 'debe tener como máximo 2 carácteres' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['nombre'].hasError('pattern')">
+            {{ 'El nombre' }} <strong>{{ 'debe escribirse con letra inicial mayúscula' }}</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="100" fxFlex.lt-md="100" fxFlex.xs="100" appearance="outline">
+          <mat-label>{{ 'Descripción' }}</mat-label>
+          <textarea
+            rows="5"
+            matInput
+            required
+            [formControl]="form.controls['descripcion']"
+            placeholder="{{ 'Descripción' }}"
+          ></textarea>
+          <mat-icon class="greyIcon" matSuffix>edit</mat-icon>
+          <mat-error *ngIf="form.controls['descripcion'].hasError('required')">
+            {{ 'La descripción' }} <strong>{{ 'es requerida' }}</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <!--Column Encuesta-->
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Encuesta' }}</mat-label>
+          <mat-icon class="greyIcon" matSuffix>event_note</mat-icon>
+          <mat-select
+            matInput
+            matNativeControl
+            required
+            [formControl]="form.controls['EncuestaId']"
+            placeholder="{{ 'Encuesta' }}"
+          >
+            <mat-option *ngFor="let item of allEncuestas; let i = index" [value]="item.id">
+              {{ item.nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+
+  <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end start">
+    <button mat-flat-button (click)="onSaveAction()" [disabled]="this.form.invalid" color="primary">
+      {{ 'Guardar' }}
+    </button>
+  </div>
+</div>

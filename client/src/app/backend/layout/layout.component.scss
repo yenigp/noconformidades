@@ -1,8 +1,6 @@
-@import "../../../assets/scss/theme/variables";
-
+@import '../../../assets/scss/theme/variables';
 
 app-layout {
-
   :host {
     height: 100% !important;
     width: 100% !important;
@@ -31,9 +29,6 @@ app-layout {
     perspective: 500px;
   }
 
-
-
-
   #NavBarFooter {
     height: 48px;
   }
@@ -56,16 +51,14 @@ app-layout {
 
   .sidenav {
     width: 300px !important;
-    box-shadow: 3px 0 6px rgba(0, 0, 0, .24);
+    box-shadow: 3px 0 6px rgba(0, 0, 0, 0.24);
     background-color: $theme-main;
     padding: 0px !important;
     // position: relative !important;
-
   }
 
   .mat-drawer-side {
     border-right: solid 0px rgba(0, 0, 0, 0) !important;
-
   }
 
   @media only screen and (max-width: 480px) {
@@ -77,7 +70,6 @@ app-layout {
   .cursor-pointer {
     cursor: pointer;
   }
-
 
   .mat-list-item {
     margin-left: 10px;
@@ -93,15 +85,12 @@ app-layout {
     }
   }
 
-
-
   .navList {
     margin-top: 8px !important;
     height: 70vh !important;
     overflow: auto;
     // padding: 8px 16px !important;
     box-sizing: border-box !important;
-
   }
 
   .icon-arrow {
@@ -190,13 +179,10 @@ app-layout {
     //     transform: scale3d(1, 1, 0.5);
     //   }
     // }
-
-
   }
-
 }
 
-.MenuPanelLayoutThemes+* .mat-menu-panel {
+.MenuPanelLayoutThemes + * .mat-menu-panel {
   min-width: 112px !important;
   max-width: 190px !important;
   padding: 2px 8px !important;
@@ -204,5 +190,4 @@ app-layout {
   .mat-menu-item {
     padding: 8px !important;
   }
-
 }

@@ -1,0 +1,189 @@
+<div class="dialog-content-wrapper">
+  <mat-toolbar class="mb-2" matDialogTitle color="primary" id="toolbarHeader">
+    <mat-toolbar-row fxLayoutAlign="space-between center">
+      <span *ngIf="!isEditing" class="mat-title mb-0">{{ 'Adicionar objetivo' }}</span>
+      <span *ngIf="isEditing" class="mat-title mb-0">{{ 'Editar objetivo' }}</span>
+      <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div mat-dialog-content class="my-dialog-content">
+    <form [formGroup]="form">
+      <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="gappx">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'nombre' }}</mat-label>
+          <mat-icon class="greyIcon" matSuffix>account_box</mat-icon>
+          <input
+            required
+            type="text"
+            maxlength="50"
+            matInput
+            [formControl]="form.controls['nombre']"
+            placeholder="{{ 'nombre' }}"
+          />
+          <mat-error *ngIf="form.controls['nombre'].hasError('required')">
+            {{ 'El nombre' }} <strong>{{ 'es requerido' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['nombre'].hasError('maxLength')">
+            {{ 'El nombre' }} <strong>{{ 'debe tener como máximo 50 carácteres' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['nombre'].hasError('minLength')">
+            {{ 'El nombre' }} <strong>{{ 'debe tener como máximo 2 carácteres' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['nombre'].hasError('pattern')">
+            {{ 'El nombre' }} <strong>{{ 'debe escribirse con letra inicial mayúscula' }}</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha Comienzo</mat-label>
+          <input
+            matInput
+            required
+            [matDatepicker]="startDate"
+            [matDatepickerFilter]="this.myFilter"
+            placeholder="Fecha Comienzo"
+            [formControl]="form.controls['FechaComienzo']"
+            [min]="minDate"
+            [max]="maxDate"
+          />
+          <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+          <mat-datepicker #startDate></mat-datepicker>
+          <mat-error *ngIf="form.controls['FechaComienzo'].hasError('required')">
+            {{ 'La fecha de comienzo' }} <strong>{{ 'es requerida' }}</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha Cierre</mat-label>
+          <input
+            matInput
+            required
+            [matDatepicker]="endDate"
+            [matDatepickerFilter]="this.myFilter"
+            placeholder="Fecha Cierre"
+            [formControl]="form.controls['FechaFin']"
+            [min]="form.controls['FechaComienzo'].value"
+            [max]="maxDate"
+          />
+          <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+          <mat-datepicker #endDate></mat-datepicker>
+          <mat-error *ngIf="form.controls['FechaFin'].hasError('required')">
+            {{ 'La fecha de cierre' }} <strong>{{ 'es requerida' }}</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <div fxLayout="row" class="mt-2" fxLayoutAlign="start start" fxLayoutGap="gappx">
+          <mat-form-field appearance="fill" fxFlex="33" fxFlex.lt-md="33" fxFlex.xs="33">
+            <mat-label>{{ 'Valor a Alcanzar' }}</mat-label>
+            <input
+              class="prueba"
+              type="number"
+              pattern="\d*"
+              [maxlength]="3"
+              min="1"
+              max="100"
+              matInput
+              [formControl]="form.controls['ValorAlcanzar']"
+              placeholder="{{ 'Valor a Alcanzar' }}"
+            />
+            <span matSuffix>%</span>
+            <mat-error *ngIf="form.controls['ValorAlcanzar'].hasError('required')">
+              {{ 'El valor a alcanzar' }} <strong>{{ 'es requerido' }}</strong>
+            </mat-error>
+            <mat-error *ngIf="form.controls['ValorAlcanzar'].hasError('minLength')">
+              {{ 'El valor a alcanzar' }} <strong>{{ 'debe tener como máximo 3 carácteres' }}</strong>
+            </mat-error>
+            <mat-error *ngIf="form.controls['ValorAlcanzar'].hasError('pattern')">
+              {{ 'El valor a alcanzar' }} <strong>{{ 'debe ser sólo número' }}</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div fxLayout="row" class="mt-2" fxLayoutAlign="start start" fxLayoutGap="gappx">
+          <mat-form-field appearance="fill" fxFlex="33" fxFlex.lt-md="33" fxFlex.xs="33">
+            <mat-label>{{ 'Cumplimiento' }}</mat-label>
+            <input
+              class="prueba"
+              type="number"
+              pattern="\d*"
+              [maxlength]="3"
+              min="1"
+              max="100"
+              matInput
+              [formControl]="form.controls['cumplimiento']"
+              placeholder="{{ 'Cumplimiento' }}"
+            />
+            <span matSuffix>%</span>
+            <mat-error *ngIf="form.controls['cumplimiento'].hasError('required')">
+              {{ 'El cumplimiento' }} <strong>{{ 'es requerido' }}</strong>
+            </mat-error>
+            <mat-error *ngIf="form.controls['cumplimiento'].hasError('minLength')">
+              {{ 'El cumplimiento' }} <strong>{{ 'debe tener como máximo 3 carácteres' }}</strong>
+            </mat-error>
+            <mat-error *ngIf="form.controls['cumplimiento'].hasError('pattern')">
+              {{ 'El cumplimiento' }} <strong>{{ 'debe ser sólo número' }}</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" class="mt-2" fxLayoutAlign="start start" fxLayoutGap="gappx">
+          <mat-form-field appearance="fill" fxFlex="33" fxFlex.lt-md="33" fxFlex.xs="33">
+            <mat-label>Periodicidad de Seguimiento</mat-label>
+            <input
+              class="prueba"
+              matInput
+              type="number"
+              placeholder="Ex. 12"
+              pattern="\d*"
+              [maxlength]="3"
+              [formControl]="form.controls['PeriodicidadSeguimiento']"
+              min="1"
+              max="365"
+            />
+            <span matSuffix>días</span>
+            <mat-error *ngIf="fontSizeControl.invalid">Min size: 1día</mat-error>
+            <mat-error *ngIf="form.controls['PeriodicidadSeguimiento'].hasError('required')">
+              {{ 'La periodicidad de seguimiento' }} <strong>{{ 'es requerida' }}</strong>
+            </mat-error>
+            <mat-error *ngIf="form.controls['PeriodicidadSeguimiento'].hasError('minLength')">
+              {{ 'La periodicidad de seguimiento' }} <strong>{{ 'debe tener como máximo 3 carácteres' }}</strong>
+            </mat-error>
+            <mat-error *ngIf="form.controls['PeriodicidadSeguimiento'].hasError('pattern')">
+              {{ 'La periodicidad de seguimiento' }} <strong>{{ 'debe ser sólo número' }}</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Indicadores</mat-label>
+          <mat-select [formControl]="form.controls['Indicadores']" multiple>
+            <mat-option *ngFor="let indicadores of Indicadores" [value]="indicadores.id">{{
+              indicadores.nombre
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!--Column Comentario-->
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Comentario' }}</mat-label>
+          <textarea
+            rows="5"
+            matInput
+            required
+            [formControl]="form.controls['comentario']"
+            placeholder="{{ 'Comentario' }}"
+          ></textarea>
+          <mat-icon class="greyIcon" matSuffix>edit</mat-icon>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+
+  <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end start">
+    <button mat-flat-button (click)="onSaveAction()" [disabled]="this.form.invalid" color="primary">
+      {{ 'Guardar' }}
+    </button>
+  </div>
+</div>

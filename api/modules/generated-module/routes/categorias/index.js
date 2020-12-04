@@ -17,16 +17,10 @@ module.exports = function (req, res) {
     req  : req,
     model: models.Categorias
   });
-  
-  query.include= 'Categorias',
-  [
+
+  query.include=[
     {
-      include: [{
-        model: models.Resultados,
-        include: [{
-          model: models.Respuestas
-        }]
-      }]
+      model: models.Encuestas
     }
   ]
 

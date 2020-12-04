@@ -47,17 +47,7 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
   formFilters: FormGroup;
   expandedElement: false;
   allData: any[] = [];
-  displayedColumns: string[] = [
-    'url',
-    'method',
-    'error',
-    'statusCode',
-    'username',
-    'UsuarioId',
-    'cargo',
-    'sucursal',
-    'createdAt',
-  ];
+  displayedColumns: string[] = ['id', 'username', 'cargo', 'path', 'method', 'body', 'statusCode', 'createdAt'];
   dataSource = new MatTableDataSource<any>([]);
   pageSizeOptions: number[] = [10, 15, 25, 50, 100];
   selection = new SelectionModel<any>(true, []);
@@ -154,6 +144,71 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
     {
       label: 'EspRRHH',
       value: 'EspRRHH',
+    },
+  ];
+  method = [
+    {
+      label: 'Consultar',
+      value: 'GET',
+    },
+    {
+      label: 'Registrar',
+      value: 'POST',
+    },
+    {
+      label: 'Actualizar',
+      value: 'PATH',
+    },
+    {
+      label: 'Eliminar',
+      value: 'DELETE',
+    },
+  ];
+
+  statusCode = [
+    {
+      label: 'Éxito',
+      value: '200',
+    },
+    {
+      label: 'Creado',
+      value: '201',
+    },
+    {
+      label: 'Sin contenido',
+      value: '204',
+    },
+    {
+      label: 'No modificado',
+      value: '304',
+    },
+    {
+      label: 'Petición incorrecta',
+      value: '400',
+    },
+    {
+      label: 'No autorizado',
+      value: '401',
+    },
+    {
+      label: 'Prohibido',
+      value: '403',
+    },
+    {
+      label: 'No encontrado',
+      value: '404',
+    },
+    {
+      label: 'Formato no soportado',
+      value: '415',
+    },
+    {
+      label: 'Requiere actualización',
+      value: '426',
+    },
+    {
+      label: 'Error interno de servidor',
+      value: '500',
     },
   ];
 
@@ -325,6 +380,8 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.breadcrumbService.clearBreadcrumd();
+    this.breadcrumbService.setBreadcrumd('Sistema de Gestión de No Conformidades', true);
     const $this = this;
     const query: IPagination = {
       limit: 10,
@@ -334,14 +391,6 @@ export class AdminLogTableComponent implements OnInit, OnDestroy {
       page: 1,
       filter: null,
     };
-
-    /*this.rolesService.getAllRoles().subscribe((data) => {
-      this.cargo = data.data;
-    });*/
-
-    /*this.sucursalService.getAllSucursal().subscribe((data) => {
-      this.sucursal = data.data;
-    });*/
 
     this.elementService.getAllLogs(this.query, this.searchFilters).subscribe((data) => {
       this.onInitPagination(data.meta);

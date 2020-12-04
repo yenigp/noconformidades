@@ -13,8 +13,8 @@ exports.registry = function registry() {
 
   global.app.express
         .route(tareasCollectionRoute)
-        .post([global.security.ensureAuthenticated(), global.security.ensureSucursal(), global.security.isJefeProceso()], require('./create'))
-        .get([global.security.ensureAuthenticated(), global.security.ensureSucursal(), global.security.isJefeProceso()], require('./index'));
+        .post([global.security.ensureAuthenticated(), global.security.isJefeProceso()], require('./create'))
+        .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
     .app.express
@@ -58,6 +58,6 @@ exports.registry = function registry() {
   global.app.express
         .route(tareasSingleRoute)
         .patch([global.security.ensureAuthenticated(), global.security.isJefeProceso()], require('./update'))
-        .get([global.security.ensureAuthenticated(), global.security.isJefeProceso()], require('./show'))
+        .get(global.security.ensureAuthenticated(), require('./show'))
         .delete([global.security.ensureAuthenticated(), global.security.isJefeProceso()],require('./delete'));
 };

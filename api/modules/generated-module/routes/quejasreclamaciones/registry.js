@@ -22,7 +22,12 @@ exports.registry = function registry() {
       return models
         .QuejasReclamaciones
         .findByPk(quejasreclamacionesId, {
-          include: [{ all: true }]
+          include: [{model: models.Producto},
+            {model: models.ProdServicio},
+            {model: models.Reserva},{
+            model: models.NoConformidad,
+            include: ['Proceso', 'Norma', models.Usuario]
+          }]
         }).then(function (data) {
           if (!data) {
             return res.sendStatus(404); // Not Found.
@@ -61,12 +66,4 @@ exports.registry = function registry() {
     .get(global.security.ensureAuthenticated(), require('./show'))
     .delete(global.security.ensureAuthenticated(), global.security.isJefeProceso(), require('./delete'));
 
-  /*var quejasreclamacionesProfileRoute = '/v1/profile';
-
-  global.app.express
-    .route(quejasreclamacionesProfileRoute)
-    .patch(function(req,res,next){
-      req.noconformidades=req.loggedUser;
-      return next();
-    }, require('./update'))*/
 };

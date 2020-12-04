@@ -14,7 +14,7 @@ exports.registry = function registry() {
   global.app.express
     .route(tiponcCollectionRoute)
     .post([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./create'))
-    .get([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa() || global.security.isEspCalidadSucursal()], require('./index'));
+    .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
     .app.express
@@ -60,13 +60,4 @@ exports.registry = function registry() {
     .patch([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./update'))
     .get(global.security.ensureAuthenticated(), require('./show'))
     .delete([global.security.ensureAuthenticated(), global.security.isEspCalidadEmpresa()], require('./delete'));
-
-  /*var tiponcProfileRoute = '/v1/profile';
-
-  global.app.express
-    .route(tiponcProfileRoute)
-    .patch(function(req,res,next){
-      req.tiponc=req.loggedUser;
-      return next();
-    }, require('./update'))*/
 };

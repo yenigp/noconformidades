@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="row barLogin">
+    <div class="title">Encuestas</div>
+    <br />
+  </div>
+  <div fxHide.xs>
+    <button color="primary" mat-button (click)="ingresar()">
+      <mat-icon>refresh</mat-icon>
+      Ingresar
+    </button>
+    <button color="primary" [routerLink]="['/backend/encuestas/create']" mat-button>
+      <mat-icon>add</mat-icon>
+      Añadir
+    </button>
+  </div>
+  <br />
+  <br />
+  <mat-card class="example-card" *ngFor="let encuesta of encuestas">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>{{ encuesta.nameAnswer }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="nPreguntasEncuestas">
+      <p>El total de preguntas es de: {{ encuesta.preguntas.length }}</p>
+    </mat-card-content>
+    <mat-card-actions class="botones">
+      <button mat-stroked-button color="primary" (click)="iniciar(encuesta.ID)">Iniciar</button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card class="example-card" *ngIf="encuestas.length === 0">
+    <mat-card-content class="noEncuestas">
+      <p>No se encontró listado de encuestas</p>
+    </mat-card-content>
+  </mat-card>
+</div>

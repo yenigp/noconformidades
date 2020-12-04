@@ -118,10 +118,6 @@ exports.loadModel = function loadModel() {
                 foreignKey: 'idreservapadre',
                 constraints: false
             });
-            models.ReservaPadre.hasMany(models.QuejasReclamaciones, {
-                foreignKey: 'ReservaId',
-                constraints: false
-            });
             models.ReservaPadre.hasMany(models.Turista, {
                 foreignKey: 'idreservapadre',
                 constraints: false

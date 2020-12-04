@@ -95,17 +95,20 @@ function saveSystemLog(req, res, wasFinished) {
     path: req.path,
     protocol: req.protocol,
     host: req.headers.host,
+    ip: req.ip,
     headers: JSON.stringify(req.headers),
     delay: durationInMilliseconds,
     method: req.method,
     wasFinished: wasFinished,
     query: JSON.stringify(req.query),
     body: JSON.stringify(req.body),
+    respuesta: JSON.stringify(res.cookie),
     statusCode: res.statusCode,
   }
 
   if (req.statusCode == 500) {
-    bodyLog.response = req.errors;
+    bodyLog.response = req.error;
+    console.log(req.error);
   }
 
   return global
@@ -113,7 +116,7 @@ function saveSystemLog(req, res, wasFinished) {
     return models
     .SystemLog
     .create(bodyLog).then(function (elemento) {
-      console.log(elemento);
+      //console.log(elemento);
     }).catch(function (e) {
       console.log("Error-- en logs", e)
     })
@@ -139,7 +142,7 @@ app.use(function (req, res, next) {
         id: req.loggedUser.id,
         username: req.loggedUser.usuario,
         sucursal: req.loggedUser.SucursalId,
-        email: req.loggedUser.email,
+        email: req.loggedUser.email
       }
     }
      saveSystemLog(req, res, true);
@@ -403,9 +406,7 @@ function (error) {
     });
   })
 
-  serverCreator = /*(global.app.config.get('api:useHttps'))
-                  ? https.createServer.bind(this, httpsOptions, app)
-                  :*/ http.createServer.bind(this, app);
+  serverCreator = http.createServer.bind(this, app);
 
   var server = serverCreator()
     .on('error', function onServerError(errorOnCreateServer) {

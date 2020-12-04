@@ -55,8 +55,8 @@
       <mat-card-content>
         <div class="" style="margin-top: 10px">Estado: {{ service.estado }}</div>
         <hr />
-        <div>Norma: {{ service.NoConformidad.Norma.nombre }}</div>
-        <span> Proceso: {{ service.NoConformidad.Proceso.nombre }} </span>
+        <div>Norma: {{ service.NoConformidad.NormaId ? service.NoConformidad.Norma.nombre : '--' }}</div>
+        <span> Proceso: {{ service.NoConformidad.ProcesoId ? service.NoConformidad.Proceso.nombre : '--' }} </span>
       </mat-card-content>
       <mat-card-actions class="mb-0" fxLayoutAlign="end center">
         <button matTooltip="{{ 'Vista detallada' }}" (click)="this.onShowService(service)" mat-icon-button>
@@ -64,7 +64,7 @@
         </button>
         <button
           matTooltip="{{ 'Editar expediente' }}"
-          *ngIf="service.estado != 'cerrado'"
+          *ngIf="(service.estado != 'cerrado' && this.loggedInUser.RolId == 3) || this.loggedInUser.RolId == 7"
           (click)="this.onEditService(service)"
           mat-icon-button
         >
@@ -78,7 +78,3 @@
     <h1 class="text-muted mt-3">Tu lista de expediente está vacía</h1>
   </div>
 </div>
-
-<button (click)="onCreateService()" id="AddBtn" mat-fab color="primary">
-  <mat-icon> add </mat-icon>
-</button>

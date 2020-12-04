@@ -9,13 +9,15 @@ module.exports = function (req, res) {
     data: {}
   };
 
-  if (req.usuario.SucursalId != req.loggedUser.SucursalId){
-    return res.status(403).json({
-      errors: [{
-        field: "Autorización",
-        title: "Usted no tiene acceso a actualizar dicha Usuario"
-      }]
-    })
+  if (req.loggedUser.RolId != 4){
+    if (req.usuario.SucursalId != req.loggedUser.SucursalId){
+      return res.status(403).json({
+        errors: [{
+          field: "Autorización",
+          title: "Usted no tiene acceso a actualizar dicha Usuario"
+        }]
+      })
+    }
   }
   return req
     .usuario

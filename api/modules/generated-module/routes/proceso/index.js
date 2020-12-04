@@ -18,6 +18,12 @@ module.exports = function (req, res) {
     model: models.Proceso
   });
 
+  query.include=[
+    {
+      model: models.Usuario,
+    }
+  ]
+
   query=jsonAPI.prepareQuery(query);
   return models
     .Proceso.findAll(query)

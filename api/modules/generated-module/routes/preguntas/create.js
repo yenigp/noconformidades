@@ -13,14 +13,6 @@ module.exports = function (req, res) {
       return models
         .Preguntas
         .create(req.body,{transaction:t})
-        .then(function (data) {
-          return Sequelize.Promise.mapSeries(data, models.Respuestas.create())
-            .then(([data, respuestas]) => {
-              return models.Resultados.create({ PreguntaId: data.id, RespuestaId: respuestas.id, CreatorId: data.CreatorId},{
-                transaction:t
-              })
-            })
-        })
     })
     .then(function (data) {
       jsonAPIBody.data = data.toJSON();

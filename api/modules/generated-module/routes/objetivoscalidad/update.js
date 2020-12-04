@@ -4,6 +4,7 @@ module.exports = function (req, res) {
 
 	var jsonAPI    = global.app.utils.jsonAPI;
   var models = global.app.orm.sequelize.models;
+  var Sequelize = global.app.orm.Sequelize;
 
   var jsonAPIBody = {
     data: {}
@@ -17,8 +18,30 @@ module.exports = function (req, res) {
         .ObjetivosCalidad
         .findByPk(data.id, {include:[{all:true}]});
     })
+    .then(function (objetivosX) {
+      return Sequelize.Promise.mapSeries(req.body.Indicadores, 
+        function(indicadoresX) {
+          jsonAPIBody.data = objetivosX.toJSON();
+          return models.Indicadores.findOrCreate({
+            where: {
+              id:    indicadoresX,
+            }})
+            .spread(function(indicadorX, created){
+              if( created ){
+                return models.IndicadoresObjetivos.create({
+                    IndicadoresId: indicadorX.id,
+                    ObjetivosId: objetivosX.id
+                });
+            } else {
+              return models.IndicadoresObjetivos.create({
+                IndicadoresId: indicadorX.id,
+                ObjetivosId: objetivosX.id
+            });
+          }
+          })
+      })
+    })
     .then(function (data) {
-      jsonAPIBody.data = data.toJSON();
       return res.status(200).json(jsonAPIBody); // OK.
     })
     .catch(global.app.orm.Sequelize.ValidationError, function (error) {

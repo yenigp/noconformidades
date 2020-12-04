@@ -293,6 +293,10 @@ exports.loadModel = function loadModel() {
                 {
                     foreignKey: 'ReservaID'
                 });
+                models.Reserva.hasMany(models.QuejasReclamaciones, {
+                    foreignKey: 'ReservaId',
+                    constraints: false
+                });
                 
         }
 

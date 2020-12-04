@@ -38,8 +38,8 @@ function ensureAuthenticated() {
     } catch (e) {
       return res.status(401).json({
         errors: [{
-          field: "Authentication",
-          title: "Bad authentication"
+          field: "Autenticación",
+          title: "Autenticación fallida."
         }]
       })
     };
@@ -54,8 +54,8 @@ function ensureAuthenticated() {
           return res.status(401)
             .json({
               errors: [{
-                field: 'authorization',
-                title: 'Invalid bearer authorization'
+                field: 'Autenticación',
+                title: 'Usted porta una autorización no válida.'
               }]
             });
         } else {
@@ -98,8 +98,8 @@ function ensureAuthenticated() {
             if (decoded.data.lastLogout == undefined) {
               return res.status(401).json({
                 errors: [{
-                  field: "Authorization",
-                  title: "old token provided v2."
+                  field: "Autorización",
+                  title: "Usted proporcionó un token antiguo."
                 }]
               })
             }
@@ -107,8 +107,8 @@ function ensureAuthenticated() {
             if (usuariolastLogout.diff(tokenlastLogout, 'seconds') > 0) {
               return res.status(401).json({
                 errors: [{
-                  field: "Authorization",
-                  title: "old token provided"
+                  field: "Autorización",
+                  title: "Usted proporcionó un token antiguo."
                 }]
               })
             } else {
@@ -121,7 +121,7 @@ function ensureAuthenticated() {
             console.log(e);
             return res.status(401).json({
               errors: [{
-                field: "Authorization",
+                field: "Autorización",
                 title: e.message
               }]
             });
@@ -191,7 +191,7 @@ function isAdmin(){
         var rol = usuarioX.RolId;
 
         return models.Roles.findOne({
-          where: {id: rol, nombre: "AdminSucursal" || "AdminEmpresa"}
+          where: {id: rol, nombre: "AdminSucursal" || {id: rol, nombre: "AdminEmpresa"}} 
         })
       }).then(function(isAdminSucursalX) {
         console.log(isAdminSucursalX)

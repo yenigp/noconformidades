@@ -8,6 +8,8 @@ import { environment } from 'src/environments/environment';
 import * as jsPDF from 'jspdf';
 import * as html2canvas from 'html2canvas';
 import { element } from 'protractor';
+import { IUser } from 'src/app/core/classes/user.class';
+import { LoggedInUserService } from 'src/app/core/services/loggedInUser/logged-in-user.service';
 @Component({
   selector: 'app-expediente-details',
   templateUrl: './expediente-details.component.html',
@@ -17,16 +19,20 @@ export class AdminExpedienteDetailsComponent implements OnInit {
   Expediente: any = {};
   isLoading: boolean = true;
   imageUrl: any;
+  h2c: any = html2canvas;
+  loggedInUser: IUser;
   constructor(
     private breadcrumbService: BreadcrumbService,
     private route: ActivatedRoute,
     private router: Router,
     private expedienteService: ExpedienteService,
+    private loggedInUserService: LoggedInUserService,
 
     private utilsService: UtilsService,
     private showToastr: ShowToastrService,
   ) {
     this.imageUrl = environment.imageUrl;
+    this.loggedInUser = this.loggedInUserService.getLoggedInUser();
   }
 
   getExpedienteInfo(expedienteId) {
@@ -75,7 +81,7 @@ export class AdminExpedienteDetailsComponent implements OnInit {
       scale: 3,
     };
 
-    /*html2canvas(DATA, options)
+    this.h2c(DATA, options)
       .then((canvas) => {
         const img = canvas.toDataURL('image/PNG');
 
@@ -91,6 +97,6 @@ export class AdminExpedienteDetailsComponent implements OnInit {
       })
       .then((docResult) => {
         docResult.save(`${new Date().toISOString()}_noconformidad.pdf`);
-      });*/
+      });
   }
 }

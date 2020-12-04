@@ -12,7 +12,7 @@
             <mat-icon>refresh</mat-icon>
             Refrescar
           </button>
-          <button *ngIf="role !== 'Collaborator'" mat-button (click)="onCreateUser()">
+          <button *ngIf="role == 'AdminSucursal' || 'AdminEmpresa'" mat-button (click)="onCreateUser()">
             <mat-icon>add</mat-icon>
             Adicionar
           </button>
@@ -25,7 +25,7 @@
           <button mat-icon-button (click)="refreshData()">
             <mat-icon>refresh</mat-icon>
           </button>
-          <button *ngIf="role !== 'Collaborator'" mat-icon-button (click)="onCreateUser()">
+          <button *ngIf="role == 'AdminSucursal' || 'AdminEmpresa'" mat-icon-button (click)="onCreateUser()">
             <mat-icon>add</mat-icon>
           </button>
         </div>
@@ -60,7 +60,7 @@
         <div>
           <button *ngIf="selection.selected.length == 1" mat-button (click)="onEditUser(selection.selected[0])">
             <mat-icon aria-label="Example icon-button with a heart icon">edit</mat-icon>
-            <span *ngIf="role !== 'Collaborator'" class="mat-button">EDITAR</span>
+            <span *ngIf="role == 'AdminSucursal' || 'AdminEmpresa'" class="mat-button">EDITAR</span>
           </button>
           <button mat-button (click)="onRemoveUser(selection.selected)">
             <mat-icon aria-label="Remove">remove</mat-icon>
@@ -75,40 +75,31 @@
     <table mat-table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="select">
         <th style="width: 8%" mat-header-cell *matHeaderCellDef mat-sort-header>
-          <div fxLayout="column" fxLayoutAlign="start start">
-            <mat-checkbox
-              (change)="$event ? masterToggle() : null"
-              [checked]="selection.hasValue() && isAllSelected()"
-              [indeterminate]="selection.hasValue() && !isAllSelected()"
-              [aria-label]="checkboxLabel()"
-            >
-            </mat-checkbox>
-          </div>
+          <div fxLayout="column" fxLayoutAlign="start start"></div>
         </th>
         <td mat-cell *matCellDef="let row">
-          <div fxLayout="column" fxLayoutAlign="start start">
-            <mat-checkbox
-              (click)="$event.stopPropagation()"
-              (change)="$event ? selection.toggle(row) : null"
-              [checked]="selection.isSelected(row)"
-              [aria-label]="checkboxLabel(row)"
-            >
-            </mat-checkbox>
-          </div>
+          <div fxLayout="column" fxLayoutAlign="start start"></div>
         </td>
       </ng-container>
 
       <!-- Position Column -->
 
       <!-- Name Column -->
-      <ng-container matColumnDef="gitUser">
+      <ng-container matColumnDef="nombre">
         <th style="width: 15%" mat-header-cell *matHeaderCellDef mat-sort-header>
-          <span class="mat-body-2">{{ 'Git User' }}</span>
+          <span class="mat-body-2">{{ 'Nombre' }}</span>
         </th>
-        <td mat-cell *matCellDef="let element">{{ element.gitUser }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.nombre }}</td>
       </ng-container>
 
-      <!-- Symbol Column -->
+      <!-- Apellidos Column -->
+      <ng-container matColumnDef="apellidos">
+        <th style="width: 15%" mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span class="mat-body-2">{{ 'Apellidos' }}</span>
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.apellidos }}</td>
+      </ng-container>
+
       <ng-container matColumnDef="email">
         <th style="width: 15%" mat-header-cell *matHeaderCellDef mat-sort-header>
           <span class="mat-body-2">{{ 'Email' }}</span>
@@ -116,20 +107,20 @@
         <td mat-cell *matCellDef="let element">{{ element.email }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="rol">
+      <ng-container matColumnDef="usuario">
         <th style="width: 15%" mat-header-cell *matHeaderCellDef mat-sort-header>
-          <span class="mat-body-2">{{ 'Rol' }}</span>
+          <span class="mat-body-2">{{ 'Usuario' }}</span>
         </th>
-        <td mat-cell *matCellDef="let element">{{ element.rol }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.usuario }}</td>
       </ng-container>
 
       <ng-container matColumnDef="status">
-        <th style="width: 5%" mat-header-cell *matHeaderCellDef mat-sort-header>
-          <span class="mat-body-2">{{ 'Status' }}</span>
+        <th style="width: 10%" mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span class="mat-body-2">{{ 'Estado' }}</span>
         </th>
         <td mat-cell *matCellDef="let element">
           <mat-icon
-            matTooltip="{{ 'Usuario is activated' }}"
+            matTooltip="{{ 'Usuario está habilitado' }}"
             style="border-radius: 50%; color: #4caf50"
             *ngIf="element.status == 'enabled'"
             class="green-600 s-16"
@@ -137,7 +128,7 @@
             check</mat-icon
           >
           <mat-icon
-            matTooltip="{{ 'Usuario is not activated' }}"
+            matTooltip="{{ 'Usuario no está habilitado' }}"
             style="border-radius: 50%; color: #e53935"
             *ngIf="element.status !== 'enabled'"
             class="red-500 s-16"
@@ -146,11 +137,12 @@
           >
         </td>
       </ng-container>
-      <ng-container matColumnDef="description">
+
+      <ng-container matColumnDef="RolId">
         <th style="width: 15%" mat-header-cell *matHeaderCellDef mat-sort-header>
-          <span class="mat-body-2">{{ 'Description' }}</span>
+          <span class="mat-body-2">{{ 'Rol' }}</span>
         </th>
-        <td mat-cell *matCellDef="let element">{{ element.description }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.Role.nombre }}</td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
@@ -159,9 +151,6 @@
           <div id="actionsHover" fxLayout="row" fxLayoutAlign="end center">
             <button (click)="onEditUser(element)" mat-icon-button>
               <mat-icon>edit</mat-icon>
-            </button>
-            <button (click)="onRemoveUser([element])" mat-icon-button>
-              <mat-icon>delete</mat-icon>
             </button>
           </div>
         </td>

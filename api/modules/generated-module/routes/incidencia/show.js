@@ -6,7 +6,7 @@ module.exports = function (req, res) {
     data: {}
   };
 
-  /*if (req.loggedUser.RolId != 4) {
+  if (req.loggedUser.RolId != 4) {
     if (req.incidencia.NoConformidad.SucursalId != req.loggedUser.SucursalId) {
       return res.status(403).json({
         errors: [{
@@ -15,7 +15,8 @@ module.exports = function (req, res) {
         }]
       })
     }   
-  }*/
+  }
   jsonAPIBody.data = req.incidencia;
+  console.log(req.incidencia);
   return res.status(200).json(jsonAPIBody); // OK.
 };

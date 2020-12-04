@@ -1,5 +1,6 @@
 'use strict';
 
+const { update } = require('lodash');
 var moment = require('moment');
 
 module.exports = function (req, res) {
@@ -11,6 +12,31 @@ module.exports = function (req, res) {
   var jsonAPIBody = {
     data: {}
   };
+
+
+    ////////////////////////////////////////////////////////
+
+      //Función que devuelve el codigo de acción dado su id.
+      async function BuscarCodigoAcciones(TipoId) {
+      //esta funcion busca el codigo en la base de datos, dado un TipoId
+      return await models.TipoAC.findByPk(TipoId).then(function (tipoX) {
+        return tipoX.codigo;
+      })
+    }
+
+      //Función que genera el código de una accion.
+    async function GenerarCodigoAccion(id, TipoId, length) {
+      id = id.toString();
+      var tipoac = await BuscarCodigoAcciones(TipoId);
+      var lengthInicial = tipoac.length + id.length;
+      for (var i = length - lengthInicial; i > 0; i--) {
+        id = "0" + id;
+      }
+
+      return tipoac + id;
+    }
+    ////////////////////////////////////////////////////////
+
 
     //Función que devuelve el codigo de un tipo de no conformidad dado su id.
     async function BuscarCodigoPorTipoId(TipoId) {
@@ -58,22 +84,13 @@ module.exports = function (req, res) {
         .findByPk(incidencia.id, {include:[{all:true}]});
     })
     .then(async function (incidencia) {
-      if (incidencia.EspCalidad != null) {
-        return incidencia.NoConformidad.update({
-          FechaIdentificacion: req.body.FechaIdentificacion,
-          descripcion: req.body.descripcion,
-          status: "abierta"
-        }).then(async function(){
-        return models.NoConformidad.findByPk(auditoria.NoConformidadId)
-        })
-      } else {
+
         return incidencia.NoConformidad.update({
           FechaIdentificacion: req.body.FechaIdentificacion,
           descripcion: req.body.descripcion
         }).then(async function(){
-        return models.NoConformidad.findByPk(auditoria.NoConformidadId)
+        return models.NoConformidad.findByPk(incidencia.NoConformidadId)
         })
-      }
     })
     .then(async function (noconformidad) {
       if (noconformidad.SucursalId != req.loggedUser.SucursalId){
@@ -83,11 +100,12 @@ module.exports = function (req, res) {
             title: "Usted no tiene acceso a actualizar dicha No Conformidad"
           }]
         })
-      } else if (noconformidad.status === "abierta" && req.loggedUser.RolId === 7) {
+      } else if (req.loggedUser.RolId === 7) {
         noconformidad.update({
           ProcesoId: req.body.ProcesoId,
           NormaId: req.body.NormaId,
           codigo: await GenerarCodigo(noconformidad.id, 10),
+          AreaId: req.body.AreaId,
           JefeProceso: req.body.JefeProceso,
           status: "analizando"
           }).then(function(){
@@ -96,21 +114,29 @@ module.exports = function (req, res) {
         } else if (noconformidad.status === "analizando" && req.loggedUser.RolId === 3) {
           noconformidad.update({
             FechaRevision: req.body.FechaRevision,
-            AreaId: req.body.AreaId,
             resultado: req.body.resultado,
             gravedad: req.body.gravedad
-          }).then(function(){
+          }).then(function(noconformidad){
           return models.NoConformidad.findByPk(noconformidad.id)
-          })
-          //Creando acciones
-          return Sequelize.Promise.mapSeries(req.body.Acciones,
-            console.log(req.body.Acciones), 
+          .then(function () {
+            //Creando acciones
+          return Sequelize.Promise.mapSeries(req.body.Acciones, 
             function(accionesX) {
-              return models.Acciones.findOrCreate(accionesX)
-          .spread(function (accionX, created) {
-              return models.NCAcciones.create({ NoConformidadId: noconformidad.id, AccionesId: accionX.id }),
-              console.log(created)
+              return models.Acciones.create(accionesX)
+              .then(async function (accionX) {
+                var TipoId = accionX.TipoId
+                var codigo = await GenerarCodigoAccion(accionX.id, TipoId, 6);
+                return accionX.update({
+                  codigo: codigo,
+                }).then(function () {
+                  return models.Acciones.findByPk(accionX.id)
+                })
+                .then(function () {
+                  return models.NCAcciones.create({ NoConformidadId: noconformidad.id, AccionesId: accionX.id })
+                })
+              }) 
             })
+          })
           })
         } else if (noconformidad.status === "analizando" && req.loggedUser.RolId != 3) {
           return res.status(403).json({

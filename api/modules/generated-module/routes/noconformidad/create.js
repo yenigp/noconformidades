@@ -84,17 +84,15 @@ module.exports = function (req, res) {
         },{transaction:t})
     })
     .then(async function (noconformidad) {
+      var tiponc = await BuscarCodigoPorTipoId(req.body.TipoId);
       var id=noconformidad.id;
       var codigo=await GenerarCodigo(id,10);
       return noconformidad.update({
-          codigo: codigo,
+        codigo: codigo,
       }).then(function(){
       return models.NoConformidad.findByPk(noconformidad.id)
-      })
-    })
-    .then(async function (noconformidad) {
-      var tiponc = await BuscarCodigoPorTipoId(req.body.TipoId);
-          /*Si el tipo de no conformidad enviado por el usuario su código es 
+      }).then(function () {
+        /*Si el tipo de no conformidad enviado por el usuario su código es 
           auditoria interna entonces se crea una Queja y Reclamación.*/
           if (tiponc === 'AI') {
             return models
@@ -139,21 +137,12 @@ module.exports = function (req, res) {
               CreatorId: noconformidad.CreatorId
             })
           }
+      })
     })
     .then(function (data) {
-      //Creando Expediente
-      console.log(data);
-      if (data.CausaInvestigacion === true){
-        jsonAPIBody.data = data.toJSON()
-        return models
-          .Expediente
-          .create({
-            NoConformidadId: data.NoConformidadId,
-            evidencia: req.body.evidencia,
-            estado: req.body.estado,
-            CreatorId: data.CreatorId
-          })
-        } else if (data.TipoId === 3) {
+        //Creando Expediente
+        console.log(data);
+        if (data.TipoId === 3) {
           jsonAPIBody.data = data.toJSON()
           return models
           .Expediente
@@ -162,22 +151,30 @@ module.exports = function (req, res) {
             evidencia: req.body.evidencia,
             estado: req.body.estado,
             CreatorId: data.CreatorId
-          })
-      } else if (data.TipoId != 3) {
-        jsonAPIBody.data = data.toJSON()
-      } else {
-        jsonAPIBody.data = data.toJSON()
-        return models
-          .Expediente
-          .create({
-            NoConformidadId: data.NoConformidadId,
-            evidencia: req.body.evidencia,
-            estado: req.body.estado,
-            CreatorId: data.CreatorId
-          })
-      }    
-    })
-    .then(function (data) {
+          }) 
+        }else if (data.TipoId != 3) {
+            jsonAPIBody.data = data.toJSON()
+          } else if (data.CausaInvestigacion === true){
+          jsonAPIBody.data = noconformidad.toJSON()
+          return models
+            .Expediente
+            .create({
+              NoConformidadId: data.NoConformidadId,
+              evidencia: req.body.evidencia,
+              estado: req.body.estado,
+              CreatorId: data.CreatorId
+            })
+          } else {
+          jsonAPIBody.data = data.toJSON()
+          return models
+            .Expediente
+            .create({
+              NoConformidadId: data.NoConformidadId,
+              evidencia: req.body.evidencia,
+              estado: req.body.estado,
+              CreatorId: data.CreatorId
+            })
+        }    
       return res.status(201).json(jsonAPIBody); // OK.
     })
     .catch(global.app.orm.Sequelize.ValidationError, function (error) {

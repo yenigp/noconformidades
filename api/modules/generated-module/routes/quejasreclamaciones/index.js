@@ -19,7 +19,26 @@ module.exports = function (req, res) {
   });
 
 
-  query.include=[{model: models.QuejasReclamaciones}]
+  query.include=[
+    {
+      model: models.QuejasReclamaciones,
+      include: [
+        {
+          model: models.ProdServicio,
+        },
+        {
+          model: models.Producto,
+        },
+        {
+          model: models.Reserva,
+        }
+      ]
+    },
+    'Norma',
+    'Proceso',
+    'Area',
+    'Sucursal'
+  ]
 
 
   query=jsonAPI.prepareQuery(query);
@@ -27,10 +46,12 @@ module.exports = function (req, res) {
     query.where.TipoId = 3
     query.where.SucursalId = req.loggedUser.SucursalId;
   }
+  if (req.loggedUser.RolId == 3) {
+    query.where.JefeProceso = req.loggedUser.id;
+  }
   return models
     .NoConformidad.findAll(query)
     .then(function (data) {
-      console.log(data)
       jsonAPIBody.data                  = data;
       jsonAPIBody.meta.pagination.count = data.length;
       global.app.utils.jsonAPI.cleanQuery(query);

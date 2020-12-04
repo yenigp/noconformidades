@@ -13,8 +13,7 @@ exports.registry = function registry() {
 
   global.app.express
     .route(productoCollectionRoute)
-    .post(require('./create'))
-    .get(require('./index'));
+    .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
     .app.express
@@ -57,16 +56,5 @@ exports.registry = function registry() {
 
   global.app.express
     .route(productoSingleRoute)
-    .patch(require('./update'))
-    .get(require('./show'))
-    .delete(require('./delete'));
-
-  /*var productoProfileRoute = '/v1/profile';
-
-  global.app.express
-    .route(productoProfileRoute)
-    .patch(function(req,res,next){
-      req.producto=req.loggedUser;
-      return next();
-    }, require('./update'))*/
+    .get(global.security.ensureAuthenticated(), require('./show'))
 };

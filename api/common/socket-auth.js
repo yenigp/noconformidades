@@ -13,7 +13,6 @@ function authenticate(socketConnection, next) {
     if (usuario != undefined && usuario.dataValues != undefined && !error) {
       socketConnection.request.user = {
         id          : usuario.dataValues.id,
-        isSuperAdmin: usuario.dataValues.level == undefined,
         usuario    : usuario.dataValues.usuario
       };
       next(error);

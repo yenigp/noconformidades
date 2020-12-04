@@ -73,6 +73,13 @@ export class CreateNoConformidadComponent implements OnInit, OnDestroy {
   maxDate: Date;
   minDate: Date;
   hide = true;
+  checked = false;
+  disabled = false;
+  myFilter = function (d: Date | null): boolean {
+    const day = (d || new Date()).getDay();
+    // Prevent Saturday and Sunday from being selected.
+    return day !== 0 && day !== 6;
+  };
   // selectedNoConformidad: number = 2;
   ////////////////////Pagination Structure/////////////////////
   query: IPagination = {
@@ -83,23 +90,9 @@ export class CreateNoConformidadComponent implements OnInit, OnDestroy {
     page: 1,
     filter: { filterText: '', properties: [] },
   };
-  action: string = 'Siguente';
+  action: string = 'Siguiente';
 
   //////////////////////////////////////////
-  /**
-   * Session para referencias externas
-   */
-  getAllAcciones(): void {
-    this.accionesService.getAllAcciones(this.query).subscribe(
-      (data) => {
-        this.Acciones = data.data;
-      },
-      (error) => {
-        console.log(error);
-        this.utilsService.errorHandle(error);
-      },
-    );
-  }
 
   ////////////////////////////////
   @ViewChild('stepper', { static: false }) stepper: any;
@@ -127,7 +120,6 @@ export class CreateNoConformidadComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
   ) {
     this.noconformidad = {};
-    this.getAllAcciones();
     this._unsubscribeAll = new Subject<any>();
     this.loggedInUser = this.loggedInUserService.getLoggedInUser();
     this.route.queryParams.subscribe((queryParams) => {
@@ -196,7 +188,7 @@ export class CreateNoConformidadComponent implements OnInit, OnDestroy {
           this.generarReport();
         },
         (err) => {
-          this.utilsService.errorHandle(err, 'No Conformidad', 'Listando');
+          this.utilsService.errorHandle(err, 'No Conformidades', 'Listando');
         },
       );
     } else {
@@ -217,11 +209,12 @@ export class CreateNoConformidadComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.breadcrumbService.clearBreadcrumd();
     this.breadcrumbService.setBreadcrumd('NoConformidad', false, '/backend/noconformidad');
-    this.breadcrumbService.setBreadcrumd('Agregar no conformidad', true);
-
-    this.accionesService.getAllAcciones().subscribe((data) => {
-      this.Acciones = data.data;
-    });
+    if (this.loggedInUser.RolId == 7) {
+      this.breadcrumbService.setBreadcrumd('Registrar no conformidad', true);
+    }
+    if (this.loggedInUser.RolId == 3) {
+      this.breadcrumbService.setBreadcrumd('Analizar no conformidad', true);
+    }
     this.normaService.getAllNorma().subscribe((data) => {
       console.log(data.data);
       this.Norma = data.data;
@@ -265,10 +258,12 @@ export class CreateNoConformidadComponent implements OnInit, OnDestroy {
   rellenarResumen(val) {
     this.noconformidad.codigo = val.codigo ? val.codigo : '';
     this.noconformidad.FechaRegistro = val.FechaRegistro ? val.FechaRegistro : '';
+    this.noconformidad.FechaIdentificacion = val.FechaIdentificacion ? val.FechaIdentificacion : '';
     this.noconformidad.FechaTermino = val.FechaTermino ? val.FechaTermino : '';
-    this.noconformidad.ProcesoId = val.ProcesoId ? val.ProcesoId : '';
-    this.noconformidad.NormaId = val.NormaId ? val.NormaId : '';
-    this.noconformidad.TipoId = val.TipoId ? val.TipoId : '';
+    this.noconformidad.FechaCierre = val.FechaCierre ? val.FechaCierre : '';
+    this.noconformidad.ProcesoId = val.ProcesoId ? val.Proceso.nombre : '';
+    this.noconformidad.NormaId = val.NormaId ? val.Norma.nombre : '';
+    this.noconformidad.TipoId = val.TipoId ? val.Tipo.nombre : '';
   }
 
   buildForm(): void {
@@ -318,10 +313,12 @@ export class CreateNoConformidadComponent implements OnInit, OnDestroy {
           : null,
       ],
       AreaId: [this.noconformidadCreated && this.noconformidadCreated.AreaId ? this.noconformidadCreated.AreaId : null],
-      tipo: [this.noconformidadCreated && this.noconformidadCreated.tipo ? this.noconformidadCreated.tipo : null],
+      tipo: [
+        this.noconformidadCreated && this.noconformidadCreated.tipo ? this.noconformidadCreated.Incidencia.tipo : null,
+      ],
       CausaInvestigacion: [
-        this.noconformidadCreated && this.noconformidadCreated.CausaInvestigacion
-          ? this.noconformidadCreated.CausaInvestigacion
+        this.noconformidadCreated && this.noconformidadCreated.Incidencia.CausaInvestigacion
+          ? this.noconformidadCreated.Incidencia.CausaInvestigacion
           : null,
       ],
       observacion: [
@@ -411,20 +408,14 @@ export class CreateNoConformidadComponent implements OnInit, OnDestroy {
   onClearStorage(): void {
     localStorage.removeItem('noconformidadCreated');
     this.noconformidadCreated = null;
-    // this.showToastr.showSucces('El estado de almacenamiento del producto ha sido eliminado', "Aviso");
     this.form.reset();
   }
 
   //////////////////////////////////////////////////////////////////////////
   Finalizar() {
-    /**
-     * esta accion debe coger el id del deploy creado y darle un patch
-     * con el arreglo de web Clients
-     * y luego de eso hacer un redirect para el listado de no conformidades
-     */
     let data = {
-      id: this.noconformidadCreated.id,
-      Usuario: this.Usuario,
+      id: this.queryParams.NoConformidadId,
+      Acciones: this.Acciones,
     };
     this.spinner.show();
     if (this.noconformidadCreated) {

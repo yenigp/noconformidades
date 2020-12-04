@@ -13,6 +13,29 @@ module.exports = function (req, res) {
     data: {}
   };
 
+      ////////////////////////////////////////////////////////
+
+      //Función que devuelve el codigo de acción dado su id.
+      async function BuscarCodigoAcciones(TipoId) {
+        //esta funcion busca el codigo en la base de datos, dado un TipoId
+        return await models.TipoAC.findByPk(TipoId).then(function (tipoX) {
+          return tipoX.codigo;
+        })
+      }
+  
+        //Función que genera el código de una accion.
+      async function GenerarCodigoAccion(id, TipoId, length) {
+        id = id.toString();
+        var tipoac = await BuscarCodigoAcciones(TipoId);
+        var lengthInicial = tipoac.length + id.length;
+        for (var i = length - lengthInicial; i > 0; i--) {
+          id = "0" + id;
+        }
+  
+        return tipoac + id;
+      }
+      ////////////////////////////////////////////////////////
+
     //Función que devuelve el codigo de un tipo de no conformidad dado su id.
     async function BuscarCodigoPorTipoId(TipoId) {
       //esta funcion busca el codigo en la base de datos, dado un TipoId
@@ -62,19 +85,9 @@ module.exports = function (req, res) {
       return quejasreclamaciones.NoConformidad.update({
         ProcesoId: req.body.ProcesoId,
         NormaId: req.body.NormaId,
-        FechaRegistro: req.body.FechaRegistro,
         FechaIdentificacion: req.body.FechaIdentificacion,
-        FechaTermino: fechatermino,
-        TipoId: 3,
         descripcion: req.body.descripcion,
         evidencia: req.body.evidencia,
-        resultado: req.body.resultado,
-        estado: req.body.estado,
-        FechaRevision: req.body.FechaRevision,
-        FechaCierre: req.body.FechaCierre,
-        AreaId: req.body.AreaId,
-        gravedad: req.body.gravedad,
-        JefeProceso: req.body.JefeProceso
       }).then(async function(){
         if (req.body.ProcesoId != null){
           quejasreclamaciones.NoConformidad.update({
@@ -102,7 +115,6 @@ module.exports = function (req, res) {
           return models.NoConformidad.findByPk(noconformidad.id)
           })
         } else if (noconformidad.status === "analizando" && req.loggedUser.RolId === 3) {
-          console.log(req.loggedUser.RolId)
           noconformidad.update({
             FechaRevision: req.body.FechaRevision,
             AreaId: req.body.AreaId,
@@ -111,16 +123,25 @@ module.exports = function (req, res) {
             CostoNoCalidad: req.body.CostoNoCalidad
           }).then(function(){
           return models.NoConformidad.findByPk(noconformidad.id)
-          })
-          //Creando acciones
-          return Sequelize.Promise.mapSeries(req.body.Acciones,
-            console.log(req.body.Acciones), 
+          .then(function () {
+            //Creando acciones
+          return Sequelize.Promise.mapSeries(req.body.Acciones, 
             function(accionesX) {
-              return models.Acciones.findOrCreate(accionesX)
-          .spread(function (accionX, created) {
-              return models.NCAcciones.create({ NoConformidadId: noconformidad.id, AccionesId: accionX.id }),
-              console.log(created)
+              return models.Acciones.create(accionesX)
+              .then(async function (accionX) {
+                var TipoId = accionX.TipoId
+                var codigo = await GenerarCodigoAccion(accionX.id, TipoId, 6);
+                return accionX.update({
+                  codigo: codigo,
+                }).then(function () {
+                  return models.Acciones.findByPk(accionX.id)
+                })
+                .then(function () {
+                  return models.NCAcciones.create({ NoConformidadId: noconformidad.id, AccionesId: accionX.id })
+                })
+              }) 
             })
+          })
           })
         } else {
           if (noconformidad.FechaRevision != null && noconformidad.AreaId != null && noconformidad.gravedad != null){

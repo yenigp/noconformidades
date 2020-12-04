@@ -42,7 +42,7 @@ module.exports = function (req, res) {
           AccionTomar: req.body.AccionTomar,
           estado: req.body.estado,
           FechaCumplimiento: req.body.FechaCumplimiento,
-          CreatorId: req.body.CreatorId
+          CreatorId: req.body.CreatorId,
         }, {
           transaction: t
         })
@@ -55,17 +55,34 @@ module.exports = function (req, res) {
             return models.Acciones.findByPk(data.id, { transaction: t })
           })
         })
+      })
         .then(function (accionX) {
+          console.log(accionX.id)
           return Sequelize.Promise.mapSeries(req.body.Tareas, 
             function(tareasX) {
+              console.log(tareasX)
               jsonAPIBody.data = accionX.toJSON();
-              return models.Tareas.create(tareasX)
-          .then(function (tareaX) {
-              return models.AccionTarea.create({ AccionesId: accionX.id, TareasId: tareaX.id })
+              return models.Tareas.findOrCreate({
+                where: {
+                  id:    tareasX,
+                }})
+                .spread(function(tareaX, created){
+                  console.log(tareaX)
+                  if( created ){
+                    return models.AccionTarea.create({
+                      AccionesId: accionX.id, 
+                      TareasId: tareaX.id
+                    });
+                } else {
+                  return models.AccionTarea.create({
+                    AccionesId: accionX.id, 
+                    TareasId: tareaX.id
+                });
+              }
+              })
             })
-          })
         })
-    }).then(function (data) {
+        .then(function (data) {
       //jsonAPIBody.data = data.toJSON();
       return res.status(201).json(jsonAPIBody); // OK.
     })

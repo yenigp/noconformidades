@@ -24,19 +24,7 @@ module.exports = function (req, res) {
     }
   ]
 
-  query=jsonAPI.prepareQuery(query);
-  if (req.loggedUser.RolId != 4){
-      if (req.loggedUser.RolId != 5){
-        if (req.loggedUser.RolId != 6) {
-          return res.status(401).json({
-            errors: [{
-              field: "autorización",
-              title: "usted no tiene permiso para ver los roles de los usuarios del sistema"
-            }]
-        })
-      }   
-    }
-  }  
+  query=jsonAPI.prepareQuery(query); 
   return models
     .Roles.findAll(query)
     .then(function (data) {

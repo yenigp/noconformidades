@@ -13,8 +13,8 @@ exports.registry = function registry() {
 
   global.app.express
         .route(dictamenCollectionRoute)
-        .post(require('./create'))
-        .get(require('./index'));
+        .post(global.security.ensureAuthenticated(), require('./create'))
+        .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
     .app.express
@@ -57,7 +57,7 @@ exports.registry = function registry() {
 
   global.app.express
         .route(dictamenSingleRoute)
-        .patch(require('./update'))
-        .get(require('./show'))
-        .delete(require('./delete'));
+        .patch(global.security.ensureAuthenticated(), require('./update'))
+        .get(global.security.ensureAuthenticated(), require('./show'))
+        .delete([global.security.ensureAuthenticated(), global.security.isJefeProceso()], require('./delete'));
 };

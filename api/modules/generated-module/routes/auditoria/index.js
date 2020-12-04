@@ -19,13 +19,21 @@ module.exports = function (req, res) {
   });
 
 
-  query.include=[{model: models.Auditoria}]
+  query.include=['Auditoria',
+  'Proceso',
+  'Norma']
 
 
   query=jsonAPI.prepareQuery(query);
   if (req.loggedUser.RolId != 4){
     query.where.TipoId = 4
     query.where.SucursalId = req.loggedUser.SucursalId;
+  }
+  if (req.loggedUser.RolId == 7) {
+    query.where.EspCalidad = req.loggedUser.id;
+  }
+  if (req.loggedUser.RolId == 3) {
+    query.where.JefeProceso = req.loggedUser.id;
   }
   return models
     .NoConformidad.findAll(query)

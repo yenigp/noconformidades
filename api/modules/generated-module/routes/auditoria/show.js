@@ -11,7 +11,7 @@ module.exports = function (req, res) {
       return res.status(403).json({
         errors: [{
           field: "Autorización",
-          title: "Usted no tiene permiso para gestionar Incidencias de esta Sucursal"
+          title: "Usted no tiene permiso para gestionar Auditorias de esta Sucursal"
         }]
       })
     }   

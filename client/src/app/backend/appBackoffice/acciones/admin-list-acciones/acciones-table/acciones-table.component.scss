@@ -1,0 +1,147 @@
+@import '../../../../../../assets/scss/theme/variables';
+@import 'src/assets/scss/mixins/breakpoints';
+
+app-acciones-table {
+  padding: 16px 0px;
+
+  tr.example-detail-row {
+    height: 0;
+  }
+
+  tr.example-element-row:not(.example-expanded-row):hover {
+    background: whitesmoke;
+  }
+
+  tr.example-element-row:not(.example-expanded-row):active {
+    background: #efefef;
+  }
+
+  .example-element-row td {
+    border-bottom-width: 0;
+  }
+
+  .example-element-detail {
+    overflow: hidden;
+    display: flex;
+  }
+
+  .example-element-diagram {
+    min-width: 80px;
+    border: 2px solid black;
+    padding: 8px;
+    font-weight: lighter;
+    margin: 8px 0;
+    height: 104px;
+  }
+
+  .example-element-symbol {
+    font-weight: bold;
+    font-size: 40px;
+    line-height: normal;
+  }
+
+  .example-element-description {
+    padding: 16px;
+  }
+
+  .example-element-description-attribution {
+    opacity: 0.5;
+  }
+
+  .mat-form-field-wrapper {
+    padding-bottom: 0px !important;
+  }
+
+  @include media-breakpoint('lt-sm') {
+    padding: 16px 0px !important;
+  }
+
+  mat-toolbar-row {
+    background-color: transparent !important;
+  }
+
+  mat-toolbar {
+    background-color: transparent !important;
+  }
+
+  .example-full-width {
+    width: 100%;
+  }
+
+  .search-input {
+    font-family: Roboto;
+    font-size: 20px;
+    outline: none; // removes blue outline on focus
+    border: 0; // removes border
+    box-shadow: none;
+    background-color: transparent;
+  }
+
+  .mat-table {
+    display: table;
+    width: 100%;
+    // border-left: 1px solid rgba(0, 0, 0, 0.12);
+    // border-right: 1px solid rgba(0, 0, 0, 0.12);
+
+    > .mat-header-row,
+    > .mat-row {
+      display: table-row !important;
+      padding: 0 !important;
+      border: none !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+      > .mat-header-cell,
+      > .mat-cell {
+        display: table-cell;
+        height: 90px !important;
+        vertical-align: middle;
+
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
+      }
+    }
+  }
+
+  #actionsHover {
+    color: #616161 !important;
+  }
+
+  .rowData {
+    min-height: 60px !important;
+    height: 60px !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.12) !important;
+
+    &:hover {
+      background-color: #eee;
+    }
+  }
+
+  .responsive_table {
+    // max-height: 70vh;
+    overflow-x: auto;
+    padding: 1px;
+    width: 100% !important;
+
+    @include media-breakpoint('lt-md') {
+      table {
+        min-width: 800px !important;
+
+        th {
+          min-width: 80px !important;
+        }
+
+        #select {
+          min-width: 60px !important;
+        }
+
+        #action {
+          min-width: 60px !important;
+        }
+      }
+
+      .mat-paginator {
+        display: block;
+        min-width: 800px !important;
+      }
+    }
+  }
+}

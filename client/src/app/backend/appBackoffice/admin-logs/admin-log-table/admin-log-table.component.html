@@ -29,7 +29,7 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field fxFlex="22" class="mr-3" appearance="outline">
+      <mat-form-field *ngIf="this.loggedInUser.RolId == 4" fxFlex="22" class="mr-3" appearance="outline">
         <mat-label> {{ 'Sucursal' }}</mat-label>
         <mat-select [formControl]="formFilters.controls['sucursal']" placeholder="{{ 'Sucursal' }}" multiple>
           <mat-option *ngFor="let item of sucursal; let i = index" [value]="item.value">
@@ -43,9 +43,9 @@
       <mat-form-field fxFlex="22" class="mr-3" appearance="outline">
         <mat-label> {{ 'Acción' }}</mat-label>
         <mat-select [formControl]="formFilters.controls['method']" placeholder="{{ 'Acción' }}" multiple>
-          <mat-option *ngFor="let item of ['GET', 'POST', 'PATH', 'DELETE']; let i = index" [value]="item">
+          <mat-option *ngFor="let item of method; let i = index" [value]="item.value">
             <div fxLayout="row" fxLayoutAlign="start center">
-              {{ item }}
+              {{ item.label }}
             </div>
           </mat-option>
         </mat-select>
@@ -58,12 +58,9 @@
           placeholder="{{ 'Código de Respuesta' }}"
           multiple
         >
-          <mat-option
-            *ngFor="let item of [200, 201, 204, 304, 400, 401, 403, 404, 415, 426, 500]; let i = index"
-            [value]="item"
-          >
+          <mat-option *ngFor="let item of statusCode; let i = index" [value]="item.value">
             <div fxLayout="row" fxLayoutAlign="start center">
-              {{ item }}
+              {{ item.label }}
             </div>
           </mat-option>
         </mat-select>
@@ -167,12 +164,39 @@
         (matSortChange)="sortData($event)"
         class="mat-elevation-z8 cf-padding-left-10 cf-padding-right-10 cf-padding-bottom-10"
       >
-        <ng-container matColumnDef="url">
+        <ng-container matColumnDef="id">
           <th style="width: 10%" mat-header-cell *matHeaderCellDef mat-sort-header>
-            <span class="mat-body-2">{{ 'Url' }}</span>
+            <span class="mat-body-2">{{ 'No.' }}</span>
           </th>
           <td mat-cell *matCellDef="let element">
-            <span class="mat-body-2"> {{ element.path }}</span>
+            <span class="mat-body-2"> {{ element.id }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="username">
+          <th style="width: 10%" mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span class="mat-body-2">{{ 'Usuario' }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="mat-body-2">{{ element.username }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="path">
+          <th style="width: 8%" mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span class="mat-body-2">{{ 'Tabla' }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="mat-body-2">{{ element.path }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="body">
+          <th style="width: 8%" mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span class="mat-body-2">{{ 'Valor' }}</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="mat-body-2">{{ element.body ? element.body : '--' }}</span>
           </td>
         </ng-container>
 
@@ -181,61 +205,38 @@
             <span class="mat-body-2">{{ 'Acción' }}</span>
           </th>
           <td mat-cell *matCellDef="let element">
-            <span class="mat-body-2">{{ element.method }}</span>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="error">
-          <th style="width: 15%" mat-header-cell *matHeaderCellDef mat-sort-header>
-            <span class="mat-body-2">{{ 'Error' }}</span>
-          </th>
-          <td mat-cell *matCellDef="let element">
-            <span class="mat-body-2 color-red-500">{{ element.errorMessage }}</span>
+            <span *ngIf="element.method == 'GET'" class="mat-body-2">{{ this.method[0].label }}</span>
+            <span *ngIf="element.method == 'POST'" class="mat-body-2">{{ this.method[1].label }}</span>
+            <span *ngIf="element.method == 'PATH'" class="mat-body-2">{{ this.method[2].label }}</span>
+            <span *ngIf="element.method == 'DELETE'" class="mat-body-2">{{ this.method[3].label }}</span>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="statusCode">
           <th style="width: 8%" mat-header-cell *matHeaderCellDef mat-sort-header>
-            <span class="mat-body-2">{{ 'status' }}</span>
+            <span class="mat-body-2">{{ 'Estado' }}</span>
           </th>
           <td mat-cell *matCellDef="let element">
-            <span class="mat-body-2" ngCla>{{ element.statusCode }}</span>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="username">
-          <th style="width: 10%" mat-header-cell *matHeaderCellDef mat-sort-header>
-            <span class="mat-body-2">{{ 'Username' }}</span>
-          </th>
-          <td mat-cell *matCellDef="let element">
-            <span class="mat-body-2">{{ element.username }}</span>
+            <span *ngIf="element.statusCode == '200'" class="mat-body-2">{{ this.statusCode[0].label }}</span>
+            <span *ngIf="element.statusCode == '201'" class="mat-body-2">{{ this.statusCode[1].label }}</span>
+            <span *ngIf="element.statusCode == '204'" class="mat-body-2">{{ this.statusCode[2].label }}</span>
+            <span *ngIf="element.statusCode == '304'" class="mat-body-2">{{ this.statusCode[3].label }}</span>
+            <span *ngIf="element.statusCode == '400'" class="mat-body-2">{{ this.statusCode[4].label }}</span>
+            <span *ngIf="element.statusCode == '401'" class="mat-body-2">{{ this.statusCode[5].label }}</span>
+            <span *ngIf="element.statusCode == '403'" class="mat-body-2">{{ this.statusCode[6].label }}</span>
+            <span *ngIf="element.statusCode == '404'" class="mat-body-2">{{ this.statusCode[7].label }}</span>
+            <span *ngIf="element.statusCode == '415'" class="mat-body-2">{{ this.statusCode[8].label }}</span>
+            <span *ngIf="element.statusCode == '426'" class="mat-body-2">{{ this.statusCode[9].label }}</span>
+            <span *ngIf="element.statusCode == '500'" class="mat-body-2">{{ this.statusCode[10].label }}</span>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="cargo">
           <th style="width: 8%" mat-header-cell *matHeaderCellDef mat-sort-header>
-            <span class="mat-body-2">{{ 'Cargo' }}</span>
+            <span class="mat-body-2">{{ 'Rol' }}</span>
           </th>
           <td mat-cell *matCellDef="let element">
-            <span class="mat-body-2">{{ element.cargo }}</span>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="sucursal">
-          <th style="width: 8%" mat-header-cell *matHeaderCellDef mat-sort-header>
-            <span class="mat-body-2">{{ 'Sucursal' }}</span>
-          </th>
-          <td mat-cell *matCellDef="let element">
-            <span class="mat-body-2">{{ element.sucursal }}</span>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="UsuarioId">
-          <th style="width: 4%" mat-header-cell *matHeaderCellDef mat-sort-header>
-            <span class="mat-body-2">{{ 'UsuarioId' }}</span>
-          </th>
-          <td mat-cell *matCellDef="let element">
-            <span class="mat-body-2">{{ element.UsuarioId }}</span>
+            <span class="mat-body-2">{{ element.Usuario ? element.Usuario.Role.nombre : '--' }}</span>
           </td>
         </ng-container>
 
@@ -252,7 +253,7 @@
             <span class="mat-body-2">{{ 'Fecha' }}</span>
           </th>
           <td mat-cell *matCellDef="let element">
-            <span class="mat-body-2">{{ element.createdAt }}</span>
+            <span class="mat-body-2" type="date">{{ element.createdAt | date: 'dd-MM-yyyy' }}</span>
           </td>
         </ng-container>
 

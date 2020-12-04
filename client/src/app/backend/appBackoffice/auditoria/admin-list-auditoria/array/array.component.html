@@ -1,0 +1,62 @@
+<div class="container">
+  <div mat-dialog-content class="my-dialog-content">
+    <div style="float: left; width: 65%">
+      <div *ngFor="let form of formData.controls">
+        <form [formGroup]="form">
+          <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
+            <span class="mat-body-2">{{ 'Acciones para resolver la no conformidad' }}</span>
+          </div>
+          <div fxLayout="row" class="mt-2" fxLayoutAlign="start start" fxLayoutGap="gappx">
+            <mat-form-field fxFlex="100" fxFlex.lt-md="80" fxFlex.xs="100" appearance="outline">
+              <mat-label>{{ 'Tipo' }}</mat-label>
+              <mat-select [formControl]="form.controls['TipoId']">
+                <mat-option *ngFor="let item of TipoAC" [value]="item.id">
+                  {{ item.nombre }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.controls['TipoId'].hasError('required')">
+                {{ 'El tipo de acción' }} <strong>{{ 'es requerido' }}</strong>
+              </mat-error>
+            </mat-form-field>
+
+            <div fxLayout="row" class="mt-2" fxLayoutAlign="start start" fxLayoutGap="gappx">
+              <mat-form-field fxFlex="100" fxFlex.lt-md="80" fxFlex.xs="100" appearance="outline">
+                <mat-label>{{ 'Acción a tomar' }}</mat-label>
+                <textarea
+                  rows="3"
+                  matInput
+                  [formControl]="form.controls['AccionTomar']"
+                  placeholder="{{ 'Acción a tomar' }}"
+                ></textarea>
+                <mat-icon class="greyIcon" matSuffix>edit</mat-icon>
+                <mat-error *ngIf="form.controls['AccionTomar'].hasError('required')">
+                  {{ 'La acción a tomar' }} <strong>{{ 'es requerida' }}</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field fxFlex="100" fxFlex.lt-md="80" fxFlex.xs="100" appearance="outline">
+              <mat-label>{{ 'Fecha de Cumplimiento' }}</mat-label>
+              <input
+                matInput
+                [matDatepicker]="startDate"
+                placeholder="Fecha de Cumplimiento"
+                [formControl]="form.controls['FechaCumplimiento']"
+                [min]="minDate"
+                [max]="maxDate"
+              />
+              <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+              <mat-datepicker #startDate></mat-datepicker>
+              <mat-error *ngIf="form.controls['FechaCumplimiento'].hasError('required')">
+                {{ 'El rol' }} <strong>{{ 'es requerido' }}</strong>
+              </mat-error>
+            </mat-form-field>
+            <button (click)="updateLength()" id="AddBtn" mat-fab color="primary">
+              <mat-icon id="ico"> add </mat-icon>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,4 @@
+const { model } = require('mongoose');
 
 exports.registry = function registry() {
   var models   = global.app.orm.sequelize.models;
@@ -13,7 +14,7 @@ exports.registry = function registry() {
 
   global.app.express
         .route(expedienteCollectionRoute)
-        .post(global.security.ensureAuthenticated(), require('./create'))
+        .post([global.security.ensureAuthenticated(), global.security.isEspCalidadSucursal()], require('./create'))
         .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
@@ -31,7 +32,9 @@ exports.registry = function registry() {
                 'Sucursal',
                 'Auditoria',
                 'Incidencia',
-                'QuejasReclamaciones',
+                {
+                  model: models.QuejasReclamaciones
+                }
               ]
             }]
           }).then(function (data) {
@@ -68,7 +71,7 @@ exports.registry = function registry() {
 
   global.app.express
         .route(expedienteSingleRoute)
-        .patch(global.security.ensureAuthenticated(), require('./update'))
+        .patch([global.security.ensureAuthenticated(), global.security.isEspCalidadSucursal()], require('./update'))
         .get(global.security.ensureAuthenticated(), require('./show'))
-        .delete(global.security.ensureAuthenticated(), require('./delete'));
+        .delete([global.security.ensureAuthenticated(), global.security.isEspCalidadSucursal()], require('./delete'));
 };

@@ -1,0 +1,325 @@
+@import '../.././../../../assets/scss/theme/variables';
+
+.app-nueva {
+  #toolbarHeader {
+    border-top-left-radius: 6px !important;
+    border-top-right-radius: 6px !important;
+  }
+
+  .mat-dialog-container {
+    padding: 0;
+    // width: 85vw !important; ///parametro ajustable
+
+    .mat-toolbar {
+      flex: 1 0 auto;
+      min-height: initial;
+    }
+
+    .toolbar-bottom {
+      height: auto;
+    }
+  }
+
+  .dialog-content-wrapper {
+    max-height: 94vh;
+    max-width: 95vw;
+    width: 32vw;
+    display: flex;
+    flex-direction: column;
+    width: 50vw !important;
+
+    @media (min-width: 768px) and (max-width: 1980px) {
+      width: 15cm !important;
+    }
+
+    @media (min-width: 320px) and (max-width: 768px) {
+      width: 95vw !important;
+    }
+  }
+
+  .cdk-overlay-pane {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 1000px) {
+    .cdk-overlay-pane {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .mat-dialog-actions {
+    padding: 16px 16px;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    margin-bottom: 0px !important;
+  }
+
+  .my-dialog-content {
+    padding: 0px 16px !important;
+    margin: 0px !important;
+  }
+
+  .mat-dialog-content {
+    display: block;
+    // margin: 0 -24px;
+    // padding: 0 24px;
+    max-height: 76vh;
+    overflow: auto;
+  }
+
+  .PassSection {
+    border-radius: 4px;
+    border: 1.25px solid #eee;
+
+    &:hover {
+      border: 1.25px solid #323232;
+      transition: border 0.5s ease;
+    }
+  }
+
+  ////////////////////////////////////////////////
+
+  .hide-style {
+    display: none;
+  }
+
+  .avatar-profile {
+    position: relative;
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    flex: none !important;
+    background-color: #eee;
+    color: #ccecfc;
+    border: 3px solid $theme-main !important;
+
+    .avatar-icon {
+      font-size: 100px;
+      height: 100px;
+      width: 100px;
+    }
+
+    #photoCameraBtn {
+      opacity: 0;
+
+      mat-icon {
+        font-size: 30px;
+        height: 30px;
+        width: 30px;
+      }
+    }
+
+    &:hover {
+      #photoCameraBtn {
+        opacity: 1;
+        transition: opacity 0.5s ease;
+      }
+    }
+
+    button {
+      position: absolute;
+    }
+  }
+
+  /////////////////////////////////////////////////
+
+  .mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+  }
+}
+
+.prueba {
+  position: relative;
+  right: 1px;
+  bottom: -15px;
+  max-height: 20px;
+  max-width: 20px;
+
+  #ico {
+    position: relative;
+    right: 10px;
+    bottom: 29px;
+    max-height: 3px;
+    max-width: 5px;
+  }
+}
+
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+.container-fluid {
+  padding: 0;
+}
+
+.container {
+  margin-top: 2em;
+}
+
+.example-container {
+  height: 100vh;
+  min-height: 100vh;
+}
+
+.example-sidenav-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-sidenav {
+  padding: 20px;
+  min-width: 20em;
+}
+
+.buttonToggle {
+  min-width: 0;
+  padding: 0 10px;
+}
+
+.menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.menu > li > a {
+  text-decoration: none;
+  color: black;
+}
+
+.divider {
+  border: #00000014 0.1em solid;
+  margin-bottom: 2em;
+}
+
+.newAnswer {
+  /* display: inline; */
+  margin-bottom: 2em;
+  cursor: pointer;
+}
+
+.numPregunta {
+  max-width: 10em;
+}
+
+.containerAccordion {
+  margin-bottom: 0.5em;
+}
+
+.alert {
+  margin-top: 1em;
+}
+
+.conTouter {
+  min-height: 75.5vh;
+}
+
+.botones {
+  text-align: right;
+  border-top: #00000014 1px solid;
+}
+
+.example-card {
+  margin-bottom: 1em;
+}
+
+.noEncuestas {
+  text-align: center;
+}
+
+.nPreguntasEncuestas {
+  margin-left: 16px;
+}
+
+.contentCanvas {
+  display: inline;
+  width: 400px;
+}
+
+.contentCanvas > canvas {
+  display: inline;
+}
+
+.barLogin {
+  height: 40px;
+  background-color: #80808014;
+  margin-bottom: 2em;
+  border-radius: 10px;
+}
+.login {
+  margin: 0 0 0 auto;
+}
+
+.title {
+  margin: auto 0 auto 3em;
+  font-size: 1.5em;
+  font-weight: 500;
+}
+
+.contaEncuesta {
+  text-align: center;
+  margin: 10em auto;
+  padding: 1em;
+  background-color: #8080801a;
+  border-radius: 1em;
+}
+
+.nameEncuesta {
+  height: 3em;
+  font-size: 1.5em;
+}
+
+.contentEncuesta {
+  margin-top: 1em;
+}
+
+.pregunta {
+  font-size: 1.5em;
+}
+
+.respuesta {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.menu > li {
+  margin-top: 1em;
+}
+
+.mat-radio-label {
+  margin-left: 1.5em;
+}
+
+.resultButton {
+  color: white;
+  background-color: #46c346;
+}
+
+.header-result,
+.sub-header-result {
+  text-align: center;
+}
+
+.sub-header-result {
+  margin-bottom: 3em;
+}
+
+/* .mat-form-field-underline {
+    //linea inferior del input
+    background-color: green !important;
+}  */
+
+/* .mat-form-field-ripple { */
+/*color de linea inferior del input al hacer clic*/
+/* background-color: red !important; */
+/* } */

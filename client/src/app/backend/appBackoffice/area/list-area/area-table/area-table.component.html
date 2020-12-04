@@ -83,33 +83,17 @@
       class="mat-elevation-z8 cf-padding-left-10 cf-padding-right-10 cf-padding-bottom-10"
     >
       <ng-container matColumnDef="select">
-        <th style="width: 8%" mat-header-cell *matHeaderCellDef mat-sort-header>
-          <div fxLayout="column" fxLayoutAlign="start start">
-            <mat-checkbox
-              (change)="$event ? masterToggle() : null"
-              [checked]="selection.hasValue() && isAllSelected()"
-              [indeterminate]="selection.hasValue() && !isAllSelected()"
-              [aria-label]="checkboxLabel()"
-            >
-            </mat-checkbox>
-          </div>
+        <th style="width: 1%" mat-header-cell *matHeaderCellDef mat-sort-header>
+          <div fxLayout="column" fxLayoutAlign="start start"></div>
         </th>
         <td mat-cell *matCellDef="let row">
-          <div fxLayout="column" fxLayoutAlign="start start">
-            <mat-checkbox
-              (click)="$event.stopPropagation()"
-              (change)="$event ? selection.toggle(row) : null"
-              [checked]="selection.isSelected(row)"
-              [aria-label]="checkboxLabel(row)"
-            >
-            </mat-checkbox>
-          </div>
+          <div fxLayout="column" fxLayoutAlign="start start"></div>
         </td>
       </ng-container>
 
       <!-- Name Column -->
       <ng-container matColumnDef="nombre">
-        <th style="width: 15%" mat-header-cell *matHeaderCellDef mat-sort-header>
+        <th style="width: 20%" mat-header-cell *matHeaderCellDef mat-sort-header>
           <span class="mat-body-2">{{ 'Nombre' }}</span>
         </th>
         <td mat-cell *matCellDef="let element">{{ element.nombre }}</td>
@@ -117,10 +101,20 @@
 
       <!-- SucursalId Column -->
       <ng-container matColumnDef="SucursalId">
-        <th style="width: 15%" mat-header-cell *matHeaderCellDef mat-sort-header>
+        <th style="width: 20%" mat-header-cell *matHeaderCellDef mat-sort-header>
           <span class="mat-body-2">{{ 'Sucursal' }}</span>
         </th>
         <td mat-cell *matCellDef="let element">{{ element.Sucursal ? element.Sucursal.nombagenciaviajes : '--' }}</td>
+      </ng-container>
+
+      <!-- JefeMercado Column -->
+      <ng-container matColumnDef="JefeMercado">
+        <th style="width: 20%" mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span class="mat-body-2">{{ 'Jefe de Mercado' }}</span>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.Usuario ? element.Usuario.nombre + ' ' + ' ' + element.Usuario.apellidos : '--' }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="actions">

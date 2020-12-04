@@ -7,7 +7,20 @@ exports.loadModel = function loadModel() {
         lodash.extend({}, global.app.orm.mixins.attributes, {
             "texto": {
                 "type": global.app.orm.Sequelize.STRING,
-                "allowNull": false
+                "allowNull": false,
+                "unique": true,
+                "validate":{
+                  "notNull": {
+                    "msg": "Por favor, registre el texto"
+                },
+                  isUnique(value) {
+                    return Preguntas.findOne({
+                    where: {texto:value}
+                    }).then((texto) => {
+                     if (texto) {throw new Error('Error: el texto' + ' ' + (value) + ' ' + 'ya existe')}
+                    })
+                   }
+                },
         
               },
               "CategoriaId": {

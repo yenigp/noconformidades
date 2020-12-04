@@ -16,6 +16,10 @@
             <mat-icon>add</mat-icon>
             Adicionar
           </button>
+          <button [routerLink]="['/backend/proceso/mapa']" mat-button>
+            <mat-icon>hvac</mat-icon>
+            Mapa
+          </button>
         </div>
 
         <div fxHide fxShow.xs>
@@ -136,7 +140,7 @@
         <th style="width: 15%" mat-header-cell *matHeaderCellDef mat-sort-header>
           <span class="mat-body-2">{{ 'Jefe de Proceso' }}</span>
         </th>
-        <td mat-cell *matCellDef="let element">{{ element.JefeProceso }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.Usuario.nombre + ' ' + ' ' + element.Usuario.apellidos }}</td>
       </ng-container>
 
       <ng-container matColumnDef="actions">

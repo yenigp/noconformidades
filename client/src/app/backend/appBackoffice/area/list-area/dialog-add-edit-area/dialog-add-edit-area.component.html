@@ -15,15 +15,30 @@
         <mat-form-field appearance="outline">
           <mat-label>{{ 'Nombre' }}</mat-label>
           <mat-icon class="greyIcon" matSuffix>account_box</mat-icon>
-          <input type="text" matInput [formControl]="form.controls['nombre']" placeholder="{{ 'nombre' }}" />
+          <input
+            type="text"
+            maxlength="50"
+            matInput
+            [formControl]="form.controls['nombre']"
+            placeholder="{{ 'nombre' }}"
+          />
           <mat-error *ngIf="form.controls['nombre'].hasError('required')">
-            {{ 'Nombre' }} <strong>{{ 'es requerido' }}</strong>
+            {{ 'El nombre' }} <strong>{{ 'es requerido' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['nombre'].hasError('maxLength')">
+            {{ 'El nombre' }} <strong>{{ 'debe tener como máximo 50 carácteres' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['nombre'].hasError('minLength')">
+            {{ 'El nombre' }} <strong>{{ 'debe tener como máximo 2 carácteres' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['nombre'].hasError('pattern')">
+            {{ 'El nombre' }} <strong>{{ 'debe escribirse con letra inicial mayúscula' }}</strong>
           </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" fxFlex="100" fxFlex.lt-md="100" fxFlex.xs="100">
           <mat-label>{{ 'Sucursal' }}</mat-label>
-          <mat-select [formControl]="form.controls['SucursalId']">
+          <mat-select [formControl]="form.controls['SucursalId']" (selectionChange)="onChange($event.value)">
             <mat-option *ngFor="let item of Sucursal" [value]="item.id">
               {{ item.nombagenciaviajes }}
             </mat-option>
@@ -32,6 +47,23 @@
           <mat-error *ngIf="form.controls['SucursalId'].hasError('required')">
             {{ 'La sucursal' }} <strong>{{ 'es requerida' }}</strong>
           </mat-error>
+        </mat-form-field>
+
+        <!--Column JefeMercado-->
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Jefe de Mercado' }}</mat-label>
+          <mat-icon class="greyIcon" matSuffix>account_box</mat-icon>
+          <mat-select
+            matInput
+            matNativeControl
+            required
+            [formControl]="form.controls['JefeMercado']"
+            placeholder="{{ 'Jefe de Mercado' }}"
+          >
+            <mat-option *ngFor="let item of JefeMercado; let i = index" [value]="item.id">
+              {{ item.nombre + ' ' + item.apellidos }}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
     </form>

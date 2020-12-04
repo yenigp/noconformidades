@@ -8,6 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { UtilsService } from 'src/app/core/services/utils/utils.service';
 import { AreaService } from 'src/app/backend/services/area/area.service';
 import { SucursalService } from 'src/app/backend/services/sucursal/sucursal.service';
+import { UserService } from 'src/app/backend/services/user/user.service';
 
 @Component({
   selector: 'app-dialog-add-edit-area',
@@ -24,6 +25,10 @@ export class DialogAddEditAreaComponent implements OnInit {
   applyStyle = false;
   form: FormGroup;
   Sucursal: any[] = [];
+  jefemercado: any;
+  Usuario: any[] = [];
+  JefeMercado: any[] = [];
+  allJefeMercado: any[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -35,11 +40,13 @@ export class DialogAddEditAreaComponent implements OnInit {
     private showToastr: ShowToastrService,
     private areaService: AreaService,
     private sucursalService: SucursalService,
+    private userService: UserService,
   ) {
     this.dialogRef.disableClose = true;
     this.loggedInUser = this.loggedInUserService.getLoggedInUser();
 
     this.isEditing = data.isEditing;
+    this.jefemercado = data.jefemercado;
     this.selectedArea = data.selectedArea;
   }
 
@@ -53,10 +60,23 @@ export class DialogAddEditAreaComponent implements OnInit {
     }
   }
 
+  //////////////////////////////////////////
+
+  onChange(id: any): void {
+    this.allJefeMercado = this.Usuario.filter((item) => item.SucursalId == id);
+    this.JefeMercado = this.allJefeMercado.filter((item) => item.Role.nombre === 'JefeProceso');
+  }
+
+  /////////////////////////////////////////
+
   ngOnInit(): void {
     this.createForm();
     this.sucursalService.getAllSucursal().subscribe((data) => {
       this.Sucursal = data.data;
+    });
+    this.userService.getAllUsers().subscribe((data) => {
+      this.Usuario = data.data;
+      console.log(this.Usuario);
     });
   }
 
@@ -65,17 +85,39 @@ export class DialogAddEditAreaComponent implements OnInit {
       this.form = this.fb.group({
         nombre: [
           this.selectedArea && this.selectedArea.nombre ? this.selectedArea.nombre : null,
-          [Validators.required],
+          [
+            Validators.required,
+            Validators.maxLength(50),
+            Validators.minLength(2),
+            Validators.pattern(
+              '^(?=.{3,50}$)[A-ZÁÉÍÓÚ][a-zñáéíóú]+(?: [A-ZÁÉÍÓÚ][a-zñáéíóú]+)+(?: [A-ZÁÉÍÓÚ][a-zñáéíóú]+)?$',
+            ),
+          ],
         ],
         SucursalId: [
           this.selectedArea && this.selectedArea.SucursalId ? this.selectedArea.SucursaId : null,
           [Validators.required],
         ],
+        JefeMercado: [
+          this.selectedArea && this.selectedArea.JefeMercado ? this.selectedArea.JefeMercado : null,
+          [Validators.required],
+        ],
       });
     } else {
       this.form = this.fb.group({
-        nombre: [null, [Validators.required]],
+        nombre: [
+          null,
+          [
+            Validators.required,
+            Validators.maxLength(50),
+            Validators.minLength(2),
+            Validators.pattern(
+              '^(?=.{3,50}$)[A-ZÁÉÍÓÚ][a-zñáéíóú]+(?: [A-ZÁÉÍÓÚ][a-zñáéíóú]+)+(?: [A-ZÁÉÍÓÚ][a-zñáéíóú]+)?$',
+            ),
+          ],
+        ],
         SucursalId: [null, [Validators.required]],
+        JefeMercado: [null, [Validators.required]],
       });
     }
   }

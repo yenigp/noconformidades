@@ -45,18 +45,14 @@ exports.loadTasks = function loadTasks() {
 };
 
 exports.setRoutes = function setRoutes() {
-    //require('./routes/accion_tarea/registry').registry();
     require('./routes/acciones/registry').registry();
-    //require('./routes/agenciamercado/registry').registry();
     require('./routes/agenciaviajes/registry').registry();
     require('./routes/auditoria/registry').registry();
     require('./routes/dictamen/registry').registry();
     require('./routes/expediente/registry').registry();
     require('./routes/incidencia/registry').registry();
-    //require('./routes/indicadores_objetivos/registry').registry();
     require('./routes/indicadores/registry').registry();
     require('./routes/mercado/registry').registry();
-    //require('./routes/mercadopais/registry').registry();
     require('./routes/usuario/registry').registry();
     require('./routes/roles/registry').registry();
     require('./routes/noconformidad/registry').registry();
@@ -68,12 +64,10 @@ exports.setRoutes = function setRoutes() {
     require('./routes/producto/registry').registry();
     require('./routes/quejasreclamaciones/registry').registry();
     require('./routes/reserva/registry').registry();
-    //require('./routes/reservapadre/registry').registry();
     require('./routes/area/registry').registry();
     require('./routes/sucursal/registry').registry();
     require('./routes/tareas/registry').registry();
     require('./routes/turista/registry').registry();
-    //require('./routes/turistareserva/registry').registry();
     require('./routes/tiponc/registry').registry();
     require('./routes/tipoac/registry').registry();
     require('./routes/encuestas/registry').registry();

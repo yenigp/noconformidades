@@ -13,8 +13,7 @@ exports.registry = function registry() {
 
   global.app.express
     .route(mercadoCollectionRoute)
-    .post(require('./create'))
-    .get(require('./index'));
+    .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
     .app.express
@@ -57,16 +56,6 @@ exports.registry = function registry() {
 
   global.app.express
     .route(mercadoSingleRoute)
-    .patch(require('./update'))
-    .get(require('./show'))
-    .delete(require('./delete'));
+    .get(global.security.ensureAuthenticated(), require('./show'))
 
-  /*var mercadoProfileRoute = '/v1/profile';
-
-  global.app.express
-    .route(mercadoProfileRoute)
-    .patch(function(req,res,next){
-      req.mercado=req.loggedUser;
-      return next();
-    }, require('./update'))*/
 };

@@ -64,6 +64,7 @@ module.exports = function (req, res) {
           descripcion: req.body.descripcion,
           evidencia: req.body.evidencia,
           JefeProceso: req.body.JefeProceso,
+          AreaId: req.body.AreaId,
           SucursalId: req.loggedUser.SucursalId,
           CreatorId: req.loggedUser.id,
           EspCalidad: req.loggedUser.id
@@ -72,19 +73,21 @@ module.exports = function (req, res) {
         });
     })
     .then(async function (noconformidad) {
-      if (noconformidad.JefeProceso != null) {
-        noconformidad.update({
-          status: "analizando",
-        }).then(function(){
-        return models.NoConformidad.findByPk(noconformidad.id)
-        })
+      var id=noconformidad.id;
+      var codigo=await GenerarCodigo(id,10);
+      return noconformidad.update({
+          codigo: codigo,
+      }).then(function(){
+      return models.NoConformidad.findByPk(noconformidad.id)
+      })
+    })
+    .then(async function (noconformidad) {
       return models
         .QuejasReclamaciones
         .create({
           NoConformidadId: noconformidad.id,
           ServicioId: req.body.ServicioId,
           ProductoId: req.body.ProductoId,
-          TuristaId: req.body.TuristaId,
           ReservaId: req.body.ReservaId,
           tipo: req.body.tipo,
           clasificacion: req.body.clasificacion,
@@ -92,30 +95,10 @@ module.exports = function (req, res) {
           CreatorId: noconformidad.CreatorId
         }),
         noconformidad.update({
-          codigo: await GenerarCodigo(noconformidad.id,10),
-        }).then(function(){
-        return models.NoConformidad.findByPk(noconformidad.id)
-        })
-      } else {
-        return models
-        .QuejasReclamaciones
-        .create({
-          NoConformidadId: noconformidad.id,
-          ServicioId: req.body.ServicioId,
-          ProductoId: req.body.ProductoId,
-          TuristaId: req.body.TuristaId,
-          ReservaId: req.body.ReservaId,
-          tipo: req.body.tipo,
-          clasificacion: req.body.clasificacion,
-          observacion: req.body.observacion,
-          CreatorId: noconformidad.CreatorId
-        }),
-        noconformidad.update({
-          codigo: await GenerarCodigo(noconformidad.id,10),
+          status: "analizando",
         }).then(function(){
         return models.NoConformidad.findByPk(noconformidad.id)
       })
-    }
     })
     .then(function (data) {
       return models

@@ -8,7 +8,7 @@ exports.registry = function registry() {
 
   global.app.express
     .route(reservaCollectionRoute)
-    .get(/*[global.security.ensureAuthenticated(), global.security.isJefeProceso()],*/ require('./index'));
+    .get(global.security.ensureAuthenticated(), require('./index'));
 
   global
     .app.express
@@ -51,6 +51,6 @@ exports.registry = function registry() {
 
   global.app.express
     .route(reservaSingleRoute)
-    .get([global.security.ensureAuthenticated(), global.security.isJefeProceso()], require('./show'));
+    .get(global.security.ensureAuthenticated(), require('./show'));
     
 };

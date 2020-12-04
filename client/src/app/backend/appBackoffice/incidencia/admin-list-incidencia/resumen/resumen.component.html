@@ -1,0 +1,28 @@
+<div class="container">
+  <div>
+    <div>
+      <b>Resumen</b>
+    </div>
+    <ul>
+      <li>Código: {{ incidencia.codigo }}</li>
+      <li type="date">Fecha Entrada: {{ incidencia.FechaRegistro | date: 'dd-MM-yyyy hh:mm' }}</li>
+      <li type="date">Fecha Identificación: {{ incidencia.FechaIdentificacion | date: 'dd-MM-yyyy hh:mm' }}</li>
+      <li type="date">Fecha Término: {{ incidencia.FechaTermino | date: 'dd-MM-yyyy hh:mm' }}</li>
+      <li type="date">Fecha Cierre: {{ incidencia.FechaCierre | date: 'dd-MM-yyyy hh:mm' }}</li>
+      <li>Proceso: {{ incidencia.ProcesoId }}</li>
+      <li>Norma: {{ incidencia.NormaId ? incidencia.NormaId : '' }}</li>
+      <li>Tipo de Incidencia: {{ incidencia.tipo ? incidencia.tipo.toUpperCase() : '' }}</li>
+      <li>Requiere ser investigada?: {{ incidencia.CausaInvestigacion }}</li>
+    </ul>
+    <b *ngIf="Acciones">Acciones para resolver la no conformidad:</b>
+
+    <div *ngFor="let client of Acciones">
+      <span *ngIf="client.Acciones">
+        <div>Tipo: {{ client.TipoId }}</div>
+        <div>Acción a tomar: {{ client.AccionTomar }}</div>
+        <div>Fecha de cumplimiento: {{ client.FechaCumplimiento }}</div>
+        <p></p>
+      </span>
+    </div>
+  </div>
+</div>

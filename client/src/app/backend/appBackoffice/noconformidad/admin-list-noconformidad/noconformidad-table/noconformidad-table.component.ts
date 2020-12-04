@@ -22,6 +22,7 @@ import { IUser } from 'src/app/core/classes/user.class';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { htmlAstToRender3Ast } from '@angular/compiler/src/render3/r3_template_transform';
 import { Router } from '@angular/router';
+import { CdkTableExporterModule } from 'cdk-table-exporter';
 
 @Component({
   selector: 'app-noconformidad-table',
@@ -44,6 +45,7 @@ export class NoConformidadTableComponent implements OnInit {
   allNoConformidad: any[] = [];
   searchForm: FormGroup;
   expandedElement: false;
+  title = 'Registro de No Conformidad';
   dataSource: MatTableDataSource<any>;
   showFilterNoConformidad: boolean;
   loggedInUser: IUser;
@@ -64,25 +66,23 @@ export class NoConformidadTableComponent implements OnInit {
   //////////////////////////////////////////
 
   displayedColumns: string[] = [
-    'ProcesoId',
-
-    'NormaId',
-
     'codigo',
+
+    'FechaRegistro',
+
+    'FechaTermino',
 
     'TipoId',
 
-    'resultado',
+    'AreaId',
 
-    'status',
+    'resultado',
 
     'gravedad',
 
-    //'FechaIdentificacion',
+    'status',
 
-    //'AreaId',
-
-    //'SucursalId',
+    'FechaCierre',
 
     'actions',
   ];
@@ -111,7 +111,7 @@ export class NoConformidadTableComponent implements OnInit {
     this.createSearchForm();
 
     this.searchForm.valueChanges.subscribe((val) => {
-      const data = this.allNoConformidad;
+      const data = this.filterNCCode(val.textCtrl);
       this.dataSource = new MatTableDataSource<any>(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -152,6 +152,18 @@ export class NoConformidadTableComponent implements OnInit {
   hideSearchForm() {
     this.showFilterNoConformidad = false;
     this.searchForm.controls['textCtrl'].setValue('');
+  }
+
+  filterNCCode(code: string) {
+    let temp = this.allNoConformidad.filter(
+      (noconformidad) =>
+        noconformidad.codigo.toLowerCase().indexOf(code.toLowerCase()) >= 0 ||
+        (noconformidad.Proceso.codigo && noconformidad.Proceso.codigo.toLowerCase().indexOf(code.toLowerCase()) >= 0) ||
+        (noconformidad.Norma.nombre && noconformidad.Norma.nombre.toLowerCase().indexOf(code.toLowerCase()) >= 0) ||
+        (noconformidad.Tipo.codigo && noconformidad.Tipo.codigo.toLowerCase().indexOf(code.toLowerCase()) >= 0),
+    );
+    this.searchElementCount = temp.length;
+    return temp;
   }
 
   @HostListener('window:resize', ['$event'])
@@ -210,16 +222,11 @@ export class NoConformidadTableComponent implements OnInit {
   }
 
   onEditNoConformidad(noconformidad): void {
-    // this.noconformidadService.getNoConformidad(noconformidad).subscribe(
-    //   data => {
-    //     console.log('Vamos a editar la no conformidad::', data.data.id);
-    //     this.stateCreatingNoConformidadService.setNoConformidadCreated(data.data);
     this.router.navigate(['/backend/noconformidad/edit'], { queryParams: { NoConformidadId: noconformidad.id } });
-    //   },
-    //   err => {
-    //     this.utilsService.errorHandle(err, 'NoConformidad', 'Listando');
-    //   }
-    // );
+  }
+
+  onReporteNoConformidad(): void {
+    this.router.navigate(['/backend/noconformidad/reporte']);
   }
 
   async onRemoveNoConformidad(noconformidad) {

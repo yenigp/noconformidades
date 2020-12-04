@@ -3,6 +3,7 @@
 module.exports = function (req, res) {
   var models = global.app.orm.sequelize.models;
   var Sequelize = global.app.orm.Sequelize;
+  req.body.lastLogout = new Date().toISOString();
 
 	var jsonAPI = global.app.utils.jsonAPI;
   var jsonAPIBody = {

@@ -4,6 +4,7 @@ module.exports = function (req, res) {
 
 	var jsonAPI    = global.app.utils.jsonAPI;
   var models = global.app.orm.sequelize.models;
+  var Sequelize = global.app.orm.Sequelize;
 
   var jsonAPIBody = {
     data: {}
@@ -18,7 +19,19 @@ module.exports = function (req, res) {
         .findByPk(data.id, {include:[{all:true}]});
     })
     .then(function (data) {
-      jsonAPIBody.data = data.toJSON();
+      if(req.loggedUser.RolId == 1) {
+        jsonAPIBody.data = data.toJSON();
+        return Sequelize.Promise.mapSeries(data, models.Respuestas.create())
+        .then(([data, respuestas]) => {
+          return models.Resultados.create({ PreguntaId: data.id, RespuestaId: respuestas.id, CreatorId: data.CreatorId},{
+            transaction:t
+          })
+        })
+      } else {
+        jsonAPIBody.data = data.toJSON();
+      }  
+    })
+    .then(function (data) {
       return res.status(200).json(jsonAPIBody); // OK.
     })
     .catch(global.app.orm.Sequelize.ValidationError, function (error) {

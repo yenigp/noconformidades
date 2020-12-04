@@ -1,0 +1,103 @@
+<div class="dialog-content-wrapper">
+  <mat-toolbar class="mb-2" matDialogTitle color="primary" id="toolbarHeader">
+    <mat-toolbar-row fxLayoutAlign="space-between center">
+      <span *ngIf="!isEditing" class="mat-title mb-0">{{ 'Adicionar preguntas' }}</span>
+      <span *ngIf="isEditing" class="mat-title mb-0">{{ 'Editar preguntas' }}</span>
+      <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div mat-dialog-content class="my-dialog-content">
+    <form [formGroup]="form">
+      <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="gappx">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Texto' }}</mat-label>
+          <mat-icon class="greyIcon" matSuffix>note</mat-icon>
+          <input
+            type="text"
+            maxlength="50"
+            matInput
+            [formControl]="form.controls['texto']"
+            placeholder="{{ 'texto' }}"
+          />
+          <mat-error *ngIf="form.controls['texto'].hasError('required')">
+            {{ 'El texto' }} <strong>{{ 'es requerido' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['texto'].hasError('maxLength')">
+            {{ 'El texto' }} <strong>{{ 'debe tener como máximo 50 carácteres' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['texto'].hasError('minLength')">
+            {{ 'El texto' }} <strong>{{ 'debe tener como máximo 2 carácteres' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['texto'].hasError('pattern')">
+            {{ 'El texto' }} <strong>{{ 'debe escribirse con letra inicial mayúscula' }}</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="100" fxFlex.lt-md="100" fxFlex.xs="100" appearance="outline">
+          <mat-label>{{ 'Categoría' }}</mat-label>
+          <mat-icon class="greyIcon" matSuffix>event_note</mat-icon>
+          <mat-select
+            matInput
+            matNativeControl
+            required
+            [formControl]="form.controls['CategoriaId']"
+            placeholder="{{ 'Categoría' }}"
+          >
+            <mat-option *ngFor="let item of allCategorias; let i = index" [value]="item.id">
+              {{ item.nombre }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['CategoriaId'].hasError('required')">
+            {{ 'La categoría' }} <strong>{{ 'es requerida' }}</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <!--Column Encuesta-->
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Encuesta' }}</mat-label>
+          <mat-icon class="greyIcon" matSuffix>event_note</mat-icon>
+          <mat-select
+            matInput
+            matNativeControl
+            required
+            [formControl]="form.controls['EncuestaId']"
+            placeholder="{{ 'Encuesta' }}"
+          >
+            <mat-option *ngFor="let item of allEncuestas; let i = index" [value]="item.id">
+              {{ item.nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div>
+          <mat-label fxFlex="13">{{ 'Estado:' }}</mat-label>
+          <mat-radio-group
+            required
+            fxFlex="50"
+            fxFlex.lt-md="50"
+            fxFlex.xs="50"
+            appearance="outline"
+            aria-labelledby="example-radio-group-label"
+            class="example-radio-group"
+            color="primary"
+            [formControl]="form.controls['estado']"
+          >
+            <mat-radio-button class="example-radio-button" *ngFor="let item of estado" [value]="item">
+              {{ item }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <br />
+      </div>
+    </form>
+  </div>
+
+  <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end start">
+    <button mat-flat-button (click)="onSaveAction()" [disabled]="this.form.invalid" color="primary">
+      {{ 'Guardar' }}
+    </button>
+  </div>
+</div>

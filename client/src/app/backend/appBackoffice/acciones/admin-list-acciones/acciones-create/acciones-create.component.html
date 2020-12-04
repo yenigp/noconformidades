@@ -1,0 +1,146 @@
+<div class="container">
+  <mat-progress-bar color="accent" mode="determinate" value="{{ getProgress() }}"> </mat-progress-bar>
+  <mat-horizontal-stepper
+    [selectedIndex]="stepIndex"
+    (selectionChange)="onSlectionChange($event)"
+    labelPosition="bottom"
+    [linear]="'true'"
+    #stepper
+  >
+    <mat-step [stepControl]="this.form">
+      <div style="float: left; width: 65%" *ngIf="alreadyLoaded">
+        <form [formGroup]="this.form">
+          <ng-template matStepLabel>{{ 'Información básica' }}</ng-template>
+          <div fxLayout="column" class="SteeperLayout" fxLayoutAlign="start stretch" fxLayoutGap="gappx">
+            <div>
+              <!----------------Código------------------->
+              <div fxLayout="row" class="mt-2" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                <mat-form-field
+                  *ngIf="form.controls['estado'].value == ''"
+                  appearance="outline"
+                  fxFlex="50"
+                  fxFlex.lt-md="50"
+                  fxFlex.xs="50"
+                >
+                  <mat-label>{{ 'Código' }}</mat-label>
+                  <mat-icon class="greyIcon" matSuffix>view_week</mat-icon>
+                  <input type="text" matInput readonly [formControl]="form.controls['codigo']" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" fxFlex="50" fxFlex.lt-md="50" fxFlex.xs="50">
+                  <mat-label>{{ 'Tipo' }}</mat-label>
+                  <mat-select required [formControl]="form.controls['TipoId']">
+                    <mat-option *ngFor="let item of TipoAC" [value]="item.id">
+                      {{ item.nombre }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-icon class="greyIcon" matSuffix>view_week</mat-icon>
+                  <mat-error *ngIf="form.controls['TipoId'].hasError('required')">
+                    {{ 'El tipo de acción' }} <strong>{{ 'es requerido' }}</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <!------------TipoAC------------------------>
+              <div fxLayout="row" class="mt-2" fxLayoutAlign="start start" fxLayoutGap="gappx"></div>
+
+              <!-------------AccionTomar------------------>
+              <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                <span class="mat-body-2">{{ 'Qué acción tomar?' }}</span>
+              </div>
+              <div fxLayout="row" class="mt-2" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                <mat-form-field fxFlex="100" fxFlex.lt-md="100" fxFlex.xs="100" appearance="outline">
+                  <mat-label>{{ 'Acción' }}</mat-label>
+                  <textarea
+                    rows="5"
+                    matInput
+                    required
+                    [formControl]="form.controls['AccionTomar']"
+                    placeholder="{{ 'Acción a tomar' }}"
+                  ></textarea>
+                  <mat-icon class="greyIcon" matSuffix>edit</mat-icon>
+                  <mat-error *ngIf="form.controls['AccionTomar'].hasError('required')">
+                    {{ 'Acción a tomar' }} <strong>{{ 'es requerida' }}</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <!---------Fecha Cumplimiento-------------->
+              <div fxLayout="row" class="mt-2" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                <mat-form-field appearance="outline" fxFlex="50" fxFlex.lt-md="50" fxFlex.xs="50">
+                  <mat-label>Fecha de Cumplimiento</mat-label>
+                  <input
+                    matInput
+                    required
+                    [matDatepicker]="startDate"
+                    [matDatepickerFilter]="this.myFilter"
+                    placeholder="Fecha Identificación"
+                    [formControl]="form.controls['FechaCumplimiento']"
+                    [min]="minDate"
+                    [max]="maxDate"
+                  />
+                  <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                  <mat-datepicker #startDate></mat-datepicker>
+                  <mat-error *ngIf="form.controls['FechaCumplimiento'].hasError('required')">
+                    {{ 'La fecha de cumplimiento' }} <strong>{{ 'es requerida' }}</strong>
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" fxFlex="50" fxFlex.lt-md="50" fxFlex.xs="50">
+                  <mat-label>{{ 'Estado' }}</mat-label>
+                  <mat-select [formControl]="form.controls['estado']">
+                    <mat-option *ngFor="let item of Estado" [value]="item">
+                      {{ item }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-icon class="greyIcon" matSuffix>view_week</mat-icon>
+                </mat-form-field>
+              </div>
+              <mat-form-field appearance="outline">
+                <mat-label>Tareas</mat-label>
+                <mat-select [formControl]="form.controls['Tareas']" multiple>
+                  <mat-option *ngFor="let tareas of allTareas" [value]="tareas.id">{{ tareas.nombre }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <!------------Estado------------------------>
+              <div fxLayout="row" class="mt-2" fxLayoutAlign="start start" fxLayoutGap="gappx"></div>
+            </div>
+
+            <div
+              fxLayout="row"
+              class="w-100 mt-3"
+              ngClass.lt-md="w-80"
+              ngClass.xs="w-100"
+              fxLayoutAlign="end center"
+              fxLayoutGap="gappx"
+            >
+              <button [disabled]="this.form.invalid" (click)="onSaveBasicAcciones()" mat-raised-button color="primary">
+                {{ this.action }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div style="width: 35%; float: left; position: absolute; right: 0">
+        <div *ngIf="this.rellenarTareas">
+          <app-resumen-acciones [acciones]="this.acciones"></app-resumen-acciones>
+        </div>
+      </div>
+    </mat-step>
+    <mat-step [editable]="this.alreadyLoaded && this.form.valid">
+      <ng-template matStepLabel>{{ 'Tareas' }}</ng-template>
+      <div fxLayout="column" fxLayoutAlign="space-around stretch" fxLayoutGap="gappx">
+        <div *ngIf="this.rellenarTareas">
+          <app-array [acciones]="this.acciones" [Tareas]="this.Tareas" (respuesta)="ProcesarTareas($event)"></app-array>
+        </div>
+      </div>
+
+      <div class="SteeperBtn">
+        <button mat-raised-button class="ml-2" color="primary" (click)="Finalizar()" matStepperNext>
+          {{ 'Finalizar' }}
+        </button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>

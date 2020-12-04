@@ -6,8 +6,6 @@ import { AdminListNoConformidadComponent } from './admin-list-noconformidad/admi
 import { AdminNoConformidadRoutingModule } from './noconformidad-routing.module';
 import { NoConformidadTableComponent } from './admin-list-noconformidad/noconformidad-table/noconformidad-table.component';
 import { CreateNoConformidadComponent } from './admin-list-noconformidad/noconformidad-create/noconformidad-create.component';
-
-// import { DialogAddEditNoConformidadComponent } from './admin-list-noconformidad/dialog-add-edit-noconformidad/dialog-add-edit-noconformidad.component';
 ////////// --------MATERIAL MODULES------- /////////////////////////
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,6 +25,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatSliderModule } from '@angular/material/slider';
@@ -35,8 +34,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ArrayComponent } from './admin-list-noconformidad/array/array.component';
 import { ResumenComponent } from './admin-list-noconformidad/resumen/resumen.component';
+import { ReporteComponent } from './admin-list-noconformidad/reporte/reporte.component';
+import { ChartsModule } from 'ng2-charts';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatTableExporterModule } from 'mat-table-exporter';
+import { MatSortModule } from '@angular/material/sort';
 ///////////////////////////////////////////////////////////////////
 
 @NgModule({
@@ -65,22 +68,26 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatProgressBarModule,
 
     MatCheckboxModule,
+    MatRadioModule,
     MatPaginatorModule,
+    MatSortModule,
     MatTableModule,
+    MatTableExporterModule,
     MatSliderModule,
     MatSlideToggleModule,
     MatSelectModule,
     MatAutocompleteModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    ChartsModule,
   ],
   declarations: [
     AdminListNoConformidadComponent,
     NoConformidadTableComponent,
     CreateNoConformidadComponent,
-    ResumenComponent,
     ArrayComponent,
-    // DialogAddEditDeployComponent
+    ResumenComponent,
+    ReporteComponent,
   ],
 })
 export class AdminNoConformidadModule {}

@@ -55,7 +55,7 @@ export class AreaTableComponent implements OnInit {
   imageUrl: any;
   showActionsBtn = false;
 
-  displayedColumns: string[] = ['select', 'nombre', 'SucursalId', 'actions'];
+  displayedColumns: string[] = ['select', 'nombre', 'SucursalId', 'JefeMercado', 'actions'];
   pageSizeOptions: number[] = [10, 25, 100, 1000];
   searchElementCount = 0;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -81,6 +81,7 @@ export class AreaTableComponent implements OnInit {
 
     this.searchForm.valueChanges.subscribe((val) => {
       const data = this.allArea;
+      console.log(data);
       this.dataSource = new MatTableDataSource<any>(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -91,6 +92,7 @@ export class AreaTableComponent implements OnInit {
     this.areaService.getAllArea({ limit: 0, offset: 0 }, { role: this.role }).subscribe(
       (data) => {
         this.initTable(data.data);
+        console.log(data.data);
         this.searchElementCount = data.meta.total;
         this.selection.clear();
       },

@@ -7,5 +7,6 @@ module.exports = function (req, res) {
   };
 
   jsonAPIBody.data = req.acciones;
+  console.log(req.acciones)
   return res.status(200).json(jsonAPIBody); // OK.
 };

@@ -1,9 +1,8 @@
 <div class="dialog-content-wrapper">
-
   <mat-toolbar class="mb-2" matDialogTitle color="primary" id="toolbarHeader">
     <mat-toolbar-row fxLayoutAlign="space-between center">
-      <span *ngIf="!isEditing" class="mat-title mb-0">{{'Adicionar usuario'}}</span>
-      <span *ngIf="isEditing" class="mat-title mb-0">{{'Editar usuario'}}</span>
+      <span *ngIf="!isEditing" class="mat-title mb-0">{{ 'Adicionar usuario' }}</span>
+      <span *ngIf="isEditing" class="mat-title mb-0">{{ 'Editar usuario' }}</span>
       <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
         <mat-icon>close</mat-icon>
       </button>
@@ -13,90 +12,230 @@
   <div mat-dialog-content class="my-dialog-content">
     <form [formGroup]="form">
       <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="gappx">
-
-
         <div *ngIf="this.isEditing" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="gappx">
-          <span class="mat-title my-2" style="font-size:24px;">
-            {{this.selectedUser.gitUser}}
+          <span class="mat-title my-2" style="font-size: 24px">
+            {{ this.selectedUser.usuario }}
           </span>
         </div>
 
         <mat-form-field appearance="outline">
-          <mat-label>{{'Git User'}}</mat-label>
-          <input type="text" [formControl]="form.controls['gitUser']" matInput placeholder="{{'gitUser'}}">
+          <mat-label>{{ 'Nombre' }}</mat-label>
+          <input
+            type="text"
+            maxlength="15"
+            required
+            [formControl]="form.controls['nombre']"
+            matInput
+            placeholder="{{ 'Nombre' }}"
+          />
           <mat-icon class="greyIcon" matSuffix>person</mat-icon>
-          <mat-error *ngIf="form.controls['gitUser'].hasError('required')">
-            {{'Git User'}} <strong>{{'es requerido'}}</strong>
+          <mat-error *ngIf="form.controls['nombre'].hasError('required')">
+            {{ 'El nombre' }} <strong>{{ 'es requerido' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['nombre'].hasError('maxLength')">
+            {{ 'El nombre' }} <strong>{{ 'debe tener como máximo 15 carácteres' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['nombre'].hasError('minLength')">
+            {{ 'El nombre' }} <strong>{{ 'debe tener como máximo 2 carácteres' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['nombre'].hasError('pattern')">
+            {{ 'El nombre' }} <strong>{{ 'debe escribirse con letra inicial mayúscula' }}</strong>
           </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>{{'Correo electrónico'}}</mat-label>
-          <input [readonly]="this.isEditing" type="email" matInput [formControl]="form.controls['email']" placeholder="{{'Email'}}">
+          <mat-label>{{ 'Apellidos' }}</mat-label>
+          <input
+            type="text"
+            required
+            [formControl]="form.controls['apellidos']"
+            matInput
+            maxlength="50"
+            placeholder="{{ 'Apellidos' }}"
+          />
+          <mat-icon class="greyIcon" matSuffix>person</mat-icon>
+          <mat-error *ngIf="form.controls['apellidos'].hasError('required')">
+            {{ 'El apellido' }} <strong>{{ 'es requerido' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['apellidos'].hasError('maxLength')">
+            {{ 'El apellido' }} <strong>{{ 'debe tener como máximo 50 carácteres' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['apellidos'].hasError('minLength')">
+            {{ 'El apellido' }} <strong>{{ 'debe tener como máximo 2 carácteres' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['apellidos'].hasError('pattern')">
+            {{ 'El apellido' }} <strong>{{ 'debe escribirse con letra inicial mayúscula' }}</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Correo electrónico' }}</mat-label>
+          <input
+            [readonly]="this.isEditing"
+            type="email"
+            matInput
+            required
+            maxlength="50"
+            [formControl]="form.controls['email']"
+            placeholder="{{ 'correo' }}"
+          />
           <mat-icon class="greyIcon" matSuffix>mail</mat-icon>
           <mat-error *ngIf="form.controls['email'].hasError('required')">
-            {{'Correo electrónico'}} <strong>{{'es requerido'}}</strong>
+            {{ 'Correo electrónico' }} <strong>{{ 'es requerido' }}</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="!isEditing" appearance="outline">
+          <mat-label>{{ 'Usuario' }}</mat-label>
+          <input type="text" required [formControl]="form.controls['usuario']" matInput placeholder="{{ 'Usuario' }}" />
+          <mat-icon class="greyIcon" matSuffix>person</mat-icon>
+          <mat-error *ngIf="form.controls['usuario'].hasError('required')">
+            {{ 'El usuario' }} <strong>{{ 'son requeridos' }}</strong>
+          </mat-error>
+          <mat-error *ngIf="form.controls['usuario'].hasError('pattern')">
+            {{ 'El usuario' }} <strong>{{ 'debe ser en minúscula' }}</strong>
           </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>{{'Descripción'}}</mat-label>
-          <textarea rows="3" matInput [formControl]="form.controls['description']" placeholder="{{'Description'}}"></textarea>
-          <mat-icon class="greyIcon" matSuffix>edit</mat-icon>
+          <mat-label>{{ 'Rol' }}</mat-label>
+          <mat-select required [formControl]="form.controls['RolId']">
+            <mat-option *ngFor="let item of Roles" [value]="item.id">
+              {{ item.nombre }}
+            </mat-option>
+          </mat-select>
+          <mat-icon class="greyIcon" matSuffix>person</mat-icon>
+          <mat-error *ngIf="form.controls['RolId'].hasError('required')">
+            {{ 'El rol' }} <strong>{{ 'es requerido' }}</strong>
+          </mat-error>
         </mat-form-field>
 
+        <mat-form-field *ngIf="!isEditing" appearance="outline">
+          <mat-label>{{ 'Sucursal' }}</mat-label>
+          <mat-select required [formControl]="form.controls['SucursalId']">
+            <mat-option *ngFor="let item of Sucursal" [value]="item.id">
+              {{ item.nombagenciaviajes }}
+            </mat-option>
+          </mat-select>
+          <mat-icon class="greyIcon" matSuffix>business</mat-icon>
+          <mat-error *ngIf="form.controls['SucursalId'].hasError('required')">
+            {{ 'La Sucursal' }} <strong>{{ 'es requerida' }}</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-slide-toggle
+          *ngIf="form.controls['RolId'].value !== this.loggedInUser.RolId"
+          color="primary"
+          [formControl]="form.controls['status']"
+        >
+          {{ 'Estado' }}</mat-slide-toggle
+        >
+
+        <mat-form-field *ngIf="!isEditing" appearance="outline">
+          <mat-label>{{ 'Descripción' }}</mat-label>
+          <textarea
+            rows="3"
+            matInput
+            maxlength="150"
+            [formControl]="form.controls['description']"
+            placeholder="{{ 'Description' }}"
+          ></textarea>
+          <mat-icon class="greyIcon" matSuffix>edit</mat-icon>
+        </mat-form-field>
 
         <div *ngIf="!isEditing" fxLayout="column" fxLayoutAlign="start stretch">
           <div fxLayout="row wrap" class="mt-2" fxLayoutAlign="space-between center">
             <mat-form-field class="example-full-width" appearance="outline" fxFlex="100">
-              <mat-label>{{'Contraseña'}}</mat-label>
-              <input matInput placeholder="{{'Contraseña'}}" [type]="this.passwordType" required
-                [formControl]="formPass.controls['password']">
-              <mat-icon style="cursor:pointer;" *ngIf="this.passwordType == 'password'" class="greyIcon" matSuffix
-                (click)="this.passwordType = 'text'">
-                visibility</mat-icon>
-              <mat-icon style="cursor:pointer;" *ngIf="this.passwordType == 'text'" class="greyIcon" matSuffix
-                (click)="this.passwordType = 'password'">
-                visibility_off</mat-icon>
+              <mat-label>{{ 'Contraseña' }}</mat-label>
+              <input
+                matInput
+                placeholder="{{ 'Contraseña' }}"
+                [type]="this.passwordType"
+                required
+                maxlength="15"
+                [formControl]="formPass.controls['password']"
+              />
+              <mat-icon
+                style="cursor: pointer"
+                *ngIf="this.passwordType == 'password'"
+                class="greyIcon"
+                matSuffix
+                (click)="this.passwordType = 'text'"
+              >
+                visibility</mat-icon
+              >
+              <mat-icon
+                style="cursor: pointer"
+                *ngIf="this.passwordType == 'text'"
+                class="greyIcon"
+                matSuffix
+                (click)="this.passwordType = 'password'"
+              >
+                visibility_off</mat-icon
+              >
               <mat-error *ngIf="formPass.controls['password'].hasError('required')">
-                {{'Contraseña'}} <strong>{{'es requerida'}}</strong>
+                {{ 'Contraseña' }} <strong>{{ 'es requerida' }}</strong>
               </mat-error>
             </mat-form-field>
 
-            <mat-form-field class="example-full-width" appearance="outline" fxFlex="100"
-              [ngClass]="{'mat-form-field-invalid': formPass.hasError('mismatch'), 'ng-invalid': formPass.hasError('mismatch'), 'ng-valid': !formPass.hasError('mismatch')}">
-              <mat-label>{{'Repetir contraseña'}}</mat-label>
-              <input matInput placeholder="{{'Repetir contraseña'}}" required [type]="this.passwordType"
-                [ngClass]="{'ng-invalid': formPass.hasError('mismatch')}" [formControl]="formPass.controls['repeat']">
-              <mat-icon style="cursor:pointer;" *ngIf="this.passwordType == 'password'" class="greyIcon" matSuffix
-                (click)="this.passwordType = 'text'">
-                visibility</mat-icon>
-              <mat-icon style="cursor:pointer;" *ngIf="this.passwordType == 'text'" class="greyIcon" matSuffix
-                (click)="this.passwordType = 'password'">
-                visibility_off</mat-icon>
+            <mat-form-field
+              class="example-full-width"
+              appearance="outline"
+              fxFlex="100"
+              [ngClass]="{
+                'mat-form-field-invalid': formPass.hasError('mismatch'),
+                'ng-invalid': formPass.hasError('mismatch'),
+                'ng-valid': !formPass.hasError('mismatch')
+              }"
+            >
+              <mat-label>{{ 'Repetir contraseña' }}</mat-label>
+              <input
+                matInput
+                placeholder="{{ 'Repetir contraseña' }}"
+                required
+                maxlength="15"
+                [type]="this.passwordType"
+                [ngClass]="{ 'ng-invalid': formPass.hasError('mismatch') }"
+                [formControl]="formPass.controls['repeat']"
+              />
+              <mat-icon
+                style="cursor: pointer"
+                *ngIf="this.passwordType == 'password'"
+                class="greyIcon"
+                matSuffix
+                (click)="this.passwordType = 'text'"
+              >
+                visibility</mat-icon
+              >
+              <mat-icon
+                style="cursor: pointer"
+                *ngIf="this.passwordType == 'text'"
+                class="greyIcon"
+                matSuffix
+                (click)="this.passwordType = 'password'"
+              >
+                visibility_off</mat-icon
+              >
             </mat-form-field>
           </div>
           <div fxLayout="row" fxLayoutAlign="start center" class="pb-3">
             <mat-error *ngIf="formPass.hasError('mismatch')">
-              {{'Las contraseñas'}} <strong>{{'deben coincidir'}}</strong>
+              {{ 'Las contraseñas' }} <strong>{{ 'deben coincidir' }}</strong>
             </mat-error>
           </div>
-
         </div>
-
       </div>
-
     </form>
-
-
-
-
   </div>
 
   <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end start">
-    <button mat-flat-button (click)="onUpdateProfile()" [disabled]="this.form.invalid || (isChangePass && this.formPass.invalid )"
-      color="primary">{{'Save'}}</button>
-
+    <button
+      mat-flat-button
+      (click)="onUpdateProfile()"
+      [disabled]="this.form.invalid || (isChangePass && this.formPass.invalid)"
+      color="primary"
+    >
+      {{ 'Guardar' }}
+    </button>
   </div>
-
 </div>

@@ -1,0 +1,76 @@
+<div class="container">
+  <div mat-dialog-content class="my-dialog-content">
+    <div style="float: left; width: 100%">
+      <div>
+        <form [formGroup]="formAnswers">
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <mat-form-field appearance="legacy" class="form-group" fxFlex="30">
+                <mat-label>Nombre de la encuesta</mat-label>
+                <input matInput formControlName="nameAnswer" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- separador -->
+          <div class="divider"></div>
+
+          <div>
+            <button class="prueba" (click)="newAnswer()" id="AddBtn" mat-fab color="primary">
+              <mat-icon id="ico"> add </mat-icon>
+            </button>
+            <label>Agregar pregunta</label>
+            <ng-container formArrayName="preguntas">
+              <div *ngFor="let p of preguntas.controls; index as i" id="{{ i + 1 }}" class="containerAccordion">
+                <ng-container [formGroup]="p">
+                  <mat-accordion>
+                    <mat-expansion-panel expanded>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title class="numPregunta"> Pregunta n° {{ i + 1 }} </mat-panel-title>
+                        <mat-panel-description> {{ p.get('pregunta').value }} </mat-panel-description>
+                        <button mat-button data-toggle="modal" data-target="#exampleModal" (click)="itemValue(i)">
+                          <svg
+                            class="bi bi-trash-fill"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 16 16"
+                            fill="currentColor"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"
+                            />
+                          </svg>
+                        </button>
+                      </mat-expansion-panel-header>
+                      <div fxLayout="row" class="mt-2" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                        <mat-form-field class="form-group" fxFlex="40" fxFlex.lt-md="100" fxFlex.xs="100">
+                          <mat-label>Pregunta</mat-label>
+                          <input matInput formControlName="pregunta" />
+                        </mat-form-field>
+                      </div>
+                      <div fxLayout="row" class="mt-2" fxLayoutAlign="start start" fxLayoutGap="gappx">
+                        <mat-form-field class="form-group" fxFlex="20" fxFlex.lt-md="50" fxFlex.xs="50">
+                          <mat-label>Tipo de Respuesta</mat-label>
+                          <mat-select formControlName="tipo">
+                            <mat-option value="0">Si/No</mat-option>
+                            <mat-option value="1">1 al 5</mat-option>
+                            <mat-option value="2">1 al 10</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                </ng-container>
+              </div>
+            </ng-container>
+          </div>
+          <button type="submit" mat-raised-button color="primary" (click)="save()">Guardar</button>
+          <div *ngIf="validated" class="alert alert-danger" role="alert">Todos lo datos son necesarios.</div>
+          <div *ngIf="dateSave" class="alert alert-success" role="alert">Datos guardados correctamente</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

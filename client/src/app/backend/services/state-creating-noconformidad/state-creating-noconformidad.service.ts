@@ -8,20 +8,20 @@ export class StateCreatingNoConformidadService {
   noconformidadCreated: any = {};
 
   constructor(private httpClient: HttpClient) {
-    this.getIncidenciaCreated();
+    this.getNoConformidadCreated();
   }
 
-  public getIncidenciaCreated() {
+  public getNoConformidadCreated() {
     this.noconformidadCreated = JSON.parse(localStorage.getItem('noconformidadCreated'));
     this.noconformidadCreated = this.noconformidadCreated ? this.noconformidadCreated : null;
     return this.noconformidadCreated;
   }
 
-  public setIncidenciaCreated(incidencia) {
+  public setNoConformidadCreated(noconformidad) {
     if (this.noconformidadCreated) {
-      this.noconformidadCreated = Object.assign(this.noconformidadCreated, incidencia);
+      this.noconformidadCreated = Object.assign(this.noconformidadCreated, noconformidad);
     } else {
-      this.noconformidadCreated = incidencia;
+      this.noconformidadCreated = noconformidad;
     }
 
     localStorage.setItem('noconformidadCreated', JSON.stringify(this.noconformidadCreated));
