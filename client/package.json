@@ -28,7 +28,7 @@
     "chart.js": "^2.9.4",
     "chartjs-plugin-annotation": "^0.5.7",
     "html2canvas": "^1.0.0-rc.7",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.3.1",
     "mat-table-exporter": "^9.0.2",
     "moment": "^2.27.0",
     "ng2-charts": "^2.4.2",
