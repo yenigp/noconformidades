@@ -41,7 +41,7 @@
     "sequelize-auto": "^0.5.3",
     "sequelize-cli": "5.5.0",
     "sequelize-replace-enum-postgres": "^1.5.0",
-    "socket.io": "2.2.0",
+    "socket.io": "2.5.0",
     "sql": "^0.78.0",
     "swig": "^1.4.2",
     "uglify-js": "^3.10.1",
